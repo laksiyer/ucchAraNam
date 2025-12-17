@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Devanagari Letter Sounds</title>
+  <style>
+    body { font-family: system-ui, Arial, sans-serif; padding: 16px; }
+    h1 { font-size: 20px; margin: 0 0 10px; }
+    .grid { display: grid; grid-template-columns: repeat(8, minmax(44px, 1fr)); gap: 10px; max-width: 900px; }
+    button {
+      font-size: 26px; padding: 10px 0; border-radius: 12px; border: 1px solid #ddd;
+      background: white; cursor: pointer; box-shadow: 0 1px 2px rgba(0,0,0,.06);
+    }
+    button:active { transform: scale(0.98); }
+    .row { display:flex; gap:10px; align-items:center; margin: 10px 0 14px; flex-wrap: wrap; }
+    label { font-size: 14px; color:#444; }
+    .small { font-size: 13px; color:#666; margin-top: 10px; }
+    .pill { font-size: 13px; padding: 6px 10px; border-radius: 999px; border: 1px solid #ddd; background:#fafafa; }
+  </style>
+</head>
+<body>
+  <h1>Click a letter to hear it</h1>
+
+  <div class="row">
+    <span class="pill" id="status">Ready</span>
+    <label><input type="checkbox" id="showHint" checked> Show transliteration hint</label>
+  </div>
+
+  <div class="grid" id="grid"></div>
+
+  <p class="small">
+    Note: This page must be served from a website (not opened as a local file) for best results.
+  </p>
+
+  <script>
+    // IMPORTANT:
+    // Set this to the folder where your mp3 files live.
+    // Example: "https://YOURNAME.github.io/dev-sounds/audio/"
+    const AUDIO_BASE_URL = "https://YOUR-AUDIO-HOST/audio/";
+
+    // Start with vowels (????). You can add consonants next.
+    // "file" is the mp3 filename you will upload.
+    const letters = [
+      { ch: "?", hint: "a",   file: "a.mp3" },
+      { ch: "?", hint: "a",   file: "aa.mp3" },
+      { ch: "?", hint: "i",   file: "i.mp3" },
+      { ch: "?", hint: "i",   file: "ii.mp3" },
+      { ch: "?", hint: "u",   file: "u.mp3" },
+      { ch: "?", hint: "u",   file: "uu.mp3" },
+      { ch: "?", hint: "?",   file: "ri.mp3" },
+      { ch: "?", hint: "e",   file: "e.mp3" },
+      { ch: "?", hint: "ai",  file: "ai.mp3" },
+      { ch: "?", hint: "o",   file: "o.mp3" },
+      { ch: "?", hint: "au",  file: "au.mp3" },
+      { ch: "??", hint: "a?", file: "am.mp3" },
+      { ch: "??", hint: "a?", file: "ah.mp3" }
+    ];
+
+    const grid = document.getElementById("grid");
+    const status = document.getElementById("status");
+    const showHint = document.getElementById("showHint");
+
+    // One shared audio element = clean playback and easy stopping
+    const player = new Audio();
+    player.preload = "auto";
+
+    function setStatus(msg) { status.textContent = msg; }
+
+    function playFile(file, labelForStatus) {
+      try {
+        player.pause();
+        player.currentTime = 0;
+      } catch(e) {}
+
+      const url = AUDIO_BASE_URL + file;
+      setStatus("Loading: " + labelForStatus);
+
+      player.src = url;
+      player.play()
+        .then(() => setStatus("Playing: " + labelForStatus))
+        .catch(err => {
+          console.error(err);
+          setStatus("Audio failed. Check URL / permissions.");
+          alert("Could not play audio.\n\nTried: " + url + "\n\nCommon causes:\n- Wrong AUDIO_BASE_URL\n- File name mismatch (case-sensitive)\n- Host blocks direct access");
+        });
+    }
+
+    letters.forEach(x => {
+      const b = document.createElement("button");
+      b.textContent = x.ch;
+
+      const updateTitle = () => {
+        b.title = showHint.checked ? (x.hint + "  (" + x.file + ")") : "";
+      };
+      updateTitle();
+      showHint.addEventListener("change", updateTitle);
+
+      b.onclick = () => playFile(x.file, x.ch + (showHint.checked ? " = " + x.hint : ""));
+      grid.appendChild(b);
+    });
+  </script>
+</body>
+</html>

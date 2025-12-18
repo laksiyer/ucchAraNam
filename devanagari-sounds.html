@@ -90,6 +90,18 @@
   <h2>अवर्गीय व्यञ्जनानि</h2>
   <div class="line" id="line-avargiya"></div>
 
+  <!-- NEW: GUNITA SECTION -->
+  <h2>गुणित अक्षराणि</h2>
+  <div class="row">
+    <span class="pill">1) Pick a consonant  →  2) Pick a vowel/mātrā</span>
+    <span class="pill" id="gunita-status">Selected: —</span>
+  </div>
+  <div class="line" id="gunita-consonants"></div>
+  <div class="line" id="gunita-matras"></div>
+  <div class="row">
+    <span class="pill" id="gunita-display">—</span>
+  </div>
+
   <p class="small">Developed by Samskritabharati USA</p>
 
   <script>
@@ -158,6 +170,25 @@
       { key:"ha", deva:"ह", iast:"ha", hk:"ha", hint:"ha", file:"ha.mp3" }
     ];
 
+    // NEW: Matras for gunita (NO ॡ / ॣ)
+    const matras = [
+      { key:"a",   deva:"",  vowelFile:"a.mp3",   label:"अ" },  // inherent
+      { key:"aa",  deva:"ा", vowelFile:"aa.mp3",  label:"ा" },
+      { key:"i",   deva:"ि", vowelFile:"i.mp3",   label:"ि" },
+      { key:"ii",  deva:"ी", vowelFile:"ii.mp3",  label:"ी" },
+      { key:"u",   deva:"ु", vowelFile:"u.mp3",   label:"ु" },
+      { key:"uu",  deva:"ू", vowelFile:"uu.mp3",  label:"ू" },
+      { key:"ri",  deva:"ृ", vowelFile:"ri.mp3",  label:"ृ" },
+      { key:"rri", deva:"ॄ", vowelFile:"rri.mp3", label:"ॄ" },
+      { key:"lr",  deva:"ॢ", vowelFile:"lr.mp3",  label:"ॢ" },  // for ऌ
+      { key:"e",   deva:"े", vowelFile:"e.mp3",   label:"े" },
+      { key:"ai",  deva:"ै", vowelFile:"ai.mp3",  label:"ै" },
+      { key:"o",   deva:"ो", vowelFile:"o.mp3",   label:"ो" },
+      { key:"au",  deva:"ौ", vowelFile:"au.mp3",  label:"ौ" },
+      { key:"am",  deva:"ं", vowelFile:"am.mp3",  label:"ं" },
+      { key:"ah",  deva:"ः", vowelFile:"ah.mp3",  label:"ः" }
+    ];
+
     const allItems = [...vowels, ...vargiya, ...avargiya];
     const byKey = new Map(allItems.map(x => [x.key, x]));
     const quizPool = [...vargiya, ...avargiya]; // questions come from here
@@ -173,6 +204,10 @@
     const resetScoreBtn = document.getElementById("resetScore");
     const quizTypeRadios = document.querySelectorAll('input[name="quizType"]');
 
+    // Gunita UI
+    const gunitaStatus = document.getElementById("gunita-status");
+    const gunitaDisplay = document.getElementById("gunita-display");
+
     // --- State ---
     let scheme = schemeSel.value; // deva|iast|hk
     let quizType = "listen";      // listen|reverse
@@ -183,9 +218,10 @@
     let incorrectCount = 0;
     let streak = 0;
     let bestStreak = 0;
-
-    // tracks whether this current question has had a wrong attempt already
     let missedThisQuestion = false;
+
+    // Gunita selections
+    let selectedConsonant = null;
 
     // --- Audio ---
     const player = new Audio();
@@ -200,6 +236,19 @@
       setStatus(msg);
       player.src = url;
       player.play().catch(() => alert("Could not play: " + url));
+    }
+
+    // NEW: play multiple audio clips in order (for gunita)
+    async function playSequence(files) {
+      for (const f of files) {
+        await new Promise((resolve, reject) => {
+          try { player.pause(); player.currentTime = 0; } catch(e) {}
+          player.src = AUDIO_BASE_URL + f;
+          player.onended = resolve;
+          player.onerror = reject;
+          player.play().catch(reject);
+        });
+      }
     }
 
     function clearFeedback() {
@@ -267,11 +316,10 @@
             b.classList.add("correct");
             qPrompt.textContent = "✅ Correct!";
 
-            // score per QUESTION:
             correctCount += 1;
             if (missedThisQuestion) {
-              incorrectCount += 1; // counted once per question if they missed at least once
-              streak = 0;          // streak only continues for perfect first-try answers
+              incorrectCount += 1;
+              streak = 0;
             } else {
               streak += 1;
               if (streak > bestStreak) bestStreak = streak;
@@ -284,9 +332,8 @@
           } else {
             b.classList.add("wrong");
             qPrompt.textContent = "❌ Try again";
-            missedThisQuestion = true; // mark that this question was missed at least once
+            missedThisQuestion = true;
 
-            // optional: in listen mode, replay target sound to reinforce
             if (quizType === "listen" && quizAnswerKey) {
               const target = byKey.get(quizAnswerKey);
               if (target) setTimeout(() => playFile(target.file, "Try again"), 200);
@@ -298,17 +345,75 @@
       });
     }
 
-    // Initial render
+    // NEW: Render gunita controls
+    function renderGunita() {
+      const cDiv = document.getElementById("gunita-consonants");
+      const mDiv = document.getElementById("gunita-matras");
+
+      // consonants available for gunita
+      const consonants = [...vargiya, ...avargiya];
+
+      consonants.forEach(c => {
+        const b = document.createElement("button");
+        b.className = "letterBtn";
+        b.textContent = c.deva;
+        b.title = "Select consonant: " + c.deva;
+        b.onclick = () => {
+          selectedConsonant = c;
+          gunitaStatus.textContent = "Selected: " + c.deva;
+          gunitaDisplay.textContent = c.deva; // default (inherent a)
+          // Optional: play the base consonant sound when selected
+          playFile(c.file, "Selected: " + c.deva);
+        };
+        cDiv.appendChild(b);
+      });
+
+      matras.forEach(m => {
+        const b = document.createElement("button");
+        b.className = "letterBtn";
+        // show “अ” for inherent vowel option, otherwise show the matra sign
+        b.textContent = m.deva || "अ";
+        b.title = "Apply: " + (m.deva || "अ");
+
+        b.onclick = async () => {
+          if (!selectedConsonant) {
+            alert("First select a consonant (e.g., क).");
+            return;
+          }
+
+          // display combined gunita (क + ृ => कृ, etc.)
+          const combined = selectedConsonant.deva + (m.deva || "");
+          gunitaDisplay.textContent = combined;
+
+          // play consonant sound + vowel sound
+          try {
+            await playSequence([selectedConsonant.file, m.vowelFile]);
+            setStatus("Playing: " + combined);
+          } catch (e) {
+            console.error(e);
+            alert("Could not play gunita audio. Check file names:\n" +
+              selectedConsonant.file + " + " + m.vowelFile);
+          }
+        };
+
+        mDiv.appendChild(b);
+      });
+    }
+
+    // Initial render (existing)
     renderButtons("grid-vowels", vowels);
     renderButtons("grid-vargiya", vargiya);
     renderButtons("line-avargiya", avargiya, true);
+
+    // NEW: Gunita render
+    renderGunita();
 
     // Scheme toggle
     schemeSel.addEventListener("change", () => {
       scheme = schemeSel.value;
       document.querySelectorAll(".letterBtn").forEach(btn => {
         const x = byKey.get(btn.dataset.key);
-        btn.textContent = labelOf(x);
+        if (x) btn.textContent = labelOf(x); // only update the main letter buttons
       });
       if (quizMode.checked && quizType === "reverse" && quizAnswerKey) {
         const x = byKey.get(quizAnswerKey);
@@ -355,4 +460,3 @@
   </script>
 </body>
 </html>
-

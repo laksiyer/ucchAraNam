@@ -49,6 +49,19 @@
 
     .letterBtn.correct { background: #d4f8d4; border-color: #2f9e44; }
     .letterBtn.wrong   { background: #ffd6d6; border-color: #c92a2a; }
+
+    /* BIG display for the combined gunita syllable */
+    #gunita-display {
+      font-family: "Noto Sans Devanagari","Nirmala UI","Mangal",system-ui,sans-serif;
+      font-size: 64px;
+      line-height: 1.05;
+      padding: 14px 22px;
+      border-radius: 18px;
+      border: 1px solid #ddd;
+      background: #fafafa;
+      text-align: center;
+      min-width: 140px;
+    }
   </style>
 </head>
 
@@ -90,8 +103,8 @@
   <h2>अवर्गीय व्यञ्जनानि</h2>
   <div class="line" id="line-avargiya"></div>
 
-  <!-- NEW: GUNITA SECTION -->
-  <h2>गुणिताक्षराणि</h2>
+  <!-- GUNITA SECTION -->
+  <h2>गुणित अक्षराणि <span class="small">(Work in progress)</span></h2>
   <div class="row">
     <span class="pill">1) Pick a consonant  →  2) Pick a vowel/mātrā</span>
     <span class="pill" id="gunita-status">Selected: —</span>
@@ -99,7 +112,7 @@
   <div class="line" id="gunita-consonants"></div>
   <div class="line" id="gunita-matras"></div>
   <div class="row">
-    <span class="pill" id="gunita-display">—</span>
+    <div id="gunita-display">—</div>
   </div>
 
   <p class="small">Developed by Samskritabharati USA</p>
@@ -170,23 +183,23 @@
       { key:"ha", deva:"ह", iast:"ha", hk:"ha", hint:"ha", file:"ha.mp3" }
     ];
 
-    // NEW: Matras for gunita (NO ॡ / ॣ)
+    // Matras for gunita (NO ॡ / ॣ)
     const matras = [
-      { key:"a",   deva:"",  vowelFile:"a.mp3",   label:"अ" },  // inherent
-      { key:"aa",  deva:"ा", vowelFile:"aa.mp3",  label:"ा" },
-      { key:"i",   deva:"ि", vowelFile:"i.mp3",   label:"ि" },
-      { key:"ii",  deva:"ी", vowelFile:"ii.mp3",  label:"ी" },
-      { key:"u",   deva:"ु", vowelFile:"u.mp3",   label:"ु" },
-      { key:"uu",  deva:"ू", vowelFile:"uu.mp3",  label:"ू" },
-      { key:"ri",  deva:"ृ", vowelFile:"ri.mp3",  label:"ृ" },
-      { key:"rri", deva:"ॄ", vowelFile:"rri.mp3", label:"ॄ" },
-      { key:"lr",  deva:"ॢ", vowelFile:"lr.mp3",  label:"ॢ" },  // for ऌ
-      { key:"e",   deva:"े", vowelFile:"e.mp3",   label:"े" },
-      { key:"ai",  deva:"ै", vowelFile:"ai.mp3",  label:"ै" },
-      { key:"o",   deva:"ो", vowelFile:"o.mp3",   label:"ो" },
-      { key:"au",  deva:"ौ", vowelFile:"au.mp3",  label:"ौ" },
-      { key:"am",  deva:"ं", vowelFile:"am.mp3",  label:"ं" },
-      { key:"ah",  deva:"ः", vowelFile:"ah.mp3",  label:"ः" }
+      { key:"a",   deva:"",  vowelFile:"a.mp3"   }, // inherent vowel (show as "अ")
+      { key:"aa",  deva:"ा", vowelFile:"aa.mp3"  },
+      { key:"i",   deva:"ि", vowelFile:"i.mp3"   },
+      { key:"ii",  deva:"ी", vowelFile:"ii.mp3"  },
+      { key:"u",   deva:"ु", vowelFile:"u.mp3"   },
+      { key:"uu",  deva:"ू", vowelFile:"uu.mp3"  },
+      { key:"ri",  deva:"ृ", vowelFile:"ri.mp3"  },
+      { key:"rri", deva:"ॄ", vowelFile:"rri.mp3" },
+      { key:"lr",  deva:"ॢ", vowelFile:"lr.mp3"  },
+      { key:"e",   deva:"े", vowelFile:"e.mp3"   },
+      { key:"ai",  deva:"ै", vowelFile:"ai.mp3"  },
+      { key:"o",   deva:"ो", vowelFile:"o.mp3"   },
+      { key:"au",  deva:"ौ", vowelFile:"au.mp3"  },
+      { key:"am",  deva:"ं", vowelFile:"am.mp3"  },
+      { key:"ah",  deva:"ः", vowelFile:"ah.mp3"  }
     ];
 
     const allItems = [...vowels, ...vargiya, ...avargiya];
@@ -220,7 +233,7 @@
     let bestStreak = 0;
     let missedThisQuestion = false;
 
-    // Gunita selections
+    // Gunita selection
     let selectedConsonant = null;
 
     // --- Audio ---
@@ -238,7 +251,7 @@
       player.play().catch(() => alert("Could not play: " + url));
     }
 
-    // NEW: play multiple audio clips in order (for gunita)
+    // play multiple audio clips in order (for gunita)
     async function playSequence(files) {
       for (const f of files) {
         await new Promise((resolve, reject) => {
@@ -345,12 +358,11 @@
       });
     }
 
-    // NEW: Render gunita controls
+    // Render gunita controls
     function renderGunita() {
       const cDiv = document.getElementById("gunita-consonants");
       const mDiv = document.getElementById("gunita-matras");
 
-      // consonants available for gunita
       const consonants = [...vargiya, ...avargiya];
 
       consonants.forEach(c => {
@@ -361,8 +373,7 @@
         b.onclick = () => {
           selectedConsonant = c;
           gunitaStatus.textContent = "Selected: " + c.deva;
-          gunitaDisplay.textContent = c.deva; // default (inherent a)
-          // Optional: play the base consonant sound when selected
+          gunitaDisplay.textContent = c.deva; // default
           playFile(c.file, "Selected: " + c.deva);
         };
         cDiv.appendChild(b);
@@ -371,7 +382,6 @@
       matras.forEach(m => {
         const b = document.createElement("button");
         b.className = "letterBtn";
-        // show “अ” for inherent vowel option, otherwise show the matra sign
         b.textContent = m.deva || "अ";
         b.title = "Apply: " + (m.deva || "अ");
 
@@ -381,11 +391,9 @@
             return;
           }
 
-          // display combined gunita (क + ृ => कृ, etc.)
           const combined = selectedConsonant.deva + (m.deva || "");
           gunitaDisplay.textContent = combined;
 
-          // play consonant sound + vowel sound
           try {
             await playSequence([selectedConsonant.file, m.vowelFile]);
             setStatus("Playing: " + combined);
@@ -400,12 +408,12 @@
       });
     }
 
-    // Initial render (existing)
+    // Initial render
     renderButtons("grid-vowels", vowels);
     renderButtons("grid-vargiya", vargiya);
     renderButtons("line-avargiya", avargiya, true);
 
-    // NEW: Gunita render
+    // Gunita render
     renderGunita();
 
     // Scheme toggle
@@ -413,7 +421,7 @@
       scheme = schemeSel.value;
       document.querySelectorAll(".letterBtn").forEach(btn => {
         const x = byKey.get(btn.dataset.key);
-        if (x) btn.textContent = labelOf(x); // only update the main letter buttons
+        if (x) btn.textContent = labelOf(x); // update only main letter buttons with data-key
       });
       if (quizMode.checked && quizType === "reverse" && quizAnswerKey) {
         const x = byKey.get(quizAnswerKey);
@@ -460,4 +468,3 @@
   </script>
 </body>
 </html>
-

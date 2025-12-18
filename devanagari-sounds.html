@@ -296,6 +296,28 @@
       }
     }
 
+    // --- NEW: Try single guṇita file first, fallback to (consonant + vowel) ---
+    function tryPlaySingle(file) {
+      return new Promise((resolve, reject) => {
+        try { player.pause(); player.currentTime = 0; } catch(e) {}
+        player.src = AUDIO_BASE_URL + file;
+        player.onended = resolve;
+        player.onerror = () => reject(new Error("Missing: " + file));
+        player.play().catch(reject);
+      });
+    }
+
+    async function playGunita(consonant, matra) {
+      // A-style filename, e.g. "ka_aa.mp3", "ka_i.mp3", "ka_am.mp3", "ka_ah.mp3"
+      const gunitaFile = `${consonant.key}_${matra.key}.mp3`;
+      try {
+        await tryPlaySingle(gunitaFile);
+      } catch (e) {
+        // fallback keeps the tool working even if one file is missing/misnamed
+        await playSequence([consonant.file, matra.vowelFile]);
+      }
+    }
+
     function clearFeedback() {
       document.querySelectorAll(".letterBtn").forEach(b => b.classList.remove("correct","wrong"));
     }
@@ -422,7 +444,9 @@
           }
           const combined = selectedConsonant.deva + (m.deva || "");
           gunitaDisplay.textContent = combined;
-          await playSequence([selectedConsonant.file, m.vowelFile]);
+
+          // NEW: plays ka_aa.mp3 etc (fallbacks if missing)
+          await playGunita(selectedConsonant, m);
         };
 
         mDiv.appendChild(b);
@@ -483,4 +507,3 @@
   </script>
 </body>
 </html>
-

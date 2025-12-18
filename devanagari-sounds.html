@@ -31,83 +31,115 @@
     <label><input type="checkbox" id="showHint" checked> Show transliteration hint</label>
   </div>
 
-  <div class="grid" id="grid"></div>
+  <h2 style="margin:14px 0 8px;">स्वर</h2>
+  <div class="grid" id="grid-vowels"></div>
+
+  <h2 style="margin:18px 0 8px;">वर्गीय व्यञ्जनानि</h2>
+  <div class="grid5" id="grid-vargiya"></div>
+
+  <h2 style="margin:18px 0 8px;">अवर्गीय व्यञ्जनानि</h2>
+  <div class="line" id="line-avargiya"></div>
 
   <p class="small">
     Note: This page must be served from a website (not opened as a local file) for best results.
   </p>
 
   <script>
-    // IMPORTANT:
-    // Set this to the folder where your mp3 files live.
-    // Example: "https://YOURNAME.github.io/dev-sounds/audio/"
-const AUDIO_BASE_URL = "https://laksiyer.github.io/ucchAraNam/audio/";
+    const AUDIO_BASE_URL = "https://laksiyer.github.io/ucchAraNam/audio/";
 
-    // Start with vowels (????). You can add consonants next.
-    // "file" is the mp3 filename you will upload.
-    const letters = [
-  { ch: "अ", hint: "a",   file: "a.mp3" },
-  { ch: "आ", hint: "ā",   file: "aa.mp3" },
-  { ch: "इ", hint: "i",   file: "i.mp3" },
-  { ch: "ई", hint: "ī",   file: "ii.mp3" },
-  { ch: "उ", hint: "u",   file: "u.mp3" },
-  { ch: "ऊ", hint: "ū",   file: "uu.mp3" },
-  { ch: "ऋ", hint: "ṛ",   file: "ri.mp3" },
-    { ch: "ॠ", hint: "ṝ",   file: "rri.mp3" },
-  { ch: "लृ", hint: "ṛ",   file: "lr.mp3" },
-  { ch: "ए", hint: "e",   file: "e.mp3" },
-  { ch: "ऐ", hint: "ai",  file: "ai.mp3" },
-  { ch: "ओ", hint: "o",   file: "o.mp3" },
-  { ch: "औ", hint: "au",  file: "au.mp3" },
-  { ch: "अं", hint: "aṃ", file: "am.mp3" },
-  { ch: "अः", hint: "aḥ", file: "ah.mp3" }
+    // --- DATA (edit/extend as you like) ---
+    const vowels = [
+      { ch: "अ", hint: "a",   file: "a.mp3" },
+      { ch: "आ", hint: "ā",   file: "aa.mp3" },
+      { ch: "इ", hint: "i",   file: "i.mp3" },
+      { ch: "ई", hint: "ī",   file: "ii.mp3" },
+      { ch: "उ", hint: "u",   file: "u.mp3" },
+      { ch: "ऊ", hint: "ū",   file: "uu.mp3" },
+      { ch: "ऋ", hint: "ṛ",   file: "ri.mp3" },
+      { ch: "ॠ", hint: "ṝ",   file: "rri.mp3" },
+      { ch: "ऌ", hint: "ḷ",   file: "lr.mp3" },
+      { ch: "ए", hint: "e",   file: "e.mp3" },
+      { ch: "ऐ", hint: "ai",  file: "ai.mp3" },
+      { ch: "ओ", hint: "o",   file: "o.mp3" },
+      { ch: "औ", hint: "au",  file: "au.mp3" },
+      { ch: "अं", hint: "aṃ", file: "am.mp3" },
+      { ch: "अः", hint: "aḥ", file: "ah.mp3" }
     ];
 
-    const grid = document.getElementById("grid");
+    // 5×5 vargas (record these as isolated sounds: ka kha ga gha ṅa ... etc.)
+    const vargiya = [
+      { ch:"क", hint:"ka",  file:"ka.mp3" },  { ch:"ख", hint:"kha", file:"kha.mp3" }, { ch:"ग", hint:"ga",  file:"ga.mp3" },  { ch:"घ", hint:"gha", file:"gha.mp3" }, { ch:"ङ", hint:"ṅa",  file:"nga.mp3" },
+      { ch:"च", hint:"ca",  file:"ca.mp3" },  { ch:"छ", hint:"cha", file:"cha.mp3" }, { ch:"ज", hint:"ja",  file:"ja.mp3" },  { ch:"झ", hint:"jha", file:"jha.mp3" }, { ch:"ञ", hint:"ña",  file:"nya.mp3" },
+      { ch:"ट", hint:"ṭa",  file:"ta_retro.mp3" }, { ch:"ठ", hint:"ṭha", file:"tha_retro.mp3" }, { ch:"ड", hint:"ḍa", file:"da_retro.mp3" }, { ch:"ढ", hint:"ḍha", file:"dha_retro.mp3" }, { ch:"ण", hint:"ṇa", file:"na_retro.mp3" },
+      { ch:"त", hint:"ta",  file:"ta.mp3" },  { ch:"थ", hint:"tha", file:"tha.mp3" }, { ch:"द", hint:"da",  file:"da.mp3" },  { ch:"ध", hint:"dha", file:"dha.mp3" }, { ch:"न", hint:"na",  file:"na.mp3" },
+      { ch:"प", hint:"pa",  file:"pa.mp3" },  { ch:"फ", hint:"pha", file:"pha.mp3" }, { ch:"ब", hint:"ba",  file:"ba.mp3" },  { ch:"भ", hint:"bha", file:"bha.mp3" }, { ch:"म", hint:"ma",  file:"ma.mp3" }
+    ];
+
+    const avargiya = [
+      { ch:"य", hint:"ya", file:"ya.mp3" },
+      { ch:"र", hint:"ra", file:"ra.mp3" },
+      { ch:"ल", hint:"la", file:"la.mp3" },
+      { ch:"व", hint:"va", file:"va.mp3" },
+      { ch:"श", hint:"śa", file:"sha_palatal.mp3" },
+      { ch:"ष", hint:"ṣa", file:"sha_retro.mp3" },
+      { ch:"स", hint:"sa", file:"sa.mp3" },
+      { ch:"ह", hint:"ha", file:"ha.mp3" },
+      // Optional conjuncts (only include if you record them)
+      { ch:"क्ष", hint:"kṣa", file:"ksha.mp3" },
+      { ch:"ज्ञ", hint:"jña", file:"gya.mp3" }
+    ];
+
+    // --- PLAYER ---
     const status = document.getElementById("status");
     const showHint = document.getElementById("showHint");
-
-    // One shared audio element = clean playback and easy stopping
     const player = new Audio();
     player.preload = "auto";
 
     function setStatus(msg) { status.textContent = msg; }
 
     function playFile(file, labelForStatus) {
-      try {
-        player.pause();
-        player.currentTime = 0;
-      } catch(e) {}
-
+      try { player.pause(); player.currentTime = 0; } catch(e) {}
       const url = AUDIO_BASE_URL + file;
       setStatus("Loading: " + labelForStatus);
-
       player.src = url;
       player.play()
         .then(() => setStatus("Playing: " + labelForStatus))
         .catch(err => {
           console.error(err);
           setStatus("Audio failed. Check URL / permissions.");
-          alert("Could not play audio.\n\nTried: " + url + "\n\nCommon causes:\n- Wrong AUDIO_BASE_URL\n- File name mismatch (case-sensitive)\n- Host blocks direct access");
+          alert("Could not play audio.\n\nTried: " + url);
         });
     }
 
-    letters.forEach(x => {
-      const b = document.createElement("button");
-      b.textContent = x.ch;
+    function renderButtons(containerId, items, mode) {
+      const container = document.getElementById(containerId);
+      items.forEach(x => {
+        const b = document.createElement("button");
+        b.textContent = x.ch;
+        b.className = (mode === "line") ? "btnLine" : "";
+        const updateTitle = () => { b.title = showHint.checked ? (x.hint + " (" + x.file + ")") : ""; };
+        updateTitle();
+        showHint.addEventListener("change", updateTitle);
+        b.onclick = () => playFile(x.file, x.ch + (showHint.checked ? " = " + x.hint : ""));
+        container.appendChild(b);
+      });
+    }
 
-      const updateTitle = () => {
-        b.title = showHint.checked ? (x.hint + "  (" + x.file + ")") : "";
-      };
-      updateTitle();
-      showHint.addEventListener("change", updateTitle);
-
-      b.onclick = () => playFile(x.file, x.ch + (showHint.checked ? " = " + x.hint : ""));
-      grid.appendChild(b);
-    });
+    renderButtons("grid-vowels", vowels);
+    renderButtons("grid-vargiya", vargiya);
+    renderButtons("line-avargiya", avargiya, "line");
   </script>
+
+  <style>
+    /* Add these styles (keeps your existing ones intact) */
+    h2 { font-size: 16px; margin: 0; }
+    .grid5 { display:grid; grid-template-columns: repeat(5, minmax(44px, 1fr)); gap: 10px; max-width: 520px; }
+    .line { display:flex; gap:10px; flex-wrap: wrap; max-width: 900px; }
+    .btnLine { padding: 10px 14px; }
+  </style>
 </body>
 </html>
+
 
 
 

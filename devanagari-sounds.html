@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Sanskrit Pronunciation Tool</title>
+  <title>Devanagari Pronunciation Tool</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -21,12 +21,10 @@
     .pill { font-size: 13px; padding: 6px 10px; border-radius: 999px; border: 1px solid #ddd; background:#fafafa; }
     .small { font-size: 13px; color:#666; margin-top: 10px; }
 
-    /* Layout for sections */
     .grid { display: grid; grid-template-columns: repeat(8, minmax(54px, 1fr)); gap: 10px; max-width: 900px; }
     .grid5 { display:grid; grid-template-columns: repeat(5, minmax(54px, 1fr)); gap: 10px; max-width: 520px; }
     .line { display:flex; gap:10px; flex-wrap: wrap; max-width: 900px; }
 
-    /* LETTER BUTTONS ONLY */
     .letterBtn{
       font-family: "Noto Sans Devanagari","Nirmala UI","Mangal",system-ui,sans-serif;
       font-size: 26px;
@@ -40,7 +38,6 @@
     }
     .letterBtn:active { transform: scale(0.98); }
 
-    /* CONTROL BUTTON (Play/Next) */
     .ctrlBtn{
       font-size: 14px;
       padding: 8px 12px;
@@ -50,14 +47,13 @@
       cursor: pointer;
     }
 
-    /* Quiz feedback colors */
     .letterBtn.correct { background: #d4f8d4; border-color: #2f9e44; }
     .letterBtn.wrong   { background: #ffd6d6; border-color: #c92a2a; }
   </style>
 </head>
 
 <body>
-  <h1>Sanskrit Pronunciation Tool</h1>
+  <h1>Devanagari Pronunciation Tool</h1>
 
   <div class="row">
     <span class="pill" id="status">Ready</span>
@@ -79,16 +75,19 @@
     <label><input type="radio" name="quizType" value="reverse"> See → Guess</label>
 
     <button class="ctrlBtn" id="playNext" type="button">Play / Next</button>
+    <button class="ctrlBtn" id="resetScore" type="button">Reset</button>
+
     <span class="pill" id="qPrompt">Quiz off</span>
+    <span class="pill" id="scorePill">✅ 0  ❌ 0  🔥 0 (best 0)</span>
   </div>
 
   <h2>स्वराः</h2>
   <div class="grid" id="grid-vowels"></div>
 
-  <h2>वर्गीय-व्यञ्जनानि</h2>
+  <h2>वर्गीय व्यञ्जनानि</h2>
   <div class="grid5" id="grid-vargiya"></div>
 
-  <h2>अवर्गीय-व्यञ्जनानि</h2>
+  <h2>अवर्गीय व्यञ्जनानि</h2>
   <div class="line" id="line-avargiya"></div>
 
   <p class="small">Hosted audio required (GitHub Pages works).</p>
@@ -96,7 +95,7 @@
   <script>
     const AUDIO_BASE_URL = "https://laksiyer.github.io/ucchAraNam/audio/";
 
-    // HK conventions used:
+    // HK conventions:
     // ā A, ī I, ū U, ṛ R, ṝ RR, ḷ L, ṅ G, ñ J, ṭ T, ḍ D, ṇ N, ś z, ṣ S, ṃ M, ḥ H
     const vowels = [
       { key:"a",  deva:"अ",  iast:"a",   hk:"a",  hint:"a",   file:"a.mp3" },
@@ -161,31 +160,38 @@
 
     const allItems = [...vowels, ...vargiya, ...avargiya];
     const byKey = new Map(allItems.map(x => [x.key, x]));
+    const quizPool = [...vargiya, ...avargiya]; // questions come from here
 
-    // QUIZ POOL: choose consonants only, or include vowels too
-    const quizPool = [...vargiya, ...avargiya];
-
-    // --- UI elements ---
+    // --- UI ---
     const status = document.getElementById("status");
     const showHint = document.getElementById("showHint");
     const schemeSel = document.getElementById("scheme");
     const quizMode = document.getElementById("quizMode");
     const playNext = document.getElementById("playNext");
     const qPrompt = document.getElementById("qPrompt");
-
+    const scorePill = document.getElementById("scorePill");
+    const resetScoreBtn = document.getElementById("resetScore");
     const quizTypeRadios = document.querySelectorAll('input[name="quizType"]');
 
-    // --- state ---
-    let scheme = schemeSel.value;   // deva|iast|hk
-    let quizType = "listen";        // listen|reverse
+    // --- State ---
+    let scheme = schemeSel.value; // deva|iast|hk
+    let quizType = "listen";      // listen|reverse
     let quizAnswerKey = null;
 
-    // --- audio ---
+    // scoring (per QUESTION, not per click)
+    let correctCount = 0;
+    let incorrectCount = 0;
+    let streak = 0;
+    let bestStreak = 0;
+
+    // tracks whether this current question has had a wrong attempt already
+    let missedThisQuestion = false;
+
+    // --- Audio ---
     const player = new Audio();
     player.preload = "auto";
 
     function labelOf(x) { return (x && x[scheme]) ? x[scheme] : (x.deva || ""); }
-
     function setStatus(msg) { status.textContent = msg; }
 
     function playFile(file, msg) {
@@ -193,28 +199,42 @@
       const url = AUDIO_BASE_URL + file;
       setStatus(msg);
       player.src = url;
-      player.play().catch(() => {
-        alert("Could not play: " + url);
-      });
+      player.play().catch(() => alert("Could not play: " + url));
     }
 
     function clearFeedback() {
       document.querySelectorAll(".letterBtn").forEach(b => b.classList.remove("correct","wrong"));
     }
 
-    function pick(arr) { return arr[Math.floor(Math.random()*arr.length)]; }
+    function updateScoreUI() {
+      scorePill.textContent = `✅ ${correctCount}  ❌ ${incorrectCount}  🔥 ${streak} (best ${bestStreak})`;
+    }
+
+    function resetScore() {
+      correctCount = 0;
+      incorrectCount = 0;
+      streak = 0;
+      bestStreak = 0;
+      missedThisQuestion = false;
+      updateScoreUI();
+      clearFeedback();
+      setStatus("Ready");
+      if (!quizMode.checked) qPrompt.textContent = "Quiz off";
+    }
+
+    function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
 
     function startQuestion() {
       clearFeedback();
       const x = pick(quizPool);
       quizAnswerKey = x.key;
+      missedThisQuestion = false;
 
       if (quizType === "listen") {
         qPrompt.textContent = "Listen → Click";
         playFile(x.file, "Quiz sound");
       } else {
         qPrompt.textContent = "See → Guess (then Play)";
-        // show target letter in status (in current scheme)
         setStatus("Shown: " + labelOf(x));
       }
     }
@@ -226,7 +246,6 @@
         b.className = "letterBtn";
         b.dataset.key = x.key;
         b.textContent = labelOf(x);
-
         if (modeLine) b.style.padding = "10px 14px";
 
         const updateTitle = () => {
@@ -241,17 +260,31 @@
             return;
           }
 
-          // quiz answer attempt
+          // quiz attempt
           clearFeedback();
 
           if (x.key === quizAnswerKey) {
             b.classList.add("correct");
             qPrompt.textContent = "✅ Correct!";
+
+            // score per QUESTION:
+            correctCount += 1;
+            if (missedThisQuestion) {
+              incorrectCount += 1; // counted once per question if they missed at least once
+              streak = 0;          // streak only continues for perfect first-try answers
+            } else {
+              streak += 1;
+              if (streak > bestStreak) bestStreak = streak;
+            }
+            updateScoreUI();
+
             playFile(x.file, "Correct");
             setTimeout(startQuestion, 800);
+
           } else {
             b.classList.add("wrong");
             qPrompt.textContent = "❌ Try again";
+            missedThisQuestion = true; // mark that this question was missed at least once
 
             // optional: in listen mode, replay target sound to reinforce
             if (quizType === "listen" && quizAnswerKey) {
@@ -265,32 +298,31 @@
       });
     }
 
-    // initial render
+    // Initial render
     renderButtons("grid-vowels", vowels);
     renderButtons("grid-vargiya", vargiya);
     renderButtons("line-avargiya", avargiya, true);
 
-    // scheme switch: just relabel button faces (no re-render needed)
+    // Scheme toggle
     schemeSel.addEventListener("change", () => {
       scheme = schemeSel.value;
       document.querySelectorAll(".letterBtn").forEach(btn => {
         const x = byKey.get(btn.dataset.key);
         btn.textContent = labelOf(x);
       });
-      // if reverse quiz is showing a letter in status, update that too
       if (quizMode.checked && quizType === "reverse" && quizAnswerKey) {
         const x = byKey.get(quizAnswerKey);
         setStatus("Shown: " + labelOf(x));
       }
     });
 
-    // quiz type switch
+    // Quiz type toggle
     quizTypeRadios.forEach(r => r.addEventListener("change", () => {
       quizType = document.querySelector('input[name="quizType"]:checked').value;
       if (quizMode.checked) startQuestion();
     }));
 
-    // Play/Next button behavior
+    // Play/Next button
     playNext.addEventListener("click", () => {
       if (!quizMode.checked) return;
 
@@ -302,18 +334,24 @@
       }
     });
 
-    // quiz on/off
+    // Quiz toggle
     quizMode.addEventListener("change", () => {
+      clearFeedback();
       if (quizMode.checked) {
         startQuestion();
       } else {
         quizAnswerKey = null;
-        clearFeedback();
+        missedThisQuestion = false;
         qPrompt.textContent = "Quiz off";
         setStatus("Ready");
       }
     });
+
+    // Reset button
+    resetScoreBtn.addEventListener("click", resetScore);
+
+    // Init score display
+    updateScoreUI();
   </script>
 </body>
 </html>
-

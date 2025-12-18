@@ -38,61 +38,58 @@
     }
     .letterBtn:active { transform: scale(0.98); }
 
-    .ctrlBtn{
-      font-size: 14px;
-      padding: 8px 12px;
-      border-radius: 999px;
-      border: 1px solid #ddd;
-      background: white;
-      cursor: pointer;
+    /* ---------- GUNITA COLOR SYSTEM (color-blind friendly) ---------- */
+
+    /* Gunita consonants: neutral */
+    #gunita-consonants .letterBtn {
+      background: #ffffff;
+      border-color: #cfcfcf;
     }
 
-    .letterBtn.correct { background: #d4f8d4; border-color: #2f9e44; }
-    .letterBtn.wrong   { background: #ffd6d6; border-color: #c92a2a; }
+    /* Gunita matras: blue theme */
+    #gunita-matras .letterBtn {
+      background: #e7f1ff;
+      border-color: #2b6cb0;
+    }
 
-    /* BIG display for the combined gunita syllable */
+    /* Inherent vowel (अ): gray, not blue */
+    #gunita-matras .letterBtn[data-matra="a"] {
+      background: #f3f4f6;
+      border-color: #6b7280;
+    }
+
+    /* Large combined result */
     #gunita-display {
       font-family: "Noto Sans Devanagari","Nirmala UI","Mangal",system-ui,sans-serif;
       font-size: 64px;
       line-height: 1.05;
-      padding: 14px 22px;
+      padding: 16px 28px;
       border-radius: 18px;
-      border: 1px solid #ddd;
-      background: #fafafa;
+      background: #fff7e6;
+      border: 2px solid #b45309;
+      color: #0f172a;
+      min-width: 160px;
       text-align: center;
-      min-width: 140px;
+      position: relative;
+    }
+
+    /* Accent bar (non-color cue) */
+    #gunita-display::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 10px;
+      height: 100%;
+      background: #b45309;
+      border-top-left-radius: 18px;
+      border-bottom-left-radius: 18px;
     }
   </style>
 </head>
 
 <body>
   <h1>Devanagari Pronunciation Tool</h1>
-
-  <div class="row">
-    <span class="pill" id="status">Ready</span>
-
-    <label><input type="checkbox" id="showHint" checked> Show hint</label>
-
-    <label>
-      Display:
-      <select id="scheme">
-        <option value="deva" selected>Devanagari</option>
-        <option value="iast">IAST</option>
-        <option value="hk">Harvard–Kyoto</option>
-      </select>
-    </label>
-
-    <label><input type="checkbox" id="quizMode"> Quiz</label>
-
-    <label><input type="radio" name="quizType" value="listen" checked> Listen → Click</label>
-    <label><input type="radio" name="quizType" value="reverse"> See → Guess</label>
-
-    <button class="ctrlBtn" id="playNext" type="button">Play / Next</button>
-    <button class="ctrlBtn" id="resetScore" type="button">Reset</button>
-
-    <span class="pill" id="qPrompt">Quiz off</span>
-    <span class="pill" id="scorePill">✅ 0  ❌ 0  🔥 0 (best 0)</span>
-  </div>
 
   <h2>स्वराः</h2>
   <div class="grid" id="grid-vowels"></div>
@@ -103,14 +100,16 @@
   <h2>अवर्गीय व्यञ्जनानि</h2>
   <div class="line" id="line-avargiya"></div>
 
-  <!-- GUNITA SECTION -->
-  <h2>गुणिताक्षराणि <span class="small">(Work in progress)</span></h2>
+  <h2>गुणित अक्षराणि <span class="small">(Work in progress)</span></h2>
+
   <div class="row">
-    <span class="pill">1) Pick a consonant  →  2) Pick a vowel/mātrā</span>
+    <span class="pill">1) Pick a consonant → 2) Pick a vowel/mātrā</span>
     <span class="pill" id="gunita-status">Selected: —</span>
   </div>
+
   <div class="line" id="gunita-consonants"></div>
   <div class="line" id="gunita-matras"></div>
+
   <div class="row">
     <div id="gunita-display">—</div>
   </div>
@@ -120,352 +119,89 @@
   <script>
     const AUDIO_BASE_URL = "https://laksiyer.github.io/ucchAraNam/audio/";
 
-    // HK conventions:
-    // ā A, ī I, ū U, ṛ R, ṝ RR, ḷ L, ṅ G, ñ J, ṭ T, ḍ D, ṇ N, ś z, ṣ S, ṃ M, ḥ H
-    const vowels = [
-      { key:"a",  deva:"अ",  iast:"a",   hk:"a",  hint:"a",   file:"a.mp3" },
-      { key:"aa", deva:"आ",  iast:"ā",   hk:"A",  hint:"ā",   file:"aa.mp3" },
-      { key:"i",  deva:"इ",  iast:"i",   hk:"i",  hint:"i",   file:"i.mp3" },
-      { key:"ii", deva:"ई",  iast:"ī",   hk:"I",  hint:"ī",   file:"ii.mp3" },
-      { key:"u",  deva:"उ",  iast:"u",   hk:"u",  hint:"u",   file:"u.mp3" },
-      { key:"uu", deva:"ऊ",  iast:"ū",   hk:"U",  hint:"ū",   file:"uu.mp3" },
-      { key:"ri", deva:"ऋ",  iast:"ṛ",   hk:"R",  hint:"ṛ",   file:"ri.mp3" },
-      { key:"rri",deva:"ॠ",  iast:"ṝ",   hk:"RR", hint:"ṝ",   file:"rri.mp3" },
-      { key:"lr", deva:"ऌ",  iast:"ḷ",   hk:"L",  hint:"ḷ",   file:"lr.mp3" },
-      { key:"e",  deva:"ए",  iast:"e",   hk:"e",  hint:"e",   file:"e.mp3" },
-      { key:"ai", deva:"ऐ",  iast:"ai",  hk:"ai", hint:"ai",  file:"ai.mp3" },
-      { key:"o",  deva:"ओ",  iast:"o",   hk:"o",  hint:"o",   file:"o.mp3" },
-      { key:"au", deva:"औ",  iast:"au",  hk:"au", hint:"au",  file:"au.mp3" },
-      { key:"am", deva:"अं", iast:"aṃ",  hk:"aM", hint:"aṃ",  file:"am.mp3" },
-      { key:"ah", deva:"अः", iast:"aḥ",  hk:"aH", hint:"aḥ",  file:"ah.mp3" }
-    ];
-
     const vargiya = [
-      { key:"ka",  deva:"क", iast:"ka",  hk:"ka",  hint:"ka",  file:"ka.mp3" },
-      { key:"kha", deva:"ख", iast:"kha", hk:"kha", hint:"kha", file:"kha.mp3" },
-      { key:"ga",  deva:"ग", iast:"ga",  hk:"ga",  hint:"ga",  file:"ga.mp3" },
-      { key:"gha", deva:"घ", iast:"gha", hk:"gha", hint:"gha", file:"gha.mp3" },
-      { key:"nga", deva:"ङ", iast:"ṅa",  hk:"Ga",  hint:"ṅa",  file:"nga.mp3" },
-
-      { key:"ca",  deva:"च", iast:"ca",  hk:"ca",  hint:"ca",  file:"ca.mp3" },
-      { key:"cha", deva:"छ", iast:"cha", hk:"cha", hint:"cha", file:"cha.mp3" },
-      { key:"ja",  deva:"ज", iast:"ja",  hk:"ja",  hint:"ja",  file:"ja.mp3" },
-      { key:"jha", deva:"झ", iast:"jha", hk:"jha", hint:"jha", file:"jha.mp3" },
-      { key:"nya", deva:"ञ", iast:"ña",  hk:"Ja",  hint:"ña",  file:"nya.mp3" },
-
-      { key:"tta",  deva:"ट", iast:"ṭa",  hk:"Ta",  hint:"ṭa",  file:"ta_retro.mp3" },
-      { key:"ttha", deva:"ठ", iast:"ṭha", hk:"Tha", hint:"ṭha", file:"tha_retro.mp3" },
-      { key:"dda",  deva:"ड", iast:"ḍa",  hk:"Da",  hint:"ḍa",  file:"da_retro.mp3" },
-      { key:"ddha", deva:"ढ", iast:"ḍha", hk:"Dha", hint:"ḍha", file:"dha_retro.mp3" },
-      { key:"nna",  deva:"ण", iast:"ṇa",  hk:"Na",  hint:"ṇa",  file:"na_retro.mp3" },
-
-      { key:"ta",  deva:"त", iast:"ta",  hk:"ta",  hint:"ta",  file:"ta.mp3" },
-      { key:"tha", deva:"थ", iast:"tha", hk:"tha", hint:"tha", file:"tha.mp3" },
-      { key:"da",  deva:"द", iast:"da",  hk:"da",  hint:"da",  file:"da.mp3" },
-      { key:"dha", deva:"ध", iast:"dha", hk:"dha", hint:"dha", file:"dha.mp3" },
-      { key:"na",  deva:"न", iast:"na",  hk:"na",  hint:"na",  file:"na.mp3" },
-
-      { key:"pa",  deva:"प", iast:"pa",  hk:"pa",  hint:"pa",  file:"pa.mp3" },
-      { key:"pha", deva:"फ", iast:"pha", hk:"pha", hint:"pha", file:"pha.mp3" },
-      { key:"ba",  deva:"ब", iast:"ba",  hk:"ba",  hint:"ba",  file:"ba.mp3" },
-      { key:"bha", deva:"भ", iast:"bha", hk:"bha", hint:"bha", file:"bha.mp3" },
-      { key:"ma",  deva:"म", iast:"ma",  hk:"ma",  hint:"ma",  file:"ma.mp3" }
+      { deva:"क", file:"ka.mp3" }, { deva:"ख", file:"kha.mp3" }, { deva:"ग", file:"ga.mp3" },
+      { deva:"घ", file:"gha.mp3" }, { deva:"ङ", file:"nga.mp3" },
+      { deva:"च", file:"ca.mp3" }, { deva:"छ", file:"cha.mp3" }, { deva:"ज", file:"ja.mp3" },
+      { deva:"झ", file:"jha.mp3" }, { deva:"ञ", file:"nya.mp3" },
+      { deva:"ट", file:"ta_retro.mp3" }, { deva:"ठ", file:"tha_retro.mp3" },
+      { deva:"ड", file:"da_retro.mp3" }, { deva:"ढ", file:"dha_retro.mp3" }, { deva:"ण", file:"na_retro.mp3" },
+      { deva:"त", file:"ta.mp3" }, { deva:"थ", file:"tha.mp3" }, { deva:"द", file:"da.mp3" },
+      { deva:"ध", file:"dha.mp3" }, { deva:"न", file:"na.mp3" },
+      { deva:"प", file:"pa.mp3" }, { deva:"फ", file:"pha.mp3" }, { deva:"ब", file:"ba.mp3" },
+      { deva:"भ", file:"bha.mp3" }, { deva:"म", file:"ma.mp3" }
     ];
 
     const avargiya = [
-      { key:"ya", deva:"य", iast:"ya", hk:"ya", hint:"ya", file:"ya.mp3" },
-      { key:"ra", deva:"र", iast:"ra", hk:"ra", hint:"ra", file:"ra.mp3" },
-      { key:"la", deva:"ल", iast:"la", hk:"la", hint:"la", file:"la.mp3" },
-      { key:"va", deva:"व", iast:"va", hk:"va", hint:"va", file:"va.mp3" },
-      { key:"sha",deva:"श", iast:"śa", hk:"za", hint:"śa", file:"sha_palatal.mp3" },
-      { key:"ssa",deva:"ष", iast:"ṣa", hk:"Sa", hint:"ṣa", file:"sha_retro.mp3" },
-      { key:"sa", deva:"स", iast:"sa", hk:"sa", hint:"sa", file:"sa.mp3" },
-      { key:"ha", deva:"ह", iast:"ha", hk:"ha", hint:"ha", file:"ha.mp3" }
+      { deva:"य", file:"ya.mp3" }, { deva:"र", file:"ra.mp3" }, { deva:"ल", file:"la.mp3" },
+      { deva:"व", file:"va.mp3" }, { deva:"श", file:"sha_palatal.mp3" },
+      { deva:"ष", file:"sha_retro.mp3" }, { deva:"स", file:"sa.mp3" }, { deva:"ह", file:"ha.mp3" }
     ];
 
-    // Matras for gunita (NO ॡ / ॣ)
     const matras = [
-      { key:"a",   deva:"",  vowelFile:"a.mp3"   }, // inherent vowel (show as "अ")
-      { key:"aa",  deva:"ा", vowelFile:"aa.mp3"  },
-      { key:"i",   deva:"ि", vowelFile:"i.mp3"   },
-      { key:"ii",  deva:"ी", vowelFile:"ii.mp3"  },
-      { key:"u",   deva:"ु", vowelFile:"u.mp3"   },
-      { key:"uu",  deva:"ू", vowelFile:"uu.mp3"  },
-      { key:"ri",  deva:"ृ", vowelFile:"ri.mp3"  },
+      { key:"a", deva:"", vowelFile:"a.mp3" },
+      { key:"aa", deva:"ा", vowelFile:"aa.mp3" },
+      { key:"i", deva:"ि", vowelFile:"i.mp3" },
+      { key:"ii", deva:"ी", vowelFile:"ii.mp3" },
+      { key:"u", deva:"ु", vowelFile:"u.mp3" },
+      { key:"uu", deva:"ू", vowelFile:"uu.mp3" },
+      { key:"ri", deva:"ृ", vowelFile:"ri.mp3" },
       { key:"rri", deva:"ॄ", vowelFile:"rri.mp3" },
-      { key:"lr",  deva:"ॢ", vowelFile:"lr.mp3"  },
-      { key:"e",   deva:"े", vowelFile:"e.mp3"   },
-      { key:"ai",  deva:"ै", vowelFile:"ai.mp3"  },
-      { key:"o",   deva:"ो", vowelFile:"o.mp3"   },
-      { key:"au",  deva:"ौ", vowelFile:"au.mp3"  },
-      { key:"am",  deva:"ं", vowelFile:"am.mp3"  },
-      { key:"ah",  deva:"ः", vowelFile:"ah.mp3"  }
+      { key:"lr", deva:"ॢ", vowelFile:"lr.mp3" },
+      { key:"e", deva:"े", vowelFile:"e.mp3" },
+      { key:"ai", deva:"ै", vowelFile:"ai.mp3" },
+      { key:"o", deva:"ो", vowelFile:"o.mp3" },
+      { key:"au", deva:"ौ", vowelFile:"au.mp3" },
+      { key:"am", deva:"ं", vowelFile:"am.mp3" },
+      { key:"ah", deva:"ः", vowelFile:"ah.mp3" }
     ];
 
-    const allItems = [...vowels, ...vargiya, ...avargiya];
-    const byKey = new Map(allItems.map(x => [x.key, x]));
-    const quizPool = [...vargiya, ...avargiya]; // questions come from here
-
-    // --- UI ---
-    const status = document.getElementById("status");
-    const showHint = document.getElementById("showHint");
-    const schemeSel = document.getElementById("scheme");
-    const quizMode = document.getElementById("quizMode");
-    const playNext = document.getElementById("playNext");
-    const qPrompt = document.getElementById("qPrompt");
-    const scorePill = document.getElementById("scorePill");
-    const resetScoreBtn = document.getElementById("resetScore");
-    const quizTypeRadios = document.querySelectorAll('input[name="quizType"]');
-
-    // Gunita UI
-    const gunitaStatus = document.getElementById("gunita-status");
-    const gunitaDisplay = document.getElementById("gunita-display");
-
-    // --- State ---
-    let scheme = schemeSel.value; // deva|iast|hk
-    let quizType = "listen";      // listen|reverse
-    let quizAnswerKey = null;
-
-    // scoring (per QUESTION, not per click)
-    let correctCount = 0;
-    let incorrectCount = 0;
-    let streak = 0;
-    let bestStreak = 0;
-    let missedThisQuestion = false;
-
-    // Gunita selection
+    const player = new Audio();
     let selectedConsonant = null;
 
-    // --- Audio ---
-    const player = new Audio();
-    player.preload = "auto";
-
-    function labelOf(x) { return (x && x[scheme]) ? x[scheme] : (x.deva || ""); }
-    function setStatus(msg) { status.textContent = msg; }
-
-    function playFile(file, msg) {
-      try { player.pause(); player.currentTime = 0; } catch(e) {}
-      const url = AUDIO_BASE_URL + file;
-      setStatus(msg);
-      player.src = url;
-      player.play().catch(() => alert("Could not play: " + url));
-    }
-
-    // play multiple audio clips in order (for gunita)
     async function playSequence(files) {
       for (const f of files) {
-        await new Promise((resolve, reject) => {
-          try { player.pause(); player.currentTime = 0; } catch(e) {}
+        await new Promise(resolve => {
           player.src = AUDIO_BASE_URL + f;
           player.onended = resolve;
-          player.onerror = reject;
-          player.play().catch(reject);
+          player.play();
         });
       }
     }
 
-    function clearFeedback() {
-      document.querySelectorAll(".letterBtn").forEach(b => b.classList.remove("correct","wrong"));
-    }
+    const gunitaStatus = document.getElementById("gunita-status");
+    const gunitaDisplay = document.getElementById("gunita-display");
 
-    function updateScoreUI() {
-      scorePill.textContent = `✅ ${correctCount}  ❌ ${incorrectCount}  🔥 ${streak} (best ${bestStreak})`;
-    }
+    const cDiv = document.getElementById("gunita-consonants");
+    const mDiv = document.getElementById("gunita-matras");
 
-    function resetScore() {
-      correctCount = 0;
-      incorrectCount = 0;
-      streak = 0;
-      bestStreak = 0;
-      missedThisQuestion = false;
-      updateScoreUI();
-      clearFeedback();
-      setStatus("Ready");
-      if (!quizMode.checked) qPrompt.textContent = "Quiz off";
-    }
-
-    function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
-
-    function startQuestion() {
-      clearFeedback();
-      const x = pick(quizPool);
-      quizAnswerKey = x.key;
-      missedThisQuestion = false;
-
-      if (quizType === "listen") {
-        qPrompt.textContent = "Listen → Click";
-        playFile(x.file, "Quiz sound");
-      } else {
-        qPrompt.textContent = "See → Guess (then Play)";
-        setStatus("Shown: " + labelOf(x));
-      }
-    }
-
-    function renderButtons(containerId, items, modeLine=false) {
-      const container = document.getElementById(containerId);
-      items.forEach(x => {
-        const b = document.createElement("button");
-        b.className = "letterBtn";
-        b.dataset.key = x.key;
-        b.textContent = labelOf(x);
-        if (modeLine) b.style.padding = "10px 14px";
-
-        const updateTitle = () => {
-          b.title = showHint.checked ? (x.hint + " (" + x.file + ")") : "";
-        };
-        updateTitle();
-        showHint.addEventListener("change", updateTitle);
-
-        b.onclick = () => {
-          if (!quizMode.checked) {
-            playFile(x.file, labelOf(x) + (showHint.checked ? " = " + x.hint : ""));
-            return;
-          }
-
-          // quiz attempt
-          clearFeedback();
-
-          if (x.key === quizAnswerKey) {
-            b.classList.add("correct");
-            qPrompt.textContent = "✅ Correct!";
-
-            correctCount += 1;
-            if (missedThisQuestion) {
-              incorrectCount += 1;
-              streak = 0;
-            } else {
-              streak += 1;
-              if (streak > bestStreak) bestStreak = streak;
-            }
-            updateScoreUI();
-
-            playFile(x.file, "Correct");
-            setTimeout(startQuestion, 800);
-
-          } else {
-            b.classList.add("wrong");
-            qPrompt.textContent = "❌ Try again";
-            missedThisQuestion = true;
-
-            if (quizType === "listen" && quizAnswerKey) {
-              const target = byKey.get(quizAnswerKey);
-              if (target) setTimeout(() => playFile(target.file, "Try again"), 200);
-            }
-          }
-        };
-
-        container.appendChild(b);
-      });
-    }
-
-    // Render gunita controls
-    function renderGunita() {
-      const cDiv = document.getElementById("gunita-consonants");
-      const mDiv = document.getElementById("gunita-matras");
-
-      const consonants = [...vargiya, ...avargiya];
-
-      consonants.forEach(c => {
-        const b = document.createElement("button");
-        b.className = "letterBtn";
-        b.textContent = c.deva;
-        b.title = "Select consonant: " + c.deva;
-        b.onclick = () => {
-          selectedConsonant = c;
-          gunitaStatus.textContent = "Selected: " + c.deva;
-          gunitaDisplay.textContent = c.deva; // default
-          playFile(c.file, "Selected: " + c.deva);
-        };
-        cDiv.appendChild(b);
-      });
-
-      matras.forEach(m => {
-        const b = document.createElement("button");
-        b.className = "letterBtn";
-        b.textContent = m.deva || "अ";
-        b.title = "Apply: " + (m.deva || "अ");
-
-        b.onclick = async () => {
-          if (!selectedConsonant) {
-            alert("First select a consonant (e.g., क).");
-            return;
-          }
-
-          const combined = selectedConsonant.deva + (m.deva || "");
-          gunitaDisplay.textContent = combined;
-
-          try {
-            await playSequence([selectedConsonant.file, m.vowelFile]);
-            setStatus("Playing: " + combined);
-          } catch (e) {
-            console.error(e);
-            alert("Could not play gunita audio. Check file names:\n" +
-              selectedConsonant.file + " + " + m.vowelFile);
-          }
-        };
-
-        mDiv.appendChild(b);
-      });
-    }
-
-    // Initial render
-    renderButtons("grid-vowels", vowels);
-    renderButtons("grid-vargiya", vargiya);
-    renderButtons("line-avargiya", avargiya, true);
-
-    // Gunita render
-    renderGunita();
-
-    // Scheme toggle
-    schemeSel.addEventListener("change", () => {
-      scheme = schemeSel.value;
-      document.querySelectorAll(".letterBtn").forEach(btn => {
-        const x = byKey.get(btn.dataset.key);
-        if (x) btn.textContent = labelOf(x); // update only main letter buttons with data-key
-      });
-      if (quizMode.checked && quizType === "reverse" && quizAnswerKey) {
-        const x = byKey.get(quizAnswerKey);
-        setStatus("Shown: " + labelOf(x));
-      }
+    [...vargiya, ...avargiya].forEach(c => {
+      const b = document.createElement("button");
+      b.className = "letterBtn";
+      b.textContent = c.deva;
+      b.onclick = () => {
+        selectedConsonant = c;
+        gunitaStatus.textContent = "Selected: " + c.deva;
+        gunitaDisplay.textContent = c.deva;
+        player.src = AUDIO_BASE_URL + c.file;
+        player.play();
+      };
+      cDiv.appendChild(b);
     });
 
-    // Quiz type toggle
-    quizTypeRadios.forEach(r => r.addEventListener("change", () => {
-      quizType = document.querySelector('input[name="quizType"]:checked').value;
-      if (quizMode.checked) startQuestion();
-    }));
-
-    // Play/Next button
-    playNext.addEventListener("click", () => {
-      if (!quizMode.checked) return;
-
-      if (quizType === "reverse" && quizAnswerKey) {
-        const x = byKey.get(quizAnswerKey);
-        playFile(x.file, "Reveal");
-      } else {
-        startQuestion();
-      }
+    matras.forEach(m => {
+      const b = document.createElement("button");
+      b.className = "letterBtn";
+      b.dataset.matra = m.key;
+      b.textContent = m.deva || "अ";
+      b.onclick = async () => {
+        if (!selectedConsonant) return alert("Select a consonant first");
+        const combined = selectedConsonant.deva + (m.deva || "");
+        gunitaDisplay.textContent = combined;
+        await playSequence([selectedConsonant.file, m.vowelFile]);
+      };
+      mDiv.appendChild(b);
     });
-
-    // Quiz toggle
-    quizMode.addEventListener("change", () => {
-      clearFeedback();
-      if (quizMode.checked) {
-        startQuestion();
-      } else {
-        quizAnswerKey = null;
-        missedThisQuestion = false;
-        qPrompt.textContent = "Quiz off";
-        setStatus("Ready");
-      }
-    });
-
-    // Reset button
-    resetScoreBtn.addEventListener("click", resetScore);
-
-    // Init score display
-    updateScoreUI();
   </script>
 </body>
 </html>
-

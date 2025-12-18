@@ -1,214 +1,318 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Devanagari Letter Sounds</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Sanskrit Pronunciation Tool</title>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;600&display=swap" rel="stylesheet">
 
-<style>
-body { font-family: system-ui, Arial, sans-serif; padding: 16px; }
-h1 { font-size: 20px; margin-bottom: 8px; }
+  <style>
+    body { font-family: system-ui, Arial, sans-serif; padding: 16px; }
+    h1 { font-size: 20px; margin: 0 0 10px; }
+    h2 { font-size: 16px; margin: 14px 0 8px; }
 
-.grid, .grid5, .line, button {
-  font-family: "Noto Sans Devanagari","Nirmala UI","Mangal",system-ui,sans-serif;
-}
+    .row { display:flex; gap:10px; align-items:center; flex-wrap: wrap; margin: 10px 0 14px; }
+    label { font-size: 14px; color:#444; }
+    select { padding: 6px 8px; border-radius: 10px; border: 1px solid #ddd; background: white; }
 
-.grid { display:grid; grid-template-columns:repeat(8,1fr); gap:10px; max-width:900px; }
-.grid5 { display:grid; grid-template-columns:repeat(5,1fr); gap:10px; max-width:520px; }
-.line { display:flex; gap:10px; flex-wrap:wrap; max-width:900px; }
+    .pill { font-size: 13px; padding: 6px 10px; border-radius: 999px; border: 1px solid #ddd; background:#fafafa; }
+    .small { font-size: 13px; color:#666; margin-top: 10px; }
 
-button {
-  font-size:26px;
-  padding:10px 0;
-  border-radius:12px;
-  border:1px solid #ddd;
-  background:white;
-  cursor:pointer;
-}
-button.correct { background:#d4f8d4; border-color:#2f9e44; }
-button.wrong { background:#ffd6d6; border-color:#c92a2a; }
+    /* Layout for sections */
+    .grid { display: grid; grid-template-columns: repeat(8, minmax(54px, 1fr)); gap: 10px; max-width: 900px; }
+    .grid5 { display:grid; grid-template-columns: repeat(5, minmax(54px, 1fr)); gap: 10px; max-width: 520px; }
+    .line { display:flex; gap:10px; flex-wrap: wrap; max-width: 900px; }
 
-.row { display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-bottom:10px; }
-label { font-size:14px; }
-select { padding:6px; border-radius:8px; }
+    /* LETTER BUTTONS ONLY */
+    .letterBtn{
+      font-family: "Noto Sans Devanagari","Nirmala UI","Mangal",system-ui,sans-serif;
+      font-size: 26px;
+      padding: 10px 0;
+      border-radius: 12px;
+      border: 1px solid #ddd;
+      background: white;
+      cursor: pointer;
+      box-shadow: 0 1px 2px rgba(0,0,0,.06);
+      user-select:none;
+    }
+    .letterBtn:active { transform: scale(0.98); }
 
-.pill { font-size:13px; padding:6px 10px; border-radius:999px; border:1px solid #ddd; background:#fafafa; }
-.small { font-size:13px; color:#666; margin-top:10px; }
-</style>
+    /* CONTROL BUTTON (Play/Next) */
+    .ctrlBtn{
+      font-size: 14px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid #ddd;
+      background: white;
+      cursor: pointer;
+    }
+
+    /* Quiz feedback colors */
+    .letterBtn.correct { background: #d4f8d4; border-color: #2f9e44; }
+    .letterBtn.wrong   { background: #ffd6d6; border-color: #c92a2a; }
+  </style>
 </head>
 
 <body>
-<h1>Sanskrit Pronunciation Tool</h1>
+  <h1>Sanskrit Pronunciation Tool</h1>
 
-<div class="row">
-  <span class="pill" id="status">Ready</span>
+  <div class="row">
+    <span class="pill" id="status">Ready</span>
 
-  <label><input type="checkbox" id="showHint" checked> Show hint</label>
+    <label><input type="checkbox" id="showHint" checked> Show hint</label>
 
-  <label>
-    Display:
-    <select id="scheme">
-      <option value="deva">Devanagari</option>
-      <option value="iast">IAST</option>
-      <option value="hk">Harvard–Kyoto</option>
-    </select>
-  </label>
+    <label>
+      Display:
+      <select id="scheme">
+        <option value="deva" selected>Devanagari</option>
+        <option value="iast">IAST</option>
+        <option value="hk">Harvard–Kyoto</option>
+      </select>
+    </label>
 
-  <label><input type="checkbox" id="quizMode"> Quiz</label>
+    <label><input type="checkbox" id="quizMode"> Quiz</label>
 
-  <label><input type="radio" name="quizType" value="listen" checked> Listen → Click</label>
-  <label><input type="radio" name="quizType" value="reverse"> See → Guess</label>
+    <label><input type="radio" name="quizType" value="listen" checked> Listen → Click</label>
+    <label><input type="radio" name="quizType" value="reverse"> See → Guess</label>
 
-  <button id="newQ">Play / Next</button>
-  <span class="pill" id="qPrompt">Quiz off</span>
-</div>
+    <button class="ctrlBtn" id="playNext" type="button">Play / Next</button>
+    <span class="pill" id="qPrompt">Quiz off</span>
+  </div>
 
-<h2>स्वराः</h2>
-<div class="grid" id="grid-vowels"></div>
+  <h2>स्वराः</h2>
+  <div class="grid" id="grid-vowels"></div>
 
-<h2>वर्गीय व्यञ्जनानि</h2>
-<div class="grid5" id="grid-vargiya"></div>
+  <h2>वर्गीय व्यञ्जनानि</h2>
+  <div class="grid5" id="grid-vargiya"></div>
 
-<h2>अवर्गीय व्यञ्जनानि</h2>
-<div class="line" id="line-avargiya"></div>
+  <h2>अवर्गीय व्यञ्जनानि</h2>
+  <div class="line" id="line-avargiya"></div>
 
-<p class="small">Hosted audio required (GitHub Pages works).</p>
+  <p class="small">Hosted audio required (GitHub Pages works).</p>
 
-<script>
-const AUDIO_BASE_URL = "https://laksiyer.github.io/ucchAraNam/audio/";
+  <script>
+    const AUDIO_BASE_URL = "https://laksiyer.github.io/ucchAraNam/audio/";
 
-/* ===== DATA ===== */
-const vowels = [
- {key:"a",deva:"अ",iast:"a",hk:"a",hint:"a",file:"a.mp3"},
- {key:"aa",deva:"आ",iast:"ā",hk:"A",hint:"ā",file:"aa.mp3"},
- {key:"i",deva:"इ",iast:"i",hk:"i",hint:"i",file:"i.mp3"},
- {key:"ii",deva:"ई",iast:"ī",hk:"I",hint:"ī",file:"ii.mp3"},
- {key:"u",deva:"उ",iast:"u",hk:"u",hint:"u",file:"u.mp3"},
- {key:"uu",deva:"ऊ",iast:"ū",hk:"U",hint:"ū",file:"uu.mp3"},
- {key:"ri",deva:"ऋ",iast:"ṛ",hk:"R",hint:"ṛ",file:"ri.mp3"},
- {key:"e",deva:"ए",iast:"e",hk:"e",hint:"e",file:"e.mp3"},
- {key:"ai",deva:"ऐ",iast:"ai",hk:"ai",hint:"ai",file:"ai.mp3"},
- {key:"o",deva:"ओ",iast:"o",hk:"o",hint:"o",file:"o.mp3"},
- {key:"au",deva:"औ",iast:"au",hk:"au",hint:"au",file:"au.mp3"}
-];
+    // HK conventions used:
+    // ā A, ī I, ū U, ṛ R, ṝ RR, ḷ L, ṅ G, ñ J, ṭ T, ḍ D, ṇ N, ś z, ṣ S, ṃ M, ḥ H
+    const vowels = [
+      { key:"a",  deva:"अ",  iast:"a",   hk:"a",  hint:"a",   file:"a.mp3" },
+      { key:"aa", deva:"आ",  iast:"ā",   hk:"A",  hint:"ā",   file:"aa.mp3" },
+      { key:"i",  deva:"इ",  iast:"i",   hk:"i",  hint:"i",   file:"i.mp3" },
+      { key:"ii", deva:"ई",  iast:"ī",   hk:"I",  hint:"ī",   file:"ii.mp3" },
+      { key:"u",  deva:"उ",  iast:"u",   hk:"u",  hint:"u",   file:"u.mp3" },
+      { key:"uu", deva:"ऊ",  iast:"ū",   hk:"U",  hint:"ū",   file:"uu.mp3" },
+      { key:"ri", deva:"ऋ",  iast:"ṛ",   hk:"R",  hint:"ṛ",   file:"ri.mp3" },
+      { key:"rri",deva:"ॠ",  iast:"ṝ",   hk:"RR", hint:"ṝ",   file:"rri.mp3" },
+      { key:"lr", deva:"ऌ",  iast:"ḷ",   hk:"L",  hint:"ḷ",   file:"lr.mp3" },
+      { key:"e",  deva:"ए",  iast:"e",   hk:"e",  hint:"e",   file:"e.mp3" },
+      { key:"ai", deva:"ऐ",  iast:"ai",  hk:"ai", hint:"ai",  file:"ai.mp3" },
+      { key:"o",  deva:"ओ",  iast:"o",   hk:"o",  hint:"o",   file:"o.mp3" },
+      { key:"au", deva:"औ",  iast:"au",  hk:"au", hint:"au",  file:"au.mp3" },
+      { key:"am", deva:"अं", iast:"aṃ",  hk:"aM", hint:"aṃ",  file:"am.mp3" },
+      { key:"ah", deva:"अः", iast:"aḥ",  hk:"aH", hint:"aḥ",  file:"ah.mp3" }
+    ];
 
-const vargiya = [
- {key:"ka",deva:"क",iast:"ka",hk:"ka",hint:"ka",file:"ka.mp3"},
- {key:"kha",deva:"ख",iast:"kha",hk:"kha",hint:"kha",file:"kha.mp3"},
- {key:"ga",deva:"ग",iast:"ga",hk:"ga",hint:"ga",file:"ga.mp3"},
- {key:"gha",deva:"घ",iast:"gha",hk:"gha",hint:"gha",file:"gha.mp3"},
- {key:"nga",deva:"ङ",iast:"ṅa",hk:"Ga",hint:"ṅa",file:"nga.mp3"},
- {key:"ca",deva:"च",iast:"ca",hk:"ca",hint:"ca",file:"ca.mp3"},
- {key:"cha",deva:"छ",iast:"cha",hk:"cha",hint:"cha",file:"cha.mp3"},
- {key:"ja",deva:"ज",iast:"ja",hk:"ja",hint:"ja",file:"ja.mp3"},
- {key:"jha",deva:"झ",iast:"jha",hk:"jha",hint:"jha",file:"jha.mp3"},
- {key:"nya",deva:"ञ",iast:"ña",hk:"Ja",hint:"ña",file:"nya.mp3"}
-];
+    const vargiya = [
+      { key:"ka",  deva:"क", iast:"ka",  hk:"ka",  hint:"ka",  file:"ka.mp3" },
+      { key:"kha", deva:"ख", iast:"kha", hk:"kha", hint:"kha", file:"kha.mp3" },
+      { key:"ga",  deva:"ग", iast:"ga",  hk:"ga",  hint:"ga",  file:"ga.mp3" },
+      { key:"gha", deva:"घ", iast:"gha", hk:"gha", hint:"gha", file:"gha.mp3" },
+      { key:"nga", deva:"ङ", iast:"ṅa",  hk:"Ga",  hint:"ṅa",  file:"nga.mp3" },
 
-const avargiya = [
- {key:"ya",deva:"य",iast:"ya",hk:"ya",hint:"ya",file:"ya.mp3"},
- {key:"ra",deva:"र",iast:"ra",hk:"ra",hint:"ra",file:"ra.mp3"},
- {key:"la",deva:"ल",iast:"la",hk:"la",hint:"la",file:"la.mp3"},
- {key:"va",deva:"व",iast:"va",hk:"va",hint:"va",file:"va.mp3"},
- {key:"sa",deva:"स",iast:"sa",hk:"sa",hint:"sa",file:"sa.mp3"},
- {key:"ha",deva:"ह",iast:"ha",hk:"ha",hint:"ha",file:"ha.mp3"}
-];
+      { key:"ca",  deva:"च", iast:"ca",  hk:"ca",  hint:"ca",  file:"ca.mp3" },
+      { key:"cha", deva:"छ", iast:"cha", hk:"cha", hint:"cha", file:"cha.mp3" },
+      { key:"ja",  deva:"ज", iast:"ja",  hk:"ja",  hint:"ja",  file:"ja.mp3" },
+      { key:"jha", deva:"झ", iast:"jha", hk:"jha", hint:"jha", file:"jha.mp3" },
+      { key:"nya", deva:"ञ", iast:"ña",  hk:"Ja",  hint:"ña",  file:"nya.mp3" },
 
-const all = [...vowels,...vargiya,...avargiya];
-const byKey = new Map(all.map(x=>[x.key,x]));
+      { key:"tta",  deva:"ट", iast:"ṭa",  hk:"Ta",  hint:"ṭa",  file:"ta_retro.mp3" },
+      { key:"ttha", deva:"ठ", iast:"ṭha", hk:"Tha", hint:"ṭha", file:"tha_retro.mp3" },
+      { key:"dda",  deva:"ड", iast:"ḍa",  hk:"Da",  hint:"ḍa",  file:"da_retro.mp3" },
+      { key:"ddha", deva:"ढ", iast:"ḍha", hk:"Dha", hint:"ḍha", file:"dha_retro.mp3" },
+      { key:"nna",  deva:"ण", iast:"ṇa",  hk:"Na",  hint:"ṇa",  file:"na_retro.mp3" },
 
-/* ===== STATE ===== */
-let scheme="deva";
-let quizType="listen";
-let quizAnswer=null;
-const quizPool=[...vargiya,...avargiya];
+      { key:"ta",  deva:"त", iast:"ta",  hk:"ta",  hint:"ta",  file:"ta.mp3" },
+      { key:"tha", deva:"थ", iast:"tha", hk:"tha", hint:"tha", file:"tha.mp3" },
+      { key:"da",  deva:"द", iast:"da",  hk:"da",  hint:"da",  file:"da.mp3" },
+      { key:"dha", deva:"ध", iast:"dha", hk:"dha", hint:"dha", file:"dha.mp3" },
+      { key:"na",  deva:"न", iast:"na",  hk:"na",  hint:"na",  file:"na.mp3" },
 
-const player=new Audio();
-const status=document.getElementById("status");
-const qPrompt=document.getElementById("qPrompt");
+      { key:"pa",  deva:"प", iast:"pa",  hk:"pa",  hint:"pa",  file:"pa.mp3" },
+      { key:"pha", deva:"फ", iast:"pha", hk:"pha", hint:"pha", file:"pha.mp3" },
+      { key:"ba",  deva:"ब", iast:"ba",  hk:"ba",  hint:"ba",  file:"ba.mp3" },
+      { key:"bha", deva:"भ", iast:"bha", hk:"bha", hint:"bha", file:"bha.mp3" },
+      { key:"ma",  deva:"म", iast:"ma",  hk:"ma",  hint:"ma",  file:"ma.mp3" }
+    ];
 
-/* ===== HELPERS ===== */
-function labelOf(x){return x[scheme]||x.deva;}
-function clearColors(){document.querySelectorAll("button").forEach(b=>b.classList.remove("correct","wrong"));}
+    const avargiya = [
+      { key:"ya", deva:"य", iast:"ya", hk:"ya", hint:"ya", file:"ya.mp3" },
+      { key:"ra", deva:"र", iast:"ra", hk:"ra", hint:"ra", file:"ra.mp3" },
+      { key:"la", deva:"ल", iast:"la", hk:"la", hint:"la", file:"la.mp3" },
+      { key:"va", deva:"व", iast:"va", hk:"va", hint:"va", file:"va.mp3" },
+      { key:"sha",deva:"श", iast:"śa", hk:"za", hint:"śa", file:"sha_palatal.mp3" },
+      { key:"ssa",deva:"ष", iast:"ṣa", hk:"Sa", hint:"ṣa", file:"sha_retro.mp3" },
+      { key:"sa", deva:"स", iast:"sa", hk:"sa", hint:"sa", file:"sa.mp3" },
+      { key:"ha", deva:"ह", iast:"ha", hk:"ha", hint:"ha", file:"ha.mp3" }
+    ];
 
-function playFile(file,msg){
- player.pause(); player.currentTime=0;
- player.src=AUDIO_BASE_URL+file;
- status.textContent=msg;
- player.play();
-}
+    const allItems = [...vowels, ...vargiya, ...avargiya];
+    const byKey = new Map(allItems.map(x => [x.key, x]));
 
-function startQuestion(){
- clearColors();
- const x=quizPool[Math.floor(Math.random()*quizPool.length)];
- quizAnswer=x.key;
- if(quizType==="listen"){
-   qPrompt.textContent="Listen → Click";
-   playFile(x.file,"Quiz");
- } else {
-   qPrompt.textContent="See → Guess → Play";
-   status.textContent="Shown: "+labelOf(x);
- }
-}
+    // QUIZ POOL: choose consonants only, or include vowels too
+    const quizPool = [...vargiya, ...avargiya];
 
-/* ===== RENDER ===== */
-function render(containerId,items){
- const c=document.getElementById(containerId);
- items.forEach(x=>{
-   const b=document.createElement("button");
-   b.textContent=labelOf(x);
-   b.onclick=()=>{
-     if(!document.getElementById("quizMode").checked){
-       playFile(x.file,labelOf(x));
-       return;
-     }
-     clearColors();
-     if(x.key===quizAnswer){
-       b.classList.add("correct");
-       qPrompt.textContent="✅ Correct";
-       playFile(x.file,"Correct");
-       setTimeout(startQuestion,700);
-     } else {
-       b.classList.add("wrong");
-       qPrompt.textContent="❌ Try again";
-     }
-   };
-   b.dataset.key=x.key;
-   c.appendChild(b);
- });
-}
+    // --- UI elements ---
+    const status = document.getElementById("status");
+    const showHint = document.getElementById("showHint");
+    const schemeSel = document.getElementById("scheme");
+    const quizMode = document.getElementById("quizMode");
+    const playNext = document.getElementById("playNext");
+    const qPrompt = document.getElementById("qPrompt");
 
-render("grid-vowels",vowels);
-render("grid-vargiya",vargiya);
-render("line-avargiya",avargiya);
+    const quizTypeRadios = document.querySelectorAll('input[name="quizType"]');
 
-/* ===== CONTROLS ===== */
-document.getElementById("scheme").onchange=e=>{
- scheme=e.target.value;
- document.querySelectorAll("button[data-key]").forEach(b=>{
-   b.textContent=labelOf(byKey.get(b.dataset.key));
- });
-};
+    // --- state ---
+    let scheme = schemeSel.value;   // deva|iast|hk
+    let quizType = "listen";        // listen|reverse
+    let quizAnswerKey = null;
 
-document.getElementsByName("quizType").forEach(r=>{
- r.onchange=e=>quizType=e.target.value;
-});
+    // --- audio ---
+    const player = new Audio();
+    player.preload = "auto";
 
-document.getElementById("newQ").onclick=()=>{
- if(!document.getElementById("quizMode").checked) return;
- if(quizType==="reverse" && quizAnswer){
-   playFile(byKey.get(quizAnswer).file,"Reveal");
- } else startQuestion();
-};
+    function labelOf(x) { return (x && x[scheme]) ? x[scheme] : (x.deva || ""); }
 
-document.getElementById("quizMode").onchange=e=>{
- if(e.target.checked) startQuestion();
- else qPrompt.textContent="Quiz off";
-};
-</script>
+    function setStatus(msg) { status.textContent = msg; }
+
+    function playFile(file, msg) {
+      try { player.pause(); player.currentTime = 0; } catch(e) {}
+      const url = AUDIO_BASE_URL + file;
+      setStatus(msg);
+      player.src = url;
+      player.play().catch(() => {
+        alert("Could not play: " + url);
+      });
+    }
+
+    function clearFeedback() {
+      document.querySelectorAll(".letterBtn").forEach(b => b.classList.remove("correct","wrong"));
+    }
+
+    function pick(arr) { return arr[Math.floor(Math.random()*arr.length)]; }
+
+    function startQuestion() {
+      clearFeedback();
+      const x = pick(quizPool);
+      quizAnswerKey = x.key;
+
+      if (quizType === "listen") {
+        qPrompt.textContent = "Listen → Click";
+        playFile(x.file, "Quiz sound");
+      } else {
+        qPrompt.textContent = "See → Guess (then Play)";
+        // show target letter in status (in current scheme)
+        setStatus("Shown: " + labelOf(x));
+      }
+    }
+
+    function renderButtons(containerId, items, modeLine=false) {
+      const container = document.getElementById(containerId);
+      items.forEach(x => {
+        const b = document.createElement("button");
+        b.className = "letterBtn";
+        b.dataset.key = x.key;
+        b.textContent = labelOf(x);
+
+        if (modeLine) b.style.padding = "10px 14px";
+
+        const updateTitle = () => {
+          b.title = showHint.checked ? (x.hint + " (" + x.file + ")") : "";
+        };
+        updateTitle();
+        showHint.addEventListener("change", updateTitle);
+
+        b.onclick = () => {
+          if (!quizMode.checked) {
+            playFile(x.file, labelOf(x) + (showHint.checked ? " = " + x.hint : ""));
+            return;
+          }
+
+          // quiz answer attempt
+          clearFeedback();
+
+          if (x.key === quizAnswerKey) {
+            b.classList.add("correct");
+            qPrompt.textContent = "✅ Correct!";
+            playFile(x.file, "Correct");
+            setTimeout(startQuestion, 800);
+          } else {
+            b.classList.add("wrong");
+            qPrompt.textContent = "❌ Try again";
+
+            // optional: in listen mode, replay target sound to reinforce
+            if (quizType === "listen" && quizAnswerKey) {
+              const target = byKey.get(quizAnswerKey);
+              if (target) setTimeout(() => playFile(target.file, "Try again"), 200);
+            }
+          }
+        };
+
+        container.appendChild(b);
+      });
+    }
+
+    // initial render
+    renderButtons("grid-vowels", vowels);
+    renderButtons("grid-vargiya", vargiya);
+    renderButtons("line-avargiya", avargiya, true);
+
+    // scheme switch: just relabel button faces (no re-render needed)
+    schemeSel.addEventListener("change", () => {
+      scheme = schemeSel.value;
+      document.querySelectorAll(".letterBtn").forEach(btn => {
+        const x = byKey.get(btn.dataset.key);
+        btn.textContent = labelOf(x);
+      });
+      // if reverse quiz is showing a letter in status, update that too
+      if (quizMode.checked && quizType === "reverse" && quizAnswerKey) {
+        const x = byKey.get(quizAnswerKey);
+        setStatus("Shown: " + labelOf(x));
+      }
+    });
+
+    // quiz type switch
+    quizTypeRadios.forEach(r => r.addEventListener("change", () => {
+      quizType = document.querySelector('input[name="quizType"]:checked').value;
+      if (quizMode.checked) startQuestion();
+    }));
+
+    // Play/Next button behavior
+    playNext.addEventListener("click", () => {
+      if (!quizMode.checked) return;
+
+      if (quizType === "reverse" && quizAnswerKey) {
+        const x = byKey.get(quizAnswerKey);
+        playFile(x.file, "Reveal");
+      } else {
+        startQuestion();
+      }
+    });
+
+    // quiz on/off
+    quizMode.addEventListener("change", () => {
+      if (quizMode.checked) {
+        startQuestion();
+      } else {
+        quizAnswerKey = null;
+        clearFeedback();
+        qPrompt.textContent = "Quiz off";
+        setStatus("Ready");
+      }
+    });
+  </script>
 </body>
 </html>

@@ -52,10 +52,16 @@
 
     /* ---------- GUNITA COLOR SYSTEM (color-blind friendly) ---------- */
 
+    /* Gunita consonants: neutral */
     #gunita-consonants .letterBtn { background: #ffffff; border-color: #cfcfcf; }
+
+    /* Gunita matras: blue theme */
     #gunita-matras .letterBtn { background: #e7f1ff; border-color: #2b6cb0; }
+
+    /* Inherent vowel (अ): gray, not blue */
     #gunita-matras .letterBtn[data-matra="a"] { background: #f3f4f6; border-color: #6b7280; }
 
+    /* Large combined result */
     #gunita-display {
       font-family: "Noto Sans Devanagari","Nirmala UI","Mangal",system-ui,sans-serif;
       font-size: 64px;
@@ -69,6 +75,7 @@
       text-align: center;
       position: relative;
     }
+    /* Accent bar (non-color cue) */
     #gunita-display::before {
       content: "";
       position: absolute;
@@ -80,6 +87,10 @@
       border-top-left-radius: 18px;
       border-bottom-left-radius: 18px;
     }
+
+    /* Halanta note line */
+    #halantaNote { display:none; }
+    #halantaNote.show { display:inline; }
   </style>
 </head>
 
@@ -99,6 +110,15 @@
         <option value="hk">Harvard–Kyoto</option>
       </select>
     </label>
+
+    <!-- NEW: Halanta toggle -->
+    <label>
+      <input type="checkbox" id="showHalanta">
+      Show halanta (क्)
+    </label>
+    <span class="small" id="halantaNote">
+      Note: Halanta forms are shown for recognition; audio plays the normal consonant sound (क, ख…).
+    </span>
 
     <label><input type="checkbox" id="quizMode"> Quiz</label>
 
@@ -137,6 +157,9 @@
 
   <script>
     const AUDIO_BASE_URL = "https://laksiyer.github.io/ucchAraNam/audio/";
+
+    // HK conventions:
+    // ā A, ī I, ū U, ṛ R, ṝ RR, ḷ L, ṅ G, ñ J, ṭ T, ḍ D, ṇ N, ś z, ṣ S, ṃ M, ḥ H
 
     const vowels = [
       { key:"a",  deva:"अ",  iast:"a",   hk:"a",  hint:"a",   file:"a.mp3" },
@@ -199,8 +222,9 @@
       { key:"ha", deva:"ह", iast:"ha", hk:"ha", hint:"ha", file:"ha.mp3" }
     ];
 
+    // Matras for gunita (NO ॡ / ॣ)
     const matras = [
-      { key:"a",   deva:"",  vowelFile:"a.mp3"   },
+      { key:"a",   deva:"",  vowelFile:"a.mp3"   }, // inherent vowel (shown as "अ")
       { key:"aa",  deva:"ा", vowelFile:"aa.mp3"  },
       { key:"i",   deva:"ि", vowelFile:"i.mp3"   },
       { key:"ii",  deva:"ी", vowelFile:"ii.mp3"  },
@@ -219,11 +243,15 @@
 
     const allItems = [...vowels, ...vargiya, ...avargiya];
     const byKey = new Map(allItems.map(x => [x.key, x]));
-    const quizPool = [...vargiya, ...avargiya];
+    const quizPool = [...vargiya, ...avargiya]; // questions come from here
 
+    // --- UI ---
     const status = document.getElementById("status");
     const showHint = document.getElementById("showHint");
     const schemeSel = document.getElementById("scheme");
+    const showHalanta = document.getElementById("showHalanta");
+    const halantaNote = document.getElementById("halantaNote");
+
     const quizMode = document.getElementById("quizMode");
     const playNext = document.getElementById("playNext");
     const qPrompt = document.getElementById("qPrompt");
@@ -231,26 +259,48 @@
     const resetScoreBtn = document.getElementById("resetScore");
     const quizTypeRadios = document.querySelectorAll('input[name="quizType"]');
 
+    // Gunita UI
     const gunitaStatus = document.getElementById("gunita-status");
     const gunitaDisplay = document.getElementById("gunita-display");
 
-    let scheme = schemeSel.value;
-    let quizType = "listen";
+    // --- State ---
+    let scheme = schemeSel.value; // deva|iast|hk
+    let quizType = "listen";      // listen|reverse
     let quizAnswerKey = null;
 
+    // scoring (per QUESTION, not per click)
     let correctCount = 0;
     let incorrectCount = 0;
     let streak = 0;
     let bestStreak = 0;
+
+    // tracks whether this current question has had a wrong attempt already
     let missedThisQuestion = false;
 
+    // gunita state
     let selectedConsonant = null;
 
+    // consonant key set (for halanta display)
+    const consonantKeys = new Set([...vargiya, ...avargiya].map(x => x.key));
+    const HALANTA = "्";
+
+    // --- Audio ---
     const player = new Audio();
     player.preload = "auto";
 
-    function labelOf(x) { return (x && x[scheme]) ? x[scheme] : (x.deva || ""); }
     function setStatus(msg) { status.textContent = msg; }
+
+    function labelOf(x) {
+      if (!x) return "";
+      if (scheme !== "deva") return x[scheme] || x.deva || "";
+
+      // Devanagari scheme:
+      // If halanta is ON, show consonants as halanta forms (क्, ख्...)
+      if (showHalanta.checked && consonantKeys.has(x.key)) {
+        return (x.deva || "") + HALANTA;
+      }
+      return x.deva || "";
+    }
 
     function playFile(file, msg) {
       try { player.pause(); player.currentTime = 0; } catch(e) {}
@@ -282,7 +332,7 @@
       });
     }
 
-    // *** UPDATED: matra sound first, then guṇita file (fallback if missing) ***
+    // matra sound first, then guṇita file (fallback if missing)
     async function playGunita(consonant, matra) {
       const gunitaFile = `${consonant.key}_${matra.key}.mp3`;
 
@@ -344,7 +394,9 @@
         b.textContent = labelOf(x);
         if (modeLine) b.style.padding = "10px 14px";
 
-        const updateTitle = () => { b.title = showHint.checked ? (x.hint + " (" + x.file + ")") : ""; };
+        const updateTitle = () => {
+          b.title = showHint.checked ? (x.hint + " (" + x.file + ")") : "";
+        };
         updateTitle();
         showHint.addEventListener("change", updateTitle);
 
@@ -354,24 +406,33 @@
             return;
           }
 
+          // quiz attempt
           clearFeedback();
 
           if (x.key === quizAnswerKey) {
             b.classList.add("correct");
             qPrompt.textContent = "✅ Correct!";
 
+            // score per QUESTION:
             correctCount += 1;
-            if (missedThisQuestion) { incorrectCount += 1; streak = 0; }
-            else { streak += 1; if (streak > bestStreak) bestStreak = streak; }
+            if (missedThisQuestion) {
+              incorrectCount += 1; // counted once per question if they missed at least once
+              streak = 0;          // streak only continues for perfect first-try answers
+            } else {
+              streak += 1;
+              if (streak > bestStreak) bestStreak = streak;
+            }
             updateScoreUI();
 
             playFile(x.file, "Correct");
             setTimeout(startQuestion, 800);
+
           } else {
             b.classList.add("wrong");
             qPrompt.textContent = "❌ Try again";
-            missedThisQuestion = true;
+            missedThisQuestion = true; // mark that this question was missed at least once
 
+            // optional: in listen mode, replay target sound to reinforce
             if (quizType === "listen" && quizAnswerKey) {
               const target = byKey.get(quizAnswerKey);
               if (target) setTimeout(() => playFile(target.file, "Try again"), 200);
@@ -383,6 +444,20 @@
       });
     }
 
+    function rerenderAllLetterButtonsText() {
+      // Updates ONLY text (keeps click handlers intact)
+      document.querySelectorAll(".letterBtn").forEach(btn => {
+        const x = byKey.get(btn.dataset.key);
+        if (x) btn.textContent = labelOf(x);
+      });
+
+      // gunita consonant row (these buttons don't have dataset.key)
+      // We'll re-render gunita section completely for simplicity.
+      document.getElementById("gunita-consonants").innerHTML = "";
+      document.getElementById("gunita-matras").innerHTML = "";
+      renderGunita();
+    }
+
     function renderGunita() {
       const cDiv = document.getElementById("gunita-consonants");
       const mDiv = document.getElementById("gunita-matras");
@@ -391,13 +466,21 @@
       consonants.forEach(c => {
         const b = document.createElement("button");
         b.className = "letterBtn";
-        b.textContent = c.deva;
-        b.title = "Select consonant: " + c.deva;
+        // store key so scheme toggle could update if needed later
+        b.dataset.key = c.key;
+
+        // show halanta display if toggled, but keep base consonant for combining/audio
+        b.textContent = labelOf(c);
+        b.title = "Select consonant";
+
         b.onclick = () => {
           selectedConsonant = c;
-          gunitaStatus.textContent = "Selected: " + c.deva;
-          gunitaDisplay.textContent = c.deva;
-          playFile(c.file, "Selected: " + c.deva);
+
+          // show selected as halanta if toggled (recognition), audio stays normal
+          gunitaStatus.textContent = "Selected: " + labelOf(c);
+          gunitaDisplay.textContent = labelOf(c);
+
+          playFile(c.file, "Selected: " + (c.deva || ""));
         };
         cDiv.appendChild(b);
       });
@@ -408,41 +491,65 @@
         b.dataset.matra = m.key;
         b.textContent = m.deva || "अ";
         b.title = "Apply: " + (m.deva || "अ");
+
         b.onclick = async () => {
           if (!selectedConsonant) { alert("First select a consonant (e.g., क)."); return; }
-          const combined = selectedConsonant.deva + (m.deva || "");
+
+          // IMPORTANT: combine using BASE consonant (no halanta), regardless of display mode
+          const combined = (selectedConsonant.deva || "") + (m.deva || "");
           gunitaDisplay.textContent = combined;
+
           await playGunita(selectedConsonant, m);
         };
         mDiv.appendChild(b);
       });
     }
 
-    // Render all sections
+    // Initial render
     renderButtons("grid-vowels", vowels);
     renderButtons("grid-vargiya", vargiya);
     renderButtons("line-avargiya", avargiya, true);
     renderGunita();
 
+    // Scheme toggle
     schemeSel.addEventListener("change", () => {
       scheme = schemeSel.value;
-      document.querySelectorAll(".letterBtn").forEach(btn => {
-        const x = byKey.get(btn.dataset.key);
-        if (x) btn.textContent = labelOf(x);
-      });
+
+      // halanta only makes sense in Devanagari display
+      const showHal = (scheme === "deva");
+      showHalanta.disabled = !showHal;
+      if (!showHal) showHalanta.checked = false;
+
+      halantaNote.classList.toggle("show", showHalanta.checked && scheme === "deva");
+
+      rerenderAllLetterButtonsText();
+
       if (quizMode.checked && quizType === "reverse" && quizAnswerKey) {
         const x = byKey.get(quizAnswerKey);
         setStatus("Shown: " + labelOf(x));
       }
     });
 
+    // Halanta toggle
+    showHalanta.addEventListener("change", () => {
+      halantaNote.classList.toggle("show", showHalanta.checked && scheme === "deva");
+      rerenderAllLetterButtonsText();
+      if (quizMode.checked && quizType === "reverse" && quizAnswerKey) {
+        const x = byKey.get(quizAnswerKey);
+        setStatus("Shown: " + labelOf(x));
+      }
+    });
+
+    // Quiz type toggle
     quizTypeRadios.forEach(r => r.addEventListener("change", () => {
       quizType = document.querySelector('input[name="quizType"]:checked').value;
       if (quizMode.checked) startQuestion();
     }));
 
+    // Play/Next button
     playNext.addEventListener("click", () => {
       if (!quizMode.checked) return;
+
       if (quizType === "reverse" && quizAnswerKey) {
         const x = byKey.get(quizAnswerKey);
         playFile(x.file, "Reveal");
@@ -451,13 +558,24 @@
       }
     });
 
+    // Quiz toggle
     quizMode.addEventListener("change", () => {
       clearFeedback();
-      if (quizMode.checked) startQuestion();
-      else { quizAnswerKey = null; missedThisQuestion = false; qPrompt.textContent = "Quiz off"; setStatus("Ready"); }
+      if (quizMode.checked) {
+        startQuestion();
+      } else {
+        quizAnswerKey = null;
+        missedThisQuestion = false;
+        qPrompt.textContent = "Quiz off";
+        setStatus("Ready");
+      }
     });
 
+    // Reset button
     resetScoreBtn.addEventListener("click", resetScore);
+
+    // Init halanta note + score
+    halantaNote.classList.toggle("show", showHalanta.checked && scheme === "deva");
     updateScoreUI();
   </script>
 </body>

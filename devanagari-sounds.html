@@ -83,6 +83,56 @@
     /* Gunita-only halanta note */
     #halantaNoteGunita { display:none; }
     #halantaNoteGunita.show { display:inline; }
+
+    /* ---------- DRAWING QUIZ ---------- */
+    .card {
+      border: 1px solid #e5e7eb;
+      border-radius: 14px;
+      padding: 12px;
+      background: #ffffff;
+      box-shadow: 0 1px 2px rgba(0,0,0,.04);
+      max-width: 980px;
+    }
+    .quizGrid {
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+    @media (min-width: 900px) {
+      .quizGrid { grid-template-columns: 1.2fr 0.8fr; align-items:start; }
+    }
+    #drawCanvas {
+      width: 100%;
+      max-width: 720px;
+      height: 260px;
+      border: 2px solid #d1d5db;
+      border-radius: 12px;
+      background: #ffffff;
+      touch-action: none;
+      display:block;
+    }
+    .textboxDeva {
+      font-family: "Noto Sans Devanagari","Nirmala UI","Mangal",system-ui,sans-serif;
+      font-size: 30px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 2px solid #e5e7eb;
+      width: min(420px, 100%);
+    }
+    .quizBig {
+      font-family: "Noto Sans Devanagari","Nirmala UI","Mangal",system-ui,sans-serif;
+      font-size: 48px;
+      line-height: 1.1;
+      padding: 10px 16px;
+      border-radius: 14px;
+      border: 2px solid #cbd5e1;
+      background: #f8fafc;
+      display:inline-block;
+      min-width: 120px;
+      text-align:center;
+    }
+    .okPill { background:#d4f8d4; border-color:#2f9e44; }
+    .badPill { background:#ffd6d6; border-color:#c92a2a; }
   </style>
 </head>
 
@@ -145,12 +195,58 @@
     <div id="gunita-display">—</div>
   </div>
 
+  <!-- NEW: GUNITA WRITING QUIZ -->
+  <h2>गुणिताक्षर-लेखन-प्रश्नोत्तरी (listen → write)</h2>
+  <div class="card">
+    <div class="row">
+      <button class="ctrlBtn" id="dqNext" type="button">Next (play)</button>
+      <button class="ctrlBtn" id="dqReplay" type="button">Replay</button>
+      <button class="ctrlBtn" id="dqClear" type="button">Clear</button>
+      <button class="ctrlBtn" id="dqReveal" type="button">Reveal</button>
+      <button class="ctrlBtn" id="dqReset" type="button">Reset score</button>
+
+      <span class="pill" id="dqResult">Ready</span>
+      <span class="pill" id="dqScore">✅ 0  ❌ 0  🔥 0 (best 0)</span>
+    </div>
+
+    <div class="quizGrid">
+      <div>
+        <canvas id="drawCanvas" width="1400" height="520"></canvas>
+        <p class="small">
+          Note: Browsers can’t reliably grade handwriting without ML/OCR.
+          So scoring uses the typed answer; the drawing is for practice + comparison.
+        </p>
+      </div>
+
+      <div>
+        <div class="row" style="margin-top:0;">
+          <span class="pill">Type what you wrote (Devanagari):</span>
+        </div>
+        <input class="textboxDeva" id="dqTyped" placeholder="उदा: के" autocomplete="off" />
+        <div class="row">
+          <button class="ctrlBtn" id="dqCheck" type="button">Check</button>
+        </div>
+
+        <div class="row">
+          <span class="pill">Expected:</span>
+          <span class="quizBig" id="dqExpected">—</span>
+        </div>
+
+        <div class="row">
+          <span class="pill">Audio file:</span>
+          <span class="pill" id="dqPromptText">—</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <p class="small">Developed by Samskritabharati USA</p>
 
   <script>
     const AUDIO_BASE_URL = "https://laksiyer.github.io/ucchAraNam/audio/";
     const HALANTA = "्";
 
+    // --- DATA ---
     const vowels = [
       { key:"a",  deva:"अ",  iast:"a",   hk:"a",  hint:"a",   file:"a.mp3" },
       { key:"aa", deva:"आ",  iast:"ā",   hk:"A",  hint:"ā",   file:"aa.mp3" },
@@ -182,7 +278,8 @@
       { key:"jha", deva:"झ", iast:"jha", hk:"jha", hint:"jha", file:"jha.mp3" },
       { key:"nya", deva:"ञ", iast:"ña",  hk:"Ja",  hint:"ña",  file:"nya.mp3" },
 
-      // Retroflex group: base consonant audio uses *_retro.mp3, gunita uses tta_aa.mp3 etc.
+      /* Retroflex: keys match your gunita filenames (tta_aa.mp3 etc).
+         Base consonant audio remains ta_retro.mp3 etc. */
       { key:"tta",  deva:"ट", iast:"ṭa",  hk:"Ta",  hint:"ṭa",  file:"ta_retro.mp3" },
       { key:"ttha", deva:"ठ", iast:"ṭha", hk:"Tha", hint:"ṭha", file:"tha_retro.mp3" },
       { key:"dda",  deva:"ड", iast:"ḍa",  hk:"Da",  hint:"ḍa",  file:"da_retro.mp3" },
@@ -215,7 +312,7 @@
 
     // Matras for gunita (NO ॡ / ॣ)
     const matras = [
-      { key:"a",   deva:"",  vowelFile:"a.mp3"   }, // inherent vowel (shown as "अ")
+      { key:"a",   deva:"",  vowelFile:"a.mp3"   },
       { key:"aa",  deva:"ा", vowelFile:"aa.mp3"  },
       { key:"i",   deva:"ि", vowelFile:"i.mp3"   },
       { key:"ii",  deva:"ी", vowelFile:"ii.mp3"  },
@@ -291,11 +388,6 @@
       player.play().catch(() => alert("Could not play: " + url));
     }
 
-    function stemFromFile(filename) {
-      // "ta_retro.mp3" -> "ta_retro"
-      return (filename || "").replace(/\.mp3$/i, "");
-    }
-
     async function tryPlaySingle(file) {
       return new Promise((resolve, reject) => {
         try { player.pause(); player.currentTime = 0; } catch(e) {}
@@ -318,30 +410,15 @@
       }
     }
 
-    // Matra sound first, then guṇita file; robust filename tries for retroflex and others.
+    // Matra sound first, then gunita file; fallback if missing
     async function playGunita(consonant, matra) {
-      const keyPrefix = consonant.key;                 // e.g., "tta"
-      const stemPrefix = stemFromFile(consonant.file); // e.g., "ta_retro"
-
-      const candidates = [
-        `${keyPrefix}_${matra.key}.mp3`,   // tta_aa.mp3
-        `${stemPrefix}_${matra.key}.mp3`   // ta_retro_aa.mp3
-      ];
-
-      // always: vowel/matra sound first
+      const gunitaFile = `${consonant.key}_${matra.key}.mp3`;
       await playSequence([matra.vowelFile]);
-
-      for (const fname of candidates) {
-        try {
-          await tryPlaySingle(fname);
-          return;
-        } catch (e) {
-          // try next
-        }
+      try {
+        await tryPlaySingle(gunitaFile);
+      } catch (e) {
+        await playSequence([consonant.file, matra.vowelFile]);
       }
-
-      // final fallback: consonant + vowel
-      await playSequence([consonant.file, matra.vowelFile]);
     }
 
     function clearFeedback() {
@@ -469,10 +546,8 @@
 
         b.onclick = async () => {
           if (!selectedConsonant) { alert("First select a consonant (e.g., क)."); return; }
-
           const combined = (selectedConsonant.deva || "") + (m.deva || "");
           gunitaDisplay.textContent = combined;
-
           await playGunita(selectedConsonant, m);
         };
 
@@ -504,7 +579,6 @@
 
     schemeSel.addEventListener("change", () => {
       scheme = schemeSel.value;
-
       if (scheme !== "deva") {
         showHalantaGunita.checked = false;
         halantaNoteGunita.classList.remove("show");
@@ -527,7 +601,6 @@
 
     playNext.addEventListener("click", () => {
       if (!quizMode.checked) return;
-
       if (quizType === "reverse" && quizAnswerKey) {
         const x = byKey.get(quizAnswerKey);
         playFile(x.file, "Reveal");
@@ -549,6 +622,193 @@
     });
 
     resetScoreBtn.addEventListener("click", resetScore);
+
+    // -----------------------------
+    // NEW: Gunita Writing Quiz
+    // -----------------------------
+    const dqNext = document.getElementById("dqNext");
+    const dqReplay = document.getElementById("dqReplay");
+    const dqClear = document.getElementById("dqClear");
+    const dqReveal = document.getElementById("dqReveal");
+    const dqReset = document.getElementById("dqReset");
+    const dqCheck = document.getElementById("dqCheck");
+
+    const dqResult = document.getElementById("dqResult");
+    const dqScore = document.getElementById("dqScore");
+    const dqExpected = document.getElementById("dqExpected");
+    const dqPromptText = document.getElementById("dqPromptText");
+    const dqTyped = document.getElementById("dqTyped");
+
+    const canvas = document.getElementById("drawCanvas");
+    const ctx = canvas.getContext("2d");
+
+    let dqCorrect = 0, dqIncorrect = 0, dqStreak = 0, dqBest = 0;
+    let dqCurrent = null; // { expectedDeva, consonantKey, matraKey, file }
+
+    function dqUpdateScore() {
+      dqScore.textContent = `✅ ${dqCorrect}  ❌ ${dqIncorrect}  🔥 ${dqStreak} (best ${dqBest})`;
+    }
+
+    function dqSetPill(msg, kind="neutral") {
+      dqResult.textContent = msg;
+      dqResult.classList.remove("okPill","badPill");
+      if (kind === "ok") dqResult.classList.add("okPill");
+      if (kind === "bad") dqResult.classList.add("badPill");
+    }
+
+    function dqPickGunita() {
+      const consonants = [...vargiya, ...avargiya];
+      const c = pick(consonants);
+      const m = pick(matras);
+      const expected = (c.deva || "") + (m.deva || "");
+      const file = `${c.key}_${m.key}.mp3`; // your A-style gunita filenames
+      return { expectedDeva: expected, consonantKey: c.key, matraKey: m.key, file };
+    }
+
+    function dqPlayCurrent() {
+      if (!dqCurrent) return;
+      playFile(dqCurrent.file, "Gunita quiz");
+    }
+
+    function dqClearCanvas() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      // faint guide line
+      ctx.save();
+      ctx.globalAlpha = 0.08;
+      ctx.strokeStyle = "#000";
+      ctx.lineWidth = 4;
+      ctx.beginPath();
+      ctx.moveTo(40, canvas.height/2);
+      ctx.lineTo(canvas.width-40, canvas.height/2);
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    function dqNewQuestion() {
+      dqCurrent = dqPickGunita();
+      dqExpected.textContent = "—";
+      dqPromptText.textContent = dqCurrent.file;
+      dqTyped.value = "";
+      dqSetPill("Listen and write", "neutral");
+      dqClearCanvas();
+      dqPlayCurrent();
+    }
+
+    function dqRevealAnswer() {
+      if (!dqCurrent) return;
+      dqExpected.textContent = dqCurrent.expectedDeva;
+      dqSetPill("Revealed", "neutral");
+    }
+
+    function normalizeDeva(s) {
+      return (s || "").trim().replace(/\s+/g, "");
+    }
+
+    function dqCheckTyped() {
+      if (!dqCurrent) return;
+
+      const user = normalizeDeva(dqTyped.value);
+      const exp = normalizeDeva(dqCurrent.expectedDeva);
+
+      dqExpected.textContent = dqCurrent.expectedDeva;
+
+      if (!user) {
+        dqSetPill("Type your answer first (or press Reveal).", "bad");
+        return;
+      }
+
+      if (user === exp) {
+        dqCorrect += 1;
+        dqStreak += 1;
+        dqBest = Math.max(dqBest, dqStreak);
+        dqSetPill("✅ Correct", "ok");
+      } else {
+        dqIncorrect += 1;
+        dqStreak = 0;
+        dqSetPill("❌ Not matched (see Expected)", "bad");
+      }
+      dqUpdateScore();
+    }
+
+    function dqResetAll() {
+      dqCorrect = 0; dqIncorrect = 0; dqStreak = 0; dqBest = 0;
+      dqUpdateScore();
+      dqSetPill("Ready", "neutral");
+      dqExpected.textContent = "—";
+      dqPromptText.textContent = "—";
+      dqTyped.value = "";
+      dqClearCanvas();
+      dqCurrent = null;
+    }
+
+    // Canvas drawing (mouse + touch)
+    let drawing = false;
+    let lastX = 0, lastY = 0;
+
+    function dqPos(evt) {
+      const rect = canvas.getBoundingClientRect();
+      const clientX = (evt.touches && evt.touches[0]) ? evt.touches[0].clientX : evt.clientX;
+      const clientY = (evt.touches && evt.touches[0]) ? evt.touches[0].clientY : evt.clientY;
+      const x = (clientX - rect.left) * (canvas.width / rect.width);
+      const y = (clientY - rect.top)  * (canvas.height / rect.height);
+      return {x,y};
+    }
+
+    function dqStart(evt) {
+      evt.preventDefault();
+      drawing = true;
+      const p = dqPos(evt);
+      lastX = p.x; lastY = p.y;
+    }
+
+    function dqMove(evt) {
+      if (!drawing) return;
+      evt.preventDefault();
+      const p = dqPos(evt);
+
+      ctx.save();
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
+      ctx.strokeStyle = "#111827";
+      ctx.lineWidth = 18;
+      ctx.beginPath();
+      ctx.moveTo(lastX, lastY);
+      ctx.lineTo(p.x, p.y);
+      ctx.stroke();
+      ctx.restore();
+
+      lastX = p.x; lastY = p.y;
+    }
+
+    function dqEnd(evt) {
+      if (!drawing) return;
+      evt.preventDefault();
+      drawing = false;
+    }
+
+    canvas.addEventListener("mousedown", dqStart);
+    canvas.addEventListener("mousemove", dqMove);
+    window.addEventListener("mouseup", dqEnd);
+
+    canvas.addEventListener("touchstart", dqStart, {passive:false});
+    canvas.addEventListener("touchmove", dqMove, {passive:false});
+    canvas.addEventListener("touchend", dqEnd, {passive:false});
+
+    // Wire quiz buttons
+    dqNext.addEventListener("click", dqNewQuestion);
+    dqReplay.addEventListener("click", dqPlayCurrent);
+    dqClear.addEventListener("click", dqClearCanvas);
+    dqReveal.addEventListener("click", dqRevealAnswer);
+    dqReset.addEventListener("click", dqResetAll);
+    dqCheck.addEventListener("click", dqCheckTyped);
+
+    dqTyped.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") dqCheckTyped();
+    });
+
+    // init
+    dqClearCanvas();
+    dqUpdateScore();
   </script>
 </body>
 </html>

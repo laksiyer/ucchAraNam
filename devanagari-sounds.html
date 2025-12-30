@@ -101,7 +101,7 @@
     @media (min-width: 900px) {
       .quizGrid { grid-template-columns: 1.2fr 0.8fr; align-items:start; }
     }
-    #drawCanvas {
+    .drawCanvas {
       width: 100%;
       max-width: 720px;
       height: 260px;
@@ -130,6 +130,7 @@
       display:inline-block;
       min-width: 120px;
       text-align:center;
+      word-break: break-word;
     }
     .okPill { background:#d4f8d4; border-color:#2f9e44; }
     .badPill { background:#ffd6d6; border-color:#c92a2a; }
@@ -195,13 +196,14 @@
     <div id="gunita-display">—</div>
   </div>
 
-  <!-- NEW: GUNITA WRITING QUIZ -->
+  <!-- GUNITA WRITING QUIZ (akshara) -->
   <h2>गुणिताक्षर-लेखन-प्रश्नोत्तरी (listen → write)</h2>
   <div class="card">
-<p class="small" style="margin: 0 0 10px;">
-  <b>How to use:</b> Click <b>Next (play)</b> to hear a guṇitākṣara. Write it on the canvas <i>or</i> type it in the box.
-  Click <b>Check</b> (typing is graded). Use <b>Replay</b> to hear again, <b>Clear</b> to erase, and <b>Reveal</b> to see the answer.
-</p>
+    <p class="small" style="margin: 0 0 10px;">
+      <b>How to use:</b> Click <b>Next (play)</b> to hear a guṇitākṣara. Write it on the canvas <i>or</i> type it in the box.
+      Click <b>Check</b> (typing is graded). Use <b>Replay</b> to hear again, <b>Clear</b> to erase, and <b>Reveal</b> to see the answer.
+    </p>
+
     <div class="row">
       <button class="ctrlBtn" id="dqNext" type="button">Next (play)</button>
       <button class="ctrlBtn" id="dqReplay" type="button">Replay</button>
@@ -215,7 +217,7 @@
 
     <div class="quizGrid">
       <div>
-        <canvas id="drawCanvas" width="1400" height="520"></canvas>
+        <canvas class="drawCanvas" id="drawCanvas" width="1400" height="520"></canvas>
         <p class="small">
           Note: Browsers can’t reliably grade handwriting without ML/OCR.
           So scoring uses the typed answer; the drawing is for practice + comparison.
@@ -244,11 +246,99 @@
     </div>
   </div>
 
+  <!-- NEW: WORD QUIZ (words.json) -->
+  <h2>गुणित-शब्द-लेखन-प्रश्नोत्तरी (listen → write)</h2>
+  <div class="card">
+    <p class="small" style="margin: 0 0 10px;">
+      <b>How to use:</b> Click <b>Next (play)</b> to hear a word. Write it on the canvas <i>or</i> type it in the box.
+      Click <b>Check</b> (typing is graded). Use <b>Replay</b> to hear again, <b>Clear</b> to erase, and <b>Reveal</b> to see the answer.
+    </p>
+
+    <div class="row">
+      <span class="pill" id="wqLoadStatus">Loading words.json…</span>
+      <label>
+        Level:
+        <select id="wqLevel">
+          <option value="all" selected>All</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="row">
+      <button class="ctrlBtn" id="wqNext" type="button">Next (play)</button>
+      <button class="ctrlBtn" id="wqReplay" type="button">Replay</button>
+      <button class="ctrlBtn" id="wqClear" type="button">Clear</button>
+      <button class="ctrlBtn" id="wqReveal" type="button">Reveal</button>
+      <button class="ctrlBtn" id="wqReset" type="button">Reset score</button>
+
+      <span class="pill" id="wqResult">Ready</span>
+      <span class="pill" id="wqScore">✅ 0  ❌ 0  🔥 0 (best 0)</span>
+    </div>
+
+    <div class="quizGrid">
+      <div>
+        <canvas class="drawCanvas" id="wordCanvas" width="1400" height="520"></canvas>
+        <p class="small">
+          Note: Scoring uses the typed answer; the drawing is for practice.
+        </p>
+      </div>
+
+      <div>
+        <div class="row" style="margin-top:0;">
+          <span class="pill">Type what you wrote (Devanagari):</span>
+        </div>
+        <input class="textboxDeva" id="wqTyped" placeholder="उदा: एकम्" autocomplete="off" />
+        <div class="row">
+          <button class="ctrlBtn" id="wqCheck" type="button">Check</button>
+        </div>
+
+        <div class="row">
+          <span class="pill">Expected:</span>
+          <span class="quizBig" id="wqExpected">—</span>
+        </div>
+
+        <div class="row">
+          <span class="pill">Audio file:</span>
+          <span class="pill" id="wqPromptText">—</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <p class="small">Developed by Samskritabharati USA</p>
 
   <script>
     const AUDIO_BASE_URL = "https://laksiyer.github.io/ucchAraNam/audio/";
     const HALANTA = "्";
+
+    // -----------------------------
+    // Load words.json (Word quiz)
+    // -----------------------------
+    let WORDS = [];
+    let WORDS_READY = false;
+
+    const wqLoadStatus = document.getElementById("wqLoadStatus");
+    async function loadWordsJson() {
+      try {
+        wqLoadStatus.textContent = "Loading words.json…";
+        const res = await fetch("words.json?ts=" + Date.now(), { cache: "no-store" });
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        const data = await res.json();
+
+        WORDS = (data || []).filter(x => x && x.word && x.file);
+        WORDS_READY = WORDS.length > 0;
+
+        wqLoadStatus.textContent = WORDS_READY ? `Loaded ${WORDS.length} words` : "words.json loaded but empty";
+      } catch (e) {
+        console.error(e);
+        WORDS_READY = false;
+        wqLoadStatus.textContent = "Could not load words.json (check filename/location)";
+      }
+    }
 
     // --- DATA ---
     const vowels = [
@@ -282,8 +372,6 @@
       { key:"jha", deva:"झ", iast:"jha", hk:"jha", hint:"jha", file:"jha.mp3" },
       { key:"nya", deva:"ञ", iast:"ña",  hk:"Ja",  hint:"ña",  file:"nya.mp3" },
 
-      /* Retroflex: keys match your gunita filenames (tta_aa.mp3 etc).
-         Base consonant audio remains ta_retro.mp3 etc. */
       { key:"tta",  deva:"ट", iast:"ṭa",  hk:"Ta",  hint:"ṭa",  file:"ta_retro.mp3" },
       { key:"ttha", deva:"ठ", iast:"ṭha", hk:"Tha", hint:"ṭha", file:"tha_retro.mp3" },
       { key:"dda",  deva:"ड", iast:"ḍa",  hk:"Da",  hint:"ḍa",  file:"da_retro.mp3" },
@@ -628,7 +716,7 @@
     resetScoreBtn.addEventListener("click", resetScore);
 
     // -----------------------------
-    // NEW: Gunita Writing Quiz
+    // Gunita Writing Quiz (akshara)
     // -----------------------------
     const dqNext = document.getElementById("dqNext");
     const dqReplay = document.getElementById("dqReplay");
@@ -665,7 +753,7 @@
       const c = pick(consonants);
       const m = pick(matras);
       const expected = (c.deva || "") + (m.deva || "");
-      const file = `${c.key}_${m.key}.mp3`; // your A-style gunita filenames
+      const file = `${c.key}_${m.key}.mp3`;
       return { expectedDeva: expected, consonantKey: c.key, matraKey: m.key, file };
     }
 
@@ -676,7 +764,6 @@
 
     function dqClearCanvas() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      // faint guide line
       ctx.save();
       ctx.globalAlpha = 0.08;
       ctx.strokeStyle = "#000";
@@ -749,72 +836,218 @@
     let drawing = false;
     let lastX = 0, lastY = 0;
 
-    function dqPos(evt) {
-      const rect = canvas.getBoundingClientRect();
+    function dqPos(evt, canv) {
+      const rect = canv.getBoundingClientRect();
       const clientX = (evt.touches && evt.touches[0]) ? evt.touches[0].clientX : evt.clientX;
       const clientY = (evt.touches && evt.touches[0]) ? evt.touches[0].clientY : evt.clientY;
-      const x = (clientX - rect.left) * (canvas.width / rect.width);
-      const y = (clientY - rect.top)  * (canvas.height / rect.height);
+      const x = (clientX - rect.left) * (canv.width / rect.width);
+      const y = (clientY - rect.top)  * (canv.height / rect.height);
       return {x,y};
     }
 
-    function dqStart(evt) {
-      evt.preventDefault();
-      drawing = true;
-      const p = dqPos(evt);
-      lastX = p.x; lastY = p.y;
+    function wireCanvas(canv, context) {
+      let isDown = false;
+      let lx = 0, ly = 0;
+
+      function start(evt) {
+        evt.preventDefault();
+        isDown = true;
+        const p = dqPos(evt, canv);
+        lx = p.x; ly = p.y;
+      }
+      function move(evt) {
+        if (!isDown) return;
+        evt.preventDefault();
+        const p = dqPos(evt, canv);
+
+        context.save();
+        context.lineCap = "round";
+        context.lineJoin = "round";
+        context.strokeStyle = "#111827";
+        context.lineWidth = 18;
+        context.beginPath();
+        context.moveTo(lx, ly);
+        context.lineTo(p.x, p.y);
+        context.stroke();
+        context.restore();
+
+        lx = p.x; ly = p.y;
+      }
+      function end(evt) {
+        if (!isDown) return;
+        evt.preventDefault();
+        isDown = false;
+      }
+
+      canv.addEventListener("mousedown", start);
+      canv.addEventListener("mousemove", move);
+      window.addEventListener("mouseup", end);
+
+      canv.addEventListener("touchstart", start, {passive:false});
+      canv.addEventListener("touchmove", move, {passive:false});
+      canv.addEventListener("touchend", end, {passive:false});
     }
 
-    function dqMove(evt) {
-      if (!drawing) return;
-      evt.preventDefault();
-      const p = dqPos(evt);
+    // wire akshara canvas
+    wireCanvas(canvas, ctx);
 
-      ctx.save();
-      ctx.lineCap = "round";
-      ctx.lineJoin = "round";
-      ctx.strokeStyle = "#111827";
-      ctx.lineWidth = 18;
-      ctx.beginPath();
-      ctx.moveTo(lastX, lastY);
-      ctx.lineTo(p.x, p.y);
-      ctx.stroke();
-      ctx.restore();
-
-      lastX = p.x; lastY = p.y;
-    }
-
-    function dqEnd(evt) {
-      if (!drawing) return;
-      evt.preventDefault();
-      drawing = false;
-    }
-
-    canvas.addEventListener("mousedown", dqStart);
-    canvas.addEventListener("mousemove", dqMove);
-    window.addEventListener("mouseup", dqEnd);
-
-    canvas.addEventListener("touchstart", dqStart, {passive:false});
-    canvas.addEventListener("touchmove", dqMove, {passive:false});
-    canvas.addEventListener("touchend", dqEnd, {passive:false});
-
-    // Wire quiz buttons
+    // Wire akshara quiz buttons
     dqNext.addEventListener("click", dqNewQuestion);
     dqReplay.addEventListener("click", dqPlayCurrent);
     dqClear.addEventListener("click", dqClearCanvas);
     dqReveal.addEventListener("click", dqRevealAnswer);
     dqReset.addEventListener("click", dqResetAll);
     dqCheck.addEventListener("click", dqCheckTyped);
+    dqTyped.addEventListener("keydown", (e) => { if (e.key === "Enter") dqCheckTyped(); });
 
-    dqTyped.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") dqCheckTyped();
-    });
-
-    // init
+    // init akshara quiz
     dqClearCanvas();
     dqUpdateScore();
+
+    // -----------------------------
+    // Word Writing Quiz (words.json)
+    // -----------------------------
+    const wqLevel = document.getElementById("wqLevel");
+    const wqNext = document.getElementById("wqNext");
+    const wqReplay = document.getElementById("wqReplay");
+    const wqClear = document.getElementById("wqClear");
+    const wqReveal = document.getElementById("wqReveal");
+    const wqReset = document.getElementById("wqReset");
+    const wqCheck = document.getElementById("wqCheck");
+
+    const wqResult = document.getElementById("wqResult");
+    const wqScore = document.getElementById("wqScore");
+    const wqExpected = document.getElementById("wqExpected");
+    const wqPromptText = document.getElementById("wqPromptText");
+    const wqTyped = document.getElementById("wqTyped");
+
+    const wordCanvas = document.getElementById("wordCanvas");
+    const wctx = wordCanvas.getContext("2d");
+
+    let wqCorrect = 0, wqIncorrect = 0, wqStreak = 0, wqBest = 0;
+    let wqCurrent = null; // {word, hint, level, file, id}
+
+    function wqUpdateScore() {
+      wqScore.textContent = `✅ ${wqCorrect}  ❌ ${wqIncorrect}  🔥 ${wqStreak} (best ${wqBest})`;
+    }
+
+    function wqSetPill(msg, kind="neutral") {
+      wqResult.textContent = msg;
+      wqResult.classList.remove("okPill","badPill");
+      if (kind === "ok") wqResult.classList.add("okPill");
+      if (kind === "bad") wqResult.classList.add("badPill");
+    }
+
+    function wqClearCanvas() {
+      wctx.clearRect(0, 0, wordCanvas.width, wordCanvas.height);
+      wctx.save();
+      wctx.globalAlpha = 0.08;
+      wctx.strokeStyle = "#000";
+      wctx.lineWidth = 4;
+      wctx.beginPath();
+      wctx.moveTo(40, wordCanvas.height/2);
+      wctx.lineTo(wordCanvas.width-40, wordCanvas.height/2);
+      wctx.stroke();
+      wctx.restore();
+    }
+
+    function poolByLevel() {
+      if (!WORDS_READY) return [];
+      const lvl = wqLevel.value;
+      if (lvl === "all") return WORDS;
+      return WORDS.filter(x => String(x.level ?? "") === String(lvl));
+    }
+
+    function wqPickWord() {
+      const pool = poolByLevel();
+      if (!pool.length) return null;
+      return pool[Math.floor(Math.random() * pool.length)];
+    }
+
+    function wqPlayCurrent() {
+      if (!wqCurrent) return;
+      playFile(wqCurrent.file, "Word quiz");
+    }
+
+    function wqNewQuestion() {
+      if (!WORDS_READY) {
+        wqSetPill("words.json not loaded yet", "bad");
+        return;
+      }
+      wqCurrent = wqPickWord();
+      if (!wqCurrent) {
+        wqSetPill("No words for this level", "bad");
+        return;
+      }
+      wqExpected.textContent = "—";
+      wqPromptText.textContent = wqCurrent.file;
+      wqTyped.value = "";
+      wqSetPill("Listen and write", "neutral");
+      wqClearCanvas();
+      wqPlayCurrent();
+    }
+
+    function wqRevealAnswer() {
+      if (!wqCurrent) return;
+      wqExpected.textContent = wqCurrent.word;
+      wqSetPill("Revealed", "neutral");
+    }
+
+    function wqCheckTyped() {
+      if (!wqCurrent) return;
+
+      const user = normalizeDeva(wqTyped.value);
+      const exp = normalizeDeva(wqCurrent.word);
+
+      wqExpected.textContent = wqCurrent.word;
+
+      if (!user) {
+        wqSetPill("Type your answer first (or press Reveal).", "bad");
+        return;
+      }
+
+      if (user === exp) {
+        wqCorrect += 1;
+        wqStreak += 1;
+        wqBest = Math.max(wqBest, wqStreak);
+        wqSetPill("✅ Correct", "ok");
+      } else {
+        wqIncorrect += 1;
+        wqStreak = 0;
+        wqSetPill("❌ Not matched (see Expected)", "bad");
+      }
+      wqUpdateScore();
+    }
+
+    function wqResetAll() {
+      wqCorrect = 0; wqIncorrect = 0; wqStreak = 0; wqBest = 0;
+      wqUpdateScore();
+      wqSetPill("Ready", "neutral");
+      wqExpected.textContent = "—";
+      wqPromptText.textContent = "—";
+      wqTyped.value = "";
+      wqClearCanvas();
+      wqCurrent = null;
+    }
+
+    // wire word canvas
+    wireCanvas(wordCanvas, wctx);
+
+    // wire word quiz buttons
+    wqNext.addEventListener("click", wqNewQuestion);
+    wqReplay.addEventListener("click", wqPlayCurrent);
+    wqClear.addEventListener("click", wqClearCanvas);
+    wqReveal.addEventListener("click", wqRevealAnswer);
+    wqReset.addEventListener("click", wqResetAll);
+    wqCheck.addEventListener("click", wqCheckTyped);
+    wqTyped.addEventListener("keydown", (e) => { if (e.key === "Enter") wqCheckTyped(); });
+
+    // init word quiz UI
+    wqClearCanvas();
+    wqUpdateScore();
+
+    // finally: load words.json after page init
+    loadWordsJson();
   </script>
 </body>
 </html>
-
-

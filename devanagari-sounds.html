@@ -12,7 +12,7 @@
   <style>
     body { font-family: system-ui, Arial, sans-serif; padding: 16px; }
     h1 { font-size: 20px; margin: 0 0 10px; }
-    h2 { font-size: 16px; margin: 18px 0 8px; }
+    h2 { font-size: 16px; margin: 14px 0 8px; }
 
     .row { display:flex; gap:10px; align-items:center; flex-wrap: wrap; margin: 10px 0 14px; }
     label { font-size: 14px; color:#444; }
@@ -50,12 +50,7 @@
     .letterBtn.correct { background: #d4f8d4; border-color: #2f9e44; }
     .letterBtn.wrong   { background: #ffd6d6; border-color: #c92a2a; }
 
-    .backtop {
-      font-size: 12px;
-      margin-top: 8px;
-    }
-
-    /* ---------- GUNITA COLOR SYSTEM ---------- */
+    /* ---------- GUNITA COLOR SYSTEM (color-blind friendly) ---------- */
     #gunita-consonants .letterBtn { background: #ffffff; border-color: #cfcfcf; }
     #gunita-matras .letterBtn { background: #e7f1ff; border-color: #2b6cb0; }
     #gunita-matras .letterBtn[data-matra="a"] { background: #f3f4f6; border-color: #6b7280; }
@@ -63,13 +58,31 @@
     #gunita-display {
       font-family: "Noto Sans Devanagari","Nirmala UI","Mangal",system-ui,sans-serif;
       font-size: 64px;
+      line-height: 1.05;
       padding: 16px 28px;
       border-radius: 18px;
       background: #fff7e6;
       border: 2px solid #b45309;
+      color: #0f172a;
       min-width: 160px;
       text-align: center;
+      position: relative;
     }
+    #gunita-display::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 10px;
+      height: 100%;
+      background: #b45309;
+      border-top-left-radius: 18px;
+      border-bottom-left-radius: 18px;
+    }
+
+    /* Gunita-only halanta note */
+    #halantaNoteGunita { display:none; }
+    #halantaNoteGunita.show { display:inline; }
 
     /* ---------- DRAWING QUIZ ---------- */
     .card {
@@ -80,73 +93,961 @@
       box-shadow: 0 1px 2px rgba(0,0,0,.04);
       max-width: 980px;
     }
+    .quizGrid {
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+    @media (min-width: 900px) {
+      .quizGrid { grid-template-columns: 1.2fr 0.8fr; align-items:start; }
+    }
+    .drawCanvas {
+      width: 100%;
+      max-width: 720px;
+      height: 260px;
+      border: 2px solid #d1d5db;
+      border-radius: 12px;
+      background: #ffffff;
+      touch-action: none;
+      display:block;
+    }
+    .textboxDeva {
+      font-family: "Noto Sans Devanagari","Nirmala UI","Mangal",system-ui,sans-serif;
+      font-size: 30px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 2px solid #e5e7eb;
+      width: min(420px, 100%);
+    }
+    .quizBig {
+      font-family: "Noto Sans Devanagari","Nirmala UI","Mangal",system-ui,sans-serif;
+      font-size: 48px;
+      line-height: 1.1;
+      padding: 10px 16px;
+      border-radius: 14px;
+      border: 2px solid #cbd5e1;
+      background: #f8fafc;
+      display:inline-block;
+      min-width: 120px;
+      text-align:center;
+      word-break: break-word;
+    }
+    .okPill { background:#d4f8d4; border-color:#2f9e44; }
+    .badPill { background:#ffd6d6; border-color:#c92a2a; }
   </style>
 </head>
 
-<body id="top">
+<body>
+  <h1>Devanagari Pronunciation Tool</h1>
 
-<h1>Devanagari Pronunciation Tool</h1>
+  <div class="row">
+    <span class="pill" id="status">Ready</span>
 
-<!-- TOC -->
-<div class="card">
-  <b>Contents</b>
-  <ul class="small">
-    <li><a href="#vowels">स्वराः</a></li>
-    <li><a href="#vargiya">वर्गीय व्यञ्जनानि</a></li>
-    <li><a href="#avargiya">अवर्गीय व्यञ्जनानि</a></li>
-    <li><a href="#gunita">गुणिताक्षराणि</a></li>
-    <li><a href="#gunita-quiz">गुणिताक्षर-लेखन-प्रश्नोत्तरी</a></li>
-    <li><a href="#word-quiz">गुणित-शब्द-लेखन-प्रश्नोत्तरी</a></li>
-  </ul>
-</div>
+    <label><input type="checkbox" id="showHint" checked> Show hint</label>
 
-<!-- VOWELS -->
-<h2 id="vowels">स्वराः</h2>
-<div class="grid" id="grid-vowels"></div>
-<div class="backtop"><a href="#top">↑ Back to top</a></div>
+    <label>
+      Display:
+      <select id="scheme">
+        <option value="deva" selected>Devanagari</option>
+        <option value="iast">IAST</option>
+        <option value="hk">Harvard–Kyoto</option>
+      </select>
+    </label>
 
-<!-- VARGIYA -->
-<h2 id="vargiya">वर्गीय व्यञ्जनानि</h2>
-<div class="grid5" id="grid-vargiya"></div>
-<div class="backtop"><a href="#top">↑ Back to top</a></div>
+    <label><input type="checkbox" id="quizMode"> Quiz</label>
 
-<!-- AVARGIYA -->
-<h2 id="avargiya">अवर्गीय व्यञ्जनानि</h2>
-<div class="line" id="line-avargiya"></div>
-<div class="backtop"><a href="#top">↑ Back to top</a></div>
+    <label><input type="radio" name="quizType" value="listen" checked> Listen → Click</label>
+    <label><input type="radio" name="quizType" value="reverse"> See → Guess</label>
 
-<!-- GUNITA -->
-<h2 id="gunita">गुणिताक्षराणि (Work in progress)</h2>
-<div class="line" id="gunita-consonants"></div>
-<div class="line" id="gunita-matras"></div>
-<div id="gunita-display">—</div>
-<div class="backtop"><a href="#top">↑ Back to top</a></div>
+    <button class="ctrlBtn" id="playNext" type="button">Play / Next</button>
+    <button class="ctrlBtn" id="resetScore" type="button">Reset</button>
 
-<!-- GUNITA QUIZ -->
-<h2 id="gunita-quiz">गुणिताक्षर-लेखन-प्रश्नोत्तरी</h2>
-<div class="card">
-  <p class="small">
-    Click <b>Next</b> to hear a sound. Write it on the canvas or type it.
-    Typing is used for checking; drawing is for practice.
-  </p>
-</div>
-<div class="backtop"><a href="#top">↑ Back to top</a></div>
+    <span class="pill" id="qPrompt">Quiz off</span>
+    <span class="pill" id="scorePill">✅ 0  ❌ 0  🔥 0 (best 0)</span>
+  </div>
 
-<!-- WORD QUIZ -->
-<h2 id="word-quiz">गुणित-शब्द-लेखन-प्रश्नोत्तरी</h2>
-<div class="card">
-  <p class="small">
-    Listen to a word and write it. Compare your writing with the correct form.
-  </p>
-</div>
-<div class="backtop"><a href="#top">↑ Back to top</a></div>
+  <h2>स्वराः</h2>
+  <div class="grid" id="grid-vowels"></div>
 
-<p class="small">Developed by Samskritabharati USA</p>
+  <h2>वर्गीय व्यञ्जनानि</h2>
+  <div class="grid5" id="grid-vargiya"></div>
 
-<!-- Your existing <script> block stays EXACTLY as you already have it -->
-<script>
-  /* unchanged JS — keep your current script here */
-</script>
+  <h2>अवर्गीय व्यञ्जनानि</h2>
+  <div class="line" id="line-avargiya"></div>
 
+  <!-- GUNITA SECTION -->
+  <h2>गुणिताक्षराणि (Work in progress)</h2>
+  <div class="row">
+    <span class="pill">1) Pick a consonant → 2) Pick a vowel/mātrā</span>
+    <span class="pill" id="gunita-status">Selected: —</span>
+
+    <label>
+      <input type="checkbox" id="showHalantaGunita">
+      Show halanta here (क्)
+    </label>
+    <span class="small" id="halantaNoteGunita">
+      Halanta shown for recognition; audio uses normal consonant sound (क, ख…).
+    </span>
+  </div>
+
+  <div class="line" id="gunita-consonants"></div>
+  <div class="line" id="gunita-matras"></div>
+  <div class="row">
+    <div id="gunita-display">—</div>
+  </div>
+
+  <!-- GUNITA WRITING QUIZ (akshara) -->
+  <h2>गुणिताक्षर-लेखन-प्रश्नोत्तरी (listen → write)</h2>
+  <div class="card">
+    <p class="small" style="margin: 0 0 10px;">
+      <b>How to use:</b> Click <b>Next (play)</b> to hear a guṇitākṣara. Write it on the canvas <i>or</i> type it in the box.
+      Click <b>Check</b> (typing is graded). Use <b>Replay</b> to hear again, <b>Clear</b> to erase, and <b>Reveal</b> to see the answer.
+    </p>
+
+    <div class="row">
+      <button class="ctrlBtn" id="dqNext" type="button">Next (play)</button>
+      <button class="ctrlBtn" id="dqReplay" type="button">Replay</button>
+      <button class="ctrlBtn" id="dqClear" type="button">Clear</button>
+      <button class="ctrlBtn" id="dqReveal" type="button">Reveal</button>
+      <button class="ctrlBtn" id="dqReset" type="button">Reset score</button>
+
+      <span class="pill" id="dqResult">Ready</span>
+      <span class="pill" id="dqScore">✅ 0  ❌ 0  🔥 0 (best 0)</span>
+    </div>
+
+    <div class="quizGrid">
+      <div>
+        <canvas class="drawCanvas" id="drawCanvas" width="1400" height="520"></canvas>
+        <p class="small">
+          Note: Browsers can’t reliably grade handwriting without ML/OCR.
+          So scoring uses the typed answer; the drawing is for practice + comparison.
+        </p>
+      </div>
+
+      <div>
+        <div class="row" style="margin-top:0;">
+          <span class="pill">Type what you wrote (Devanagari):</span>
+        </div>
+        <input class="textboxDeva" id="dqTyped" placeholder="उदा: के" autocomplete="off" />
+        <div class="row">
+          <button class="ctrlBtn" id="dqCheck" type="button">Check</button>
+        </div>
+
+        <div class="row">
+          <span class="pill">Expected:</span>
+          <span class="quizBig" id="dqExpected">—</span>
+        </div>
+
+        <div class="row">
+          <span class="pill">Audio file:</span>
+          <span class="pill" id="dqPromptText">—</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NEW: WORD QUIZ (words.json) -->
+  <h2>गुणित-शब्द-लेखन-प्रश्नोत्तरी (listen → write)</h2>
+  <div class="card">
+    <p class="small" style="margin: 0 0 10px;">
+      <b>How to use:</b> Click <b>Next (play)</b> to hear a word. Write it on the canvas <i>or</i> type it in the box.
+      Click <b>Check</b> (typing is graded). Use <b>Replay</b> to hear again, <b>Clear</b> to erase, and <b>Reveal</b> to see the answer.
+    </p>
+
+    <div class="row">
+      <span class="pill" id="wqLoadStatus">Loading words.json…</span>
+      <label>
+        Level:
+        <select id="wqLevel">
+          <option value="all" selected>All</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="row">
+      <button class="ctrlBtn" id="wqNext" type="button">Next (play)</button>
+      <button class="ctrlBtn" id="wqReplay" type="button">Replay</button>
+      <button class="ctrlBtn" id="wqClear" type="button">Clear</button>
+      <button class="ctrlBtn" id="wqReveal" type="button">Reveal</button>
+      <button class="ctrlBtn" id="wqReset" type="button">Reset score</button>
+
+      <span class="pill" id="wqResult">Ready</span>
+      <span class="pill" id="wqScore">✅ 0  ❌ 0  🔥 0 (best 0)</span>
+    </div>
+
+    <div class="quizGrid">
+      <div>
+        <canvas class="drawCanvas" id="wordCanvas" width="1400" height="520"></canvas>
+        <p class="small">
+          Note: Scoring uses the typed answer; the drawing is for practice.
+        </p>
+      </div>
+
+      <div>
+        <div class="row" style="margin-top:0;">
+          <span class="pill">Type what you wrote (Devanagari):</span>
+        </div>
+        <input class="textboxDeva" id="wqTyped" placeholder="उदा: एकम्" autocomplete="off" />
+        <div class="row">
+          <button class="ctrlBtn" id="wqCheck" type="button">Check</button>
+        </div>
+
+        <div class="row">
+          <span class="pill">Expected:</span>
+          <span class="quizBig" id="wqExpected">—</span>
+        </div>
+
+        <div class="row">
+          <span class="pill">Audio file:</span>
+          <span class="pill" id="wqPromptText">—</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p class="small">Developed by Samskritabharati USA</p>
+
+  <script>
+    const AUDIO_BASE_URL = "https://laksiyer.github.io/ucchAraNam/audio/";
+    const HALANTA = "्";
+
+    // -----------------------------
+    // Load words.json (Word quiz)
+    // -----------------------------
+    let WORDS = [];
+    let WORDS_READY = false;
+
+    const wqLoadStatus = document.getElementById("wqLoadStatus");
+    async function loadWordsJson() {
+      try {
+        wqLoadStatus.textContent = "Loading words.json…";
+        const res = await fetch("words.json?ts=" + Date.now(), { cache: "no-store" });
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        const data = await res.json();
+
+        WORDS = (data || []).filter(x => x && x.word && x.file);
+        WORDS_READY = WORDS.length > 0;
+
+        wqLoadStatus.textContent = WORDS_READY ? `Loaded ${WORDS.length} words` : "words.json loaded but empty";
+      } catch (e) {
+        console.error(e);
+        WORDS_READY = false;
+        wqLoadStatus.textContent = "Could not load words.json (check filename/location)";
+      }
+    }
+
+    // --- DATA ---
+    const vowels = [
+      { key:"a",  deva:"अ",  iast:"a",   hk:"a",  hint:"a",   file:"a.mp3" },
+      { key:"aa", deva:"आ",  iast:"ā",   hk:"A",  hint:"ā",   file:"aa.mp3" },
+      { key:"i",  deva:"इ",  iast:"i",   hk:"i",  hint:"i",   file:"i.mp3" },
+      { key:"ii", deva:"ई",  iast:"ī",   hk:"I",  hint:"ī",   file:"ii.mp3" },
+      { key:"u",  deva:"उ",  iast:"u",   hk:"u",  hint:"u",   file:"u.mp3" },
+      { key:"uu", deva:"ऊ",  iast:"ū",   hk:"U",  hint:"ū",   file:"uu.mp3" },
+      { key:"ri", deva:"ऋ",  iast:"ṛ",   hk:"R",  hint:"ṛ",   file:"ri.mp3" },
+      { key:"rri",deva:"ॠ",  iast:"ṝ",   hk:"RR", hint:"ṝ",   file:"rri.mp3" },
+      { key:"lr", deva:"ऌ",  iast:"ḷ",   hk:"L",  hint:"ḷ",   file:"lr.mp3" },
+      { key:"e",  deva:"ए",  iast:"e",   hk:"e",  hint:"e",   file:"e.mp3" },
+      { key:"ai", deva:"ऐ",  iast:"ai",  hk:"ai", hint:"ai",  file:"ai.mp3" },
+      { key:"o",  deva:"ओ",  iast:"o",   hk:"o",  hint:"o",   file:"o.mp3" },
+      { key:"au", deva:"औ",  iast:"au",  hk:"au", hint:"au",  file:"au.mp3" },
+      { key:"am", deva:"अं", iast:"aṃ",  hk:"aM", hint:"aṃ",  file:"am.mp3" },
+      { key:"ah", deva:"अः", iast:"aḥ",  hk:"aH", hint:"aḥ",  file:"ah.mp3" }
+    ];
+
+    const vargiya = [
+      { key:"ka",  deva:"क", iast:"ka",  hk:"ka",  hint:"ka",  file:"ka.mp3" },
+      { key:"kha", deva:"ख", iast:"kha", hk:"kha", hint:"kha", file:"kha.mp3" },
+      { key:"ga",  deva:"ग", iast:"ga",  hk:"ga",  hint:"ga",  file:"ga.mp3" },
+      { key:"gha", deva:"घ", iast:"gha", hk:"gha", hint:"gha", file:"gha.mp3" },
+      { key:"nga", deva:"ङ", iast:"ṅa",  hk:"Ga",  hint:"ṅa",  file:"nga.mp3" },
+
+      { key:"ca",  deva:"च", iast:"ca",  hk:"ca",  hint:"ca",  file:"ca.mp3" },
+      { key:"cha", deva:"छ", iast:"cha", hk:"cha", hint:"cha", file:"cha.mp3" },
+      { key:"ja",  deva:"ज", iast:"ja",  hk:"ja",  hint:"ja",  file:"ja.mp3" },
+      { key:"jha", deva:"झ", iast:"jha", hk:"jha", hint:"jha", file:"jha.mp3" },
+      { key:"nya", deva:"ञ", iast:"ña",  hk:"Ja",  hint:"ña",  file:"nya.mp3" },
+
+      { key:"tta",  deva:"ट", iast:"ṭa",  hk:"Ta",  hint:"ṭa",  file:"ta_retro.mp3" },
+      { key:"ttha", deva:"ठ", iast:"ṭha", hk:"Tha", hint:"ṭha", file:"tha_retro.mp3" },
+      { key:"dda",  deva:"ड", iast:"ḍa",  hk:"Da",  hint:"ḍa",  file:"da_retro.mp3" },
+      { key:"ddha", deva:"ढ", iast:"ḍha", hk:"Dha", hint:"ḍha", file:"dha_retro.mp3" },
+      { key:"nna",  deva:"ण", iast:"ṇa",  hk:"Na",  hint:"ṇa",  file:"na_retro.mp3" },
+
+      { key:"ta",  deva:"त", iast:"ta",  hk:"ta",  hint:"ta",  file:"ta.mp3" },
+      { key:"tha", deva:"थ", iast:"tha", hk:"tha", hint:"tha", file:"tha.mp3" },
+      { key:"da",  deva:"द", iast:"da",  hk:"da",  hint:"da",  file:"da.mp3" },
+      { key:"dha", deva:"ध", iast:"dha", hk:"dha", hint:"dha", file:"dha.mp3" },
+      { key:"na",  deva:"न", iast:"na",  hk:"na",  hint:"na",  file:"na.mp3" },
+
+      { key:"pa",  deva:"प", iast:"pa",  hk:"pa",  hint:"pa",  file:"pa.mp3" },
+      { key:"pha", deva:"फ", iast:"pha", hk:"pha", hint:"pha", file:"pha.mp3" },
+      { key:"ba",  deva:"ब", iast:"ba",  hk:"ba",  hint:"ba",  file:"ba.mp3" },
+      { key:"bha", deva:"भ", iast:"bha", hk:"bha", hint:"bha", file:"bha.mp3" },
+      { key:"ma",  deva:"म", iast:"ma",  hk:"ma",  hint:"ma",  file:"ma.mp3" }
+    ];
+
+    const avargiya = [
+      { key:"ya", deva:"य", iast:"ya", hk:"ya", hint:"ya", file:"ya.mp3" },
+      { key:"ra", deva:"र", iast:"ra", hk:"ra", hint:"ra", file:"ra.mp3" },
+      { key:"la", deva:"ल", iast:"la", hk:"la", hint:"la", file:"la.mp3" },
+      { key:"va", deva:"व", iast:"va", hk:"va", hint:"va", file:"va.mp3" },
+      { key:"sha",deva:"श", iast:"śa", hk:"za", hint:"śa", file:"sha_palatal.mp3" },
+      { key:"ssa",deva:"ष", iast:"ṣa", hk:"Sa", hint:"ṣa", file:"sha_retro.mp3" },
+      { key:"sa", deva:"स", iast:"sa", hk:"sa", hint:"sa", file:"sa.mp3" },
+      { key:"ha", deva:"ह", iast:"ha", hk:"ha", hint:"ha", file:"ha.mp3" }
+    ];
+
+    // Matras for gunita (NO ॡ / ॣ)
+    const matras = [
+      { key:"a",   deva:"",  vowelFile:"a.mp3"   },
+      { key:"aa",  deva:"ा", vowelFile:"aa.mp3"  },
+      { key:"i",   deva:"ि", vowelFile:"i.mp3"   },
+      { key:"ii",  deva:"ी", vowelFile:"ii.mp3"  },
+      { key:"u",   deva:"ु", vowelFile:"u.mp3"   },
+      { key:"uu",  deva:"ू", vowelFile:"uu.mp3"  },
+      { key:"ri",  deva:"ृ", vowelFile:"ri.mp3"  },
+      { key:"rri", deva:"ॄ", vowelFile:"rri.mp3" },
+      { key:"lr",  deva:"ॢ", vowelFile:"lr.mp3"  },
+      { key:"e",   deva:"े", vowelFile:"e.mp3"   },
+      { key:"ai",  deva:"ै", vowelFile:"ai.mp3"  },
+      { key:"o",   deva:"ो", vowelFile:"o.mp3"   },
+      { key:"au",  deva:"ौ", vowelFile:"au.mp3"  },
+      { key:"am",  deva:"ं", vowelFile:"am.mp3"  },
+      { key:"ah",  deva:"ः", vowelFile:"ah.mp3"  }
+    ];
+
+    const allItems = [...vowels, ...vargiya, ...avargiya];
+    const byKey = new Map(allItems.map(x => [x.key, x]));
+    const quizPool = [...vargiya, ...avargiya];
+
+    // UI
+    const status = document.getElementById("status");
+    const showHint = document.getElementById("showHint");
+    const schemeSel = document.getElementById("scheme");
+    const quizMode = document.getElementById("quizMode");
+    const playNext = document.getElementById("playNext");
+    const qPrompt = document.getElementById("qPrompt");
+    const scorePill = document.getElementById("scorePill");
+    const resetScoreBtn = document.getElementById("resetScore");
+    const quizTypeRadios = document.querySelectorAll('input[name="quizType"]');
+
+    // Gunita UI
+    const gunitaStatus = document.getElementById("gunita-status");
+    const gunitaDisplay = document.getElementById("gunita-display");
+    const showHalantaGunita = document.getElementById("showHalantaGunita");
+    const halantaNoteGunita = document.getElementById("halantaNoteGunita");
+
+    // State
+    let scheme = schemeSel.value;
+    let quizType = "listen";
+    let quizAnswerKey = null;
+
+    let correctCount = 0;
+    let incorrectCount = 0;
+    let streak = 0;
+    let bestStreak = 0;
+    let missedThisQuestion = false;
+
+    let selectedConsonant = null;
+
+    // Audio
+    const player = new Audio();
+    player.preload = "auto";
+
+    function setStatus(msg) { status.textContent = msg; }
+
+    function labelOf(x) {
+      if (!x) return "";
+      return (x && x[scheme]) ? x[scheme] : (x.deva || "");
+    }
+
+    function gunitaConsonantLabel(c) {
+      if (!c) return "";
+      if (scheme === "deva" && showHalantaGunita.checked) return (c.deva || "") + HALANTA;
+      return labelOf(c);
+    }
+
+    function playFile(file, msg) {
+      try { player.pause(); player.currentTime = 0; } catch(e) {}
+      const url = AUDIO_BASE_URL + file;
+      setStatus(msg);
+      player.src = url;
+      player.play().catch(() => alert("Could not play: " + url));
+    }
+
+    async function tryPlaySingle(file) {
+      return new Promise((resolve, reject) => {
+        try { player.pause(); player.currentTime = 0; } catch(e) {}
+        player.src = AUDIO_BASE_URL + file;
+        player.onended = resolve;
+        player.onerror = () => reject(new Error("Missing: " + file));
+        player.play().catch(reject);
+      });
+    }
+
+    async function playSequence(files) {
+      for (const f of files) {
+        await new Promise((resolve, reject) => {
+          try { player.pause(); player.currentTime = 0; } catch(e) {}
+          player.src = AUDIO_BASE_URL + f;
+          player.onended = resolve;
+          player.onerror = reject;
+          player.play().catch(reject);
+        });
+      }
+    }
+
+    // Matra sound first, then gunita file; fallback if missing
+    async function playGunita(consonant, matra) {
+      const gunitaFile = `${consonant.key}_${matra.key}.mp3`;
+      await playSequence([matra.vowelFile]);
+      try {
+        await tryPlaySingle(gunitaFile);
+      } catch (e) {
+        await playSequence([consonant.file, matra.vowelFile]);
+      }
+    }
+
+    function clearFeedback() {
+      document.querySelectorAll(".letterBtn").forEach(b => b.classList.remove("correct","wrong"));
+    }
+
+    function updateScoreUI() {
+      scorePill.textContent = `✅ ${correctCount}  ❌ ${incorrectCount}  🔥 ${streak} (best ${bestStreak})`;
+    }
+
+    function resetScore() {
+      correctCount = 0;
+      incorrectCount = 0;
+      streak = 0;
+      bestStreak = 0;
+      missedThisQuestion = false;
+      updateScoreUI();
+      clearFeedback();
+      setStatus("Ready");
+      if (!quizMode.checked) qPrompt.textContent = "Quiz off";
+    }
+
+    function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+    function startQuestion() {
+      clearFeedback();
+      const x = pick(quizPool);
+      quizAnswerKey = x.key;
+      missedThisQuestion = false;
+
+      if (quizType === "listen") {
+        qPrompt.textContent = "Listen → Click";
+        playFile(x.file, "Quiz sound");
+      } else {
+        qPrompt.textContent = "See → Guess (then Play)";
+        setStatus("Shown: " + labelOf(x));
+      }
+    }
+
+    function renderButtons(containerId, items, modeLine=false) {
+      const container = document.getElementById(containerId);
+      items.forEach(x => {
+        const b = document.createElement("button");
+        b.className = "letterBtn";
+        b.dataset.key = x.key;
+        b.textContent = labelOf(x);
+        if (modeLine) b.style.padding = "10px 14px";
+
+        const updateTitle = () => {
+          b.title = showHint.checked ? (x.hint + " (" + x.file + ")") : "";
+        };
+        updateTitle();
+        showHint.addEventListener("change", updateTitle);
+
+        b.onclick = () => {
+          if (!quizMode.checked) {
+            playFile(x.file, labelOf(x) + (showHint.checked ? " = " + x.hint : ""));
+            return;
+          }
+
+          clearFeedback();
+
+          if (x.key === quizAnswerKey) {
+            b.classList.add("correct");
+            qPrompt.textContent = "✅ Correct!";
+
+            correctCount += 1;
+            if (missedThisQuestion) {
+              incorrectCount += 1;
+              streak = 0;
+            } else {
+              streak += 1;
+              if (streak > bestStreak) bestStreak = streak;
+            }
+            updateScoreUI();
+
+            playFile(x.file, "Correct");
+            setTimeout(startQuestion, 800);
+          } else {
+            b.classList.add("wrong");
+            qPrompt.textContent = "❌ Try again";
+            missedThisQuestion = true;
+
+            if (quizType === "listen" && quizAnswerKey) {
+              const target = byKey.get(quizAnswerKey);
+              if (target) setTimeout(() => playFile(target.file, "Try again"), 200);
+            }
+          }
+        };
+
+        container.appendChild(b);
+      });
+    }
+
+    function renderGunita() {
+      const cDiv = document.getElementById("gunita-consonants");
+      const mDiv = document.getElementById("gunita-matras");
+      cDiv.innerHTML = "";
+      mDiv.innerHTML = "";
+
+      const consonants = [...vargiya, ...avargiya];
+
+      consonants.forEach(c => {
+        const b = document.createElement("button");
+        b.className = "letterBtn";
+        b.dataset.key = c.key;
+        b.textContent = gunitaConsonantLabel(c);
+        b.title = "Select consonant";
+
+        b.onclick = () => {
+          selectedConsonant = c;
+          gunitaStatus.textContent = "Selected: " + gunitaConsonantLabel(c);
+          gunitaDisplay.textContent = gunitaConsonantLabel(c);
+          playFile(c.file, "Selected");
+        };
+        cDiv.appendChild(b);
+      });
+
+      matras.forEach(m => {
+        const b = document.createElement("button");
+        b.className = "letterBtn";
+        b.dataset.matra = m.key;
+        b.textContent = m.deva || "अ";
+        b.title = "Apply mātrā";
+
+        b.onclick = async () => {
+          if (!selectedConsonant) { alert("First select a consonant (e.g., क)."); return; }
+          const combined = (selectedConsonant.deva || "") + (m.deva || "");
+          gunitaDisplay.textContent = combined;
+          await playGunita(selectedConsonant, m);
+        };
+
+        mDiv.appendChild(b);
+      });
+    }
+
+    function rerenderTextsForSchemeChange() {
+      document.querySelectorAll("#grid-vowels .letterBtn, #grid-vargiya .letterBtn, #line-avargiya .letterBtn")
+        .forEach(btn => {
+          const x = byKey.get(btn.dataset.key);
+          if (x) btn.textContent = labelOf(x);
+        });
+
+      renderGunita();
+
+      if (quizMode.checked && quizType === "reverse" && quizAnswerKey) {
+        const x = byKey.get(quizAnswerKey);
+        setStatus("Shown: " + labelOf(x));
+      }
+    }
+
+    // Initial render
+    renderButtons("grid-vowels", vowels);
+    renderButtons("grid-vargiya", vargiya);
+    renderButtons("line-avargiya", avargiya, true);
+    renderGunita();
+    updateScoreUI();
+
+    schemeSel.addEventListener("change", () => {
+      scheme = schemeSel.value;
+      if (scheme !== "deva") {
+        showHalantaGunita.checked = false;
+        halantaNoteGunita.classList.remove("show");
+      }
+      rerenderTextsForSchemeChange();
+    });
+
+    showHalantaGunita.addEventListener("change", () => {
+      halantaNoteGunita.classList.toggle("show", showHalantaGunita.checked && scheme === "deva");
+      renderGunita();
+      if (selectedConsonant) {
+        gunitaStatus.textContent = "Selected: " + gunitaConsonantLabel(selectedConsonant);
+      }
+    });
+
+    quizTypeRadios.forEach(r => r.addEventListener("change", () => {
+      quizType = document.querySelector('input[name="quizType"]:checked').value;
+      if (quizMode.checked) startQuestion();
+    }));
+
+    playNext.addEventListener("click", () => {
+      if (!quizMode.checked) return;
+      if (quizType === "reverse" && quizAnswerKey) {
+        const x = byKey.get(quizAnswerKey);
+        playFile(x.file, "Reveal");
+      } else {
+        startQuestion();
+      }
+    });
+
+    quizMode.addEventListener("change", () => {
+      clearFeedback();
+      if (quizMode.checked) {
+        startQuestion();
+      } else {
+        quizAnswerKey = null;
+        missedThisQuestion = false;
+        qPrompt.textContent = "Quiz off";
+        setStatus("Ready");
+      }
+    });
+
+    resetScoreBtn.addEventListener("click", resetScore);
+
+    // -----------------------------
+    // Gunita Writing Quiz (akshara)
+    // -----------------------------
+    const dqNext = document.getElementById("dqNext");
+    const dqReplay = document.getElementById("dqReplay");
+    const dqClear = document.getElementById("dqClear");
+    const dqReveal = document.getElementById("dqReveal");
+    const dqReset = document.getElementById("dqReset");
+    const dqCheck = document.getElementById("dqCheck");
+
+    const dqResult = document.getElementById("dqResult");
+    const dqScore = document.getElementById("dqScore");
+    const dqExpected = document.getElementById("dqExpected");
+    const dqPromptText = document.getElementById("dqPromptText");
+    const dqTyped = document.getElementById("dqTyped");
+
+    const canvas = document.getElementById("drawCanvas");
+    const ctx = canvas.getContext("2d");
+
+    let dqCorrect = 0, dqIncorrect = 0, dqStreak = 0, dqBest = 0;
+    let dqCurrent = null; // { expectedDeva, consonantKey, matraKey, file }
+
+    function dqUpdateScore() {
+      dqScore.textContent = `✅ ${dqCorrect}  ❌ ${dqIncorrect}  🔥 ${dqStreak} (best ${dqBest})`;
+    }
+
+    function dqSetPill(msg, kind="neutral") {
+      dqResult.textContent = msg;
+      dqResult.classList.remove("okPill","badPill");
+      if (kind === "ok") dqResult.classList.add("okPill");
+      if (kind === "bad") dqResult.classList.add("badPill");
+    }
+
+    function dqPickGunita() {
+      const consonants = [...vargiya, ...avargiya];
+      const c = pick(consonants);
+      const m = pick(matras);
+      const expected = (c.deva || "") + (m.deva || "");
+      const file = `${c.key}_${m.key}.mp3`;
+      return { expectedDeva: expected, consonantKey: c.key, matraKey: m.key, file };
+    }
+
+    function dqPlayCurrent() {
+      if (!dqCurrent) return;
+      playFile(dqCurrent.file, "Gunita quiz");
+    }
+
+    function dqClearCanvas() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.save();
+      ctx.globalAlpha = 0.08;
+      ctx.strokeStyle = "#000";
+      ctx.lineWidth = 4;
+      ctx.beginPath();
+      ctx.moveTo(40, canvas.height/2);
+      ctx.lineTo(canvas.width-40, canvas.height/2);
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    function dqNewQuestion() {
+      dqCurrent = dqPickGunita();
+      dqExpected.textContent = "—";
+      dqPromptText.textContent = dqCurrent.file;
+      dqTyped.value = "";
+      dqSetPill("Listen and write", "neutral");
+      dqClearCanvas();
+      dqPlayCurrent();
+    }
+
+    function dqRevealAnswer() {
+      if (!dqCurrent) return;
+      dqExpected.textContent = dqCurrent.expectedDeva;
+      dqSetPill("Revealed", "neutral");
+    }
+
+    function normalizeDeva(s) {
+      return (s || "").trim().replace(/\s+/g, "");
+    }
+
+    function dqCheckTyped() {
+      if (!dqCurrent) return;
+
+      const user = normalizeDeva(dqTyped.value);
+      const exp = normalizeDeva(dqCurrent.expectedDeva);
+
+      dqExpected.textContent = dqCurrent.expectedDeva;
+
+      if (!user) {
+        dqSetPill("Type your answer first (or press Reveal).", "bad");
+        return;
+      }
+
+      if (user === exp) {
+        dqCorrect += 1;
+        dqStreak += 1;
+        dqBest = Math.max(dqBest, dqStreak);
+        dqSetPill("✅ Correct", "ok");
+      } else {
+        dqIncorrect += 1;
+        dqStreak = 0;
+        dqSetPill("❌ Not matched (see Expected)", "bad");
+      }
+      dqUpdateScore();
+    }
+
+    function dqResetAll() {
+      dqCorrect = 0; dqIncorrect = 0; dqStreak = 0; dqBest = 0;
+      dqUpdateScore();
+      dqSetPill("Ready", "neutral");
+      dqExpected.textContent = "—";
+      dqPromptText.textContent = "—";
+      dqTyped.value = "";
+      dqClearCanvas();
+      dqCurrent = null;
+    }
+
+    // Canvas drawing (mouse + touch)
+    let drawing = false;
+    let lastX = 0, lastY = 0;
+
+    function dqPos(evt, canv) {
+      const rect = canv.getBoundingClientRect();
+      const clientX = (evt.touches && evt.touches[0]) ? evt.touches[0].clientX : evt.clientX;
+      const clientY = (evt.touches && evt.touches[0]) ? evt.touches[0].clientY : evt.clientY;
+      const x = (clientX - rect.left) * (canv.width / rect.width);
+      const y = (clientY - rect.top)  * (canv.height / rect.height);
+      return {x,y};
+    }
+
+    function wireCanvas(canv, context) {
+      let isDown = false;
+      let lx = 0, ly = 0;
+
+      function start(evt) {
+        evt.preventDefault();
+        isDown = true;
+        const p = dqPos(evt, canv);
+        lx = p.x; ly = p.y;
+      }
+      function move(evt) {
+        if (!isDown) return;
+        evt.preventDefault();
+        const p = dqPos(evt, canv);
+
+        context.save();
+        context.lineCap = "round";
+        context.lineJoin = "round";
+        context.strokeStyle = "#111827";
+        context.lineWidth = 18;
+        context.beginPath();
+        context.moveTo(lx, ly);
+        context.lineTo(p.x, p.y);
+        context.stroke();
+        context.restore();
+
+        lx = p.x; ly = p.y;
+      }
+      function end(evt) {
+        if (!isDown) return;
+        evt.preventDefault();
+        isDown = false;
+      }
+
+      canv.addEventListener("mousedown", start);
+      canv.addEventListener("mousemove", move);
+      window.addEventListener("mouseup", end);
+
+      canv.addEventListener("touchstart", start, {passive:false});
+      canv.addEventListener("touchmove", move, {passive:false});
+      canv.addEventListener("touchend", end, {passive:false});
+    }
+
+    // wire akshara canvas
+    wireCanvas(canvas, ctx);
+
+    // Wire akshara quiz buttons
+    dqNext.addEventListener("click", dqNewQuestion);
+    dqReplay.addEventListener("click", dqPlayCurrent);
+    dqClear.addEventListener("click", dqClearCanvas);
+    dqReveal.addEventListener("click", dqRevealAnswer);
+    dqReset.addEventListener("click", dqResetAll);
+    dqCheck.addEventListener("click", dqCheckTyped);
+    dqTyped.addEventListener("keydown", (e) => { if (e.key === "Enter") dqCheckTyped(); });
+
+    // init akshara quiz
+    dqClearCanvas();
+    dqUpdateScore();
+
+    // -----------------------------
+    // Word Writing Quiz (words.json)
+    // -----------------------------
+    const wqLevel = document.getElementById("wqLevel");
+    const wqNext = document.getElementById("wqNext");
+    const wqReplay = document.getElementById("wqReplay");
+    const wqClear = document.getElementById("wqClear");
+    const wqReveal = document.getElementById("wqReveal");
+    const wqReset = document.getElementById("wqReset");
+    const wqCheck = document.getElementById("wqCheck");
+
+    const wqResult = document.getElementById("wqResult");
+    const wqScore = document.getElementById("wqScore");
+    const wqExpected = document.getElementById("wqExpected");
+    const wqPromptText = document.getElementById("wqPromptText");
+    const wqTyped = document.getElementById("wqTyped");
+
+    const wordCanvas = document.getElementById("wordCanvas");
+    const wctx = wordCanvas.getContext("2d");
+
+    let wqCorrect = 0, wqIncorrect = 0, wqStreak = 0, wqBest = 0;
+    let wqCurrent = null; // {word, hint, level, file, id}
+
+    function wqUpdateScore() {
+      wqScore.textContent = `✅ ${wqCorrect}  ❌ ${wqIncorrect}  🔥 ${wqStreak} (best ${wqBest})`;
+    }
+
+    function wqSetPill(msg, kind="neutral") {
+      wqResult.textContent = msg;
+      wqResult.classList.remove("okPill","badPill");
+      if (kind === "ok") wqResult.classList.add("okPill");
+      if (kind === "bad") wqResult.classList.add("badPill");
+    }
+
+    function wqClearCanvas() {
+      wctx.clearRect(0, 0, wordCanvas.width, wordCanvas.height);
+      wctx.save();
+      wctx.globalAlpha = 0.08;
+      wctx.strokeStyle = "#000";
+      wctx.lineWidth = 4;
+      wctx.beginPath();
+      wctx.moveTo(40, wordCanvas.height/2);
+      wctx.lineTo(wordCanvas.width-40, wordCanvas.height/2);
+      wctx.stroke();
+      wctx.restore();
+    }
+
+    function poolByLevel() {
+      if (!WORDS_READY) return [];
+      const lvl = wqLevel.value;
+      if (lvl === "all") return WORDS;
+      return WORDS.filter(x => String(x.level ?? "") === String(lvl));
+    }
+
+    function wqPickWord() {
+      const pool = poolByLevel();
+      if (!pool.length) return null;
+      return pool[Math.floor(Math.random() * pool.length)];
+    }
+
+    function wqPlayCurrent() {
+      if (!wqCurrent) return;
+      playFile(wqCurrent.file, "Word quiz");
+    }
+
+    function wqNewQuestion() {
+      if (!WORDS_READY) {
+        wqSetPill("words.json not loaded yet", "bad");
+        return;
+      }
+      wqCurrent = wqPickWord();
+      if (!wqCurrent) {
+        wqSetPill("No words for this level", "bad");
+        return;
+      }
+      wqExpected.textContent = "—";
+      wqPromptText.textContent = wqCurrent.file;
+      wqTyped.value = "";
+      wqSetPill("Listen and write", "neutral");
+      wqClearCanvas();
+      wqPlayCurrent();
+    }
+
+    function wqRevealAnswer() {
+      if (!wqCurrent) return;
+      wqExpected.textContent = wqCurrent.word;
+      wqSetPill("Revealed", "neutral");
+    }
+
+    function wqCheckTyped() {
+      if (!wqCurrent) return;
+
+      const user = normalizeDeva(wqTyped.value);
+      const exp = normalizeDeva(wqCurrent.word);
+
+      wqExpected.textContent = wqCurrent.word;
+
+      if (!user) {
+        wqSetPill("Type your answer first (or press Reveal).", "bad");
+        return;
+      }
+
+      if (user === exp) {
+        wqCorrect += 1;
+        wqStreak += 1;
+        wqBest = Math.max(wqBest, wqStreak);
+        wqSetPill("✅ Correct", "ok");
+      } else {
+        wqIncorrect += 1;
+        wqStreak = 0;
+        wqSetPill("❌ Not matched (see Expected)", "bad");
+      }
+      wqUpdateScore();
+    }
+
+    function wqResetAll() {
+      wqCorrect = 0; wqIncorrect = 0; wqStreak = 0; wqBest = 0;
+      wqUpdateScore();
+      wqSetPill("Ready", "neutral");
+      wqExpected.textContent = "—";
+      wqPromptText.textContent = "—";
+      wqTyped.value = "";
+      wqClearCanvas();
+      wqCurrent = null;
+    }
+
+    // wire word canvas
+    wireCanvas(wordCanvas, wctx);
+
+    // wire word quiz buttons
+    wqNext.addEventListener("click", wqNewQuestion);
+    wqReplay.addEventListener("click", wqPlayCurrent);
+    wqClear.addEventListener("click", wqClearCanvas);
+    wqReveal.addEventListener("click", wqRevealAnswer);
+    wqReset.addEventListener("click", wqResetAll);
+    wqCheck.addEventListener("click", wqCheckTyped);
+    wqTyped.addEventListener("keydown", (e) => { if (e.key === "Enter") wqCheckTyped(); });
+
+    // init word quiz UI
+    wqClearCanvas();
+    wqUpdateScore();
+
+    // finally: load words.json after page init
+    loadWordsJson();
+  </script>
 </body>
 </html>

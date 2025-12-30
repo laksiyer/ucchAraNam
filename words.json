@@ -1,0 +1,1185 @@
+[
+  {
+    "id": "001",
+    "word": "एकम्",
+    "hint": "ekam",
+    "level": 2,
+    "file": "word_001.mp3"
+  },
+  {
+    "id": "002",
+    "word": "खगः",
+    "hint": "khagaḥ",
+    "level": 2,
+    "file": "word_002.mp3"
+  },
+  {
+    "id": "003",
+    "word": "खादति",
+    "hint": "khādati",
+    "level": 1,
+    "file": "word_003.mp3"
+  },
+  {
+    "id": "004",
+    "word": "पिबति",
+    "hint": "pibati",
+    "level": 1,
+    "file": "word_004.mp3"
+  },
+  {
+    "id": "005",
+    "word": "नमति",
+    "hint": "namati",
+    "level": 1,
+    "file": "word_005.mp3"
+  },
+  {
+    "id": "006",
+    "word": "करोति",
+    "hint": "karoti",
+    "level": 1,
+    "file": "word_006.mp3"
+  },
+  {
+    "id": "007",
+    "word": "गदः",
+    "hint": "gadaḥ",
+    "level": 2,
+    "file": "word_007.mp3"
+  },
+  {
+    "id": "008",
+    "word": "गणकः",
+    "hint": "gaṇakaḥ",
+    "level": 2,
+    "file": "word_008.mp3"
+  },
+  {
+    "id": "009",
+    "word": "दशमः",
+    "hint": "daśamaḥ",
+    "level": 2,
+    "file": "word_009.mp3"
+  },
+  {
+    "id": "010",
+    "word": "कनकम्",
+    "hint": "kanakam",
+    "level": 2,
+    "file": "word_010.mp3"
+  },
+  {
+    "id": "011",
+    "word": "चणकः",
+    "hint": "caṇakaḥ",
+    "level": 2,
+    "file": "word_011.mp3"
+  },
+  {
+    "id": "012",
+    "word": "चमसः",
+    "hint": "camasaḥ",
+    "level": 2,
+    "file": "word_012.mp3"
+  },
+  {
+    "id": "013",
+    "word": "घन",
+    "hint": "ghana",
+    "level": 1,
+    "file": "word_013.mp3"
+  },
+  {
+    "id": "014",
+    "word": "कफः",
+    "hint": "kaphaḥ",
+    "level": 2,
+    "file": "word_014.mp3"
+  },
+  {
+    "id": "015",
+    "word": "अजः",
+    "hint": "ajaḥ",
+    "level": 2,
+    "file": "word_015.mp3"
+  },
+  {
+    "id": "016",
+    "word": "खजः",
+    "hint": "khajaḥ",
+    "level": 2,
+    "file": "word_016.mp3"
+  },
+  {
+    "id": "017",
+    "word": "गमनम्",
+    "hint": "gamanam",
+    "level": 2,
+    "file": "word_017.mp3"
+  },
+  {
+    "id": "018",
+    "word": "पठनम्",
+    "hint": "paṭhanam",
+    "level": 2,
+    "file": "word_018.mp3"
+  },
+  {
+    "id": "019",
+    "word": "छदः",
+    "hint": "chadaḥ",
+    "level": 2,
+    "file": "word_019.mp3"
+  },
+  {
+    "id": "020",
+    "word": "चरणौ",
+    "hint": "caraṇau",
+    "level": 1,
+    "file": "word_020.mp3"
+  },
+  {
+    "id": "021",
+    "word": "कमर",
+    "hint": "kamara",
+    "level": 1,
+    "file": "word_021.mp3"
+  },
+  {
+    "id": "022",
+    "word": "जगतः",
+    "hint": "jagataḥ",
+    "level": 2,
+    "file": "word_022.mp3"
+  },
+  {
+    "id": "023",
+    "word": "कमठः",
+    "hint": "kamaṭhaḥ",
+    "level": 2,
+    "file": "word_023.mp3"
+  },
+  {
+    "id": "024",
+    "word": "चयनम्",
+    "hint": "cayanam",
+    "level": 2,
+    "file": "word_024.mp3"
+  },
+  {
+    "id": "025",
+    "word": "जनकः",
+    "hint": "janakaḥ",
+    "level": 2,
+    "file": "word_025.mp3"
+  },
+  {
+    "id": "026",
+    "word": "जगदः",
+    "hint": "jagadaḥ",
+    "level": 2,
+    "file": "word_026.mp3"
+  },
+  {
+    "id": "027",
+    "word": "जघनम्",
+    "hint": "jaghanam",
+    "level": 2,
+    "file": "word_027.mp3"
+  },
+  {
+    "id": "028",
+    "word": "जलम्",
+    "hint": "jalam",
+    "level": 2,
+    "file": "word_028.mp3"
+  },
+  {
+    "id": "029",
+    "word": "जठरम्",
+    "hint": "jaṭharam",
+    "level": 2,
+    "file": "word_029.mp3"
+  },
+  {
+    "id": "030",
+    "word": "जयः",
+    "hint": "jayaḥ",
+    "level": 2,
+    "file": "word_030.mp3"
+  },
+  {
+    "id": "031",
+    "word": "मथनम्",
+    "hint": "mathanam",
+    "level": 2,
+    "file": "word_031.mp3"
+  },
+  {
+    "id": "032",
+    "word": "मदनः",
+    "hint": "madanaḥ",
+    "level": 2,
+    "file": "word_032.mp3"
+  },
+  {
+    "id": "033",
+    "word": "अभवम्",
+    "hint": "abhavam",
+    "level": 2,
+    "file": "word_033.mp3"
+  },
+  {
+    "id": "034",
+    "word": "नदी",
+    "hint": "nadī",
+    "level": 1,
+    "file": "word_034.mp3"
+  },
+  {
+    "id": "035",
+    "word": "नौका",
+    "hint": "naukā",
+    "level": 1,
+    "file": "word_035.mp3"
+  },
+  {
+    "id": "036",
+    "word": "नलः",
+    "hint": "nalaḥ",
+    "level": 2,
+    "file": "word_036.mp3"
+  },
+  {
+    "id": "037",
+    "word": "करणम्",
+    "hint": "karaṇam",
+    "level": 2,
+    "file": "word_037.mp3"
+  },
+  {
+    "id": "038",
+    "word": "पवनः",
+    "hint": "pavanaḥ",
+    "level": 2,
+    "file": "word_038.mp3"
+  },
+  {
+    "id": "039",
+    "word": "रथः",
+    "hint": "rathaḥ",
+    "level": 2,
+    "file": "word_039.mp3"
+  },
+  {
+    "id": "040",
+    "word": "यानम्",
+    "hint": "yānam",
+    "level": 2,
+    "file": "word_040.mp3"
+  },
+  {
+    "id": "041",
+    "word": "दलम्",
+    "hint": "dalam",
+    "level": 2,
+    "file": "word_041.mp3"
+  },
+  {
+    "id": "042",
+    "word": "शतकम्",
+    "hint": "śatakam",
+    "level": 2,
+    "file": "word_042.mp3"
+  },
+  {
+    "id": "043",
+    "word": "बलम्",
+    "hint": "balam",
+    "level": 2,
+    "file": "word_043.mp3"
+  },
+  {
+    "id": "044",
+    "word": "आगतः",
+    "hint": "āgataḥ",
+    "level": 2,
+    "file": "word_044.mp3"
+  },
+  {
+    "id": "045",
+    "word": "खादितः",
+    "hint": "khāditaḥ",
+    "level": 2,
+    "file": "word_045.mp3"
+  },
+  {
+    "id": "046",
+    "word": "उदरम्",
+    "hint": "udaram",
+    "level": 2,
+    "file": "word_046.mp3"
+  },
+  {
+    "id": "047",
+    "word": "सः",
+    "hint": "saḥ",
+    "level": 2,
+    "file": "word_047.mp3"
+  },
+  {
+    "id": "048",
+    "word": "यः",
+    "hint": "yaḥ",
+    "level": 2,
+    "file": "word_048.mp3"
+  },
+  {
+    "id": "049",
+    "word": "कः",
+    "hint": "kaḥ",
+    "level": 2,
+    "file": "word_049.mp3"
+  },
+  {
+    "id": "050",
+    "word": "किम्",
+    "hint": "kim",
+    "level": 2,
+    "file": "word_050.mp3"
+  },
+  {
+    "id": "051",
+    "word": "का",
+    "hint": "kā",
+    "level": 1,
+    "file": "word_051.mp3"
+  },
+  {
+    "id": "052",
+    "word": "अमरः",
+    "hint": "amaraḥ",
+    "level": 2,
+    "file": "word_052.mp3"
+  },
+  {
+    "id": "053",
+    "word": "अपरः",
+    "hint": "aparaḥ",
+    "level": 2,
+    "file": "word_053.mp3"
+  },
+  {
+    "id": "054",
+    "word": "कणशः",
+    "hint": "kaṇaśaḥ",
+    "level": 2,
+    "file": "word_054.mp3"
+  },
+  {
+    "id": "055",
+    "word": "करभः",
+    "hint": "karabhaḥ",
+    "level": 2,
+    "file": "word_055.mp3"
+  },
+  {
+    "id": "056",
+    "word": "सैनिकः",
+    "hint": "sainikaḥ",
+    "level": 2,
+    "file": "word_056.mp3"
+  },
+  {
+    "id": "057",
+    "word": "नायकः",
+    "hint": "nāyakaḥ",
+    "level": 2,
+    "file": "word_057.mp3"
+  },
+  {
+    "id": "058",
+    "word": "बालकः",
+    "hint": "bālakaḥ",
+    "level": 2,
+    "file": "word_058.mp3"
+  },
+  {
+    "id": "059",
+    "word": "तपः",
+    "hint": "tapaḥ",
+    "level": 2,
+    "file": "word_059.mp3"
+  },
+  {
+    "id": "060",
+    "word": "तवकः",
+    "hint": "tavakaḥ",
+    "level": 2,
+    "file": "word_060.mp3"
+  },
+  {
+    "id": "061",
+    "word": "दमनकः",
+    "hint": "damanakaḥ",
+    "level": 2,
+    "file": "word_061.mp3"
+  },
+  {
+    "id": "062",
+    "word": "दरः",
+    "hint": "daraḥ",
+    "level": 2,
+    "file": "word_062.mp3"
+  },
+  {
+    "id": "063",
+    "word": "दशक",
+    "hint": "daśaka",
+    "level": 1,
+    "file": "word_063.mp3"
+  },
+  {
+    "id": "064",
+    "word": "पतनम्",
+    "hint": "patanam",
+    "level": 2,
+    "file": "word_064.mp3"
+  },
+  {
+    "id": "065",
+    "word": "घटः",
+    "hint": "ghaṭaḥ",
+    "level": 2,
+    "file": "word_065.mp3"
+  },
+  {
+    "id": "066",
+    "word": "पीवरः",
+    "hint": "pīvaraḥ",
+    "level": 2,
+    "file": "word_066.mp3"
+  },
+  {
+    "id": "067",
+    "word": "धीवरः",
+    "hint": "dhīvaraḥ",
+    "level": 2,
+    "file": "word_067.mp3"
+  },
+  {
+    "id": "068",
+    "word": "पिनाकी",
+    "hint": "pinākī",
+    "level": 1,
+    "file": "word_068.mp3"
+  },
+  {
+    "id": "069",
+    "word": "रामः",
+    "hint": "rāmaḥ",
+    "level": 2,
+    "file": "word_069.mp3"
+  },
+  {
+    "id": "070",
+    "word": "सीता",
+    "hint": "sītā",
+    "level": 1,
+    "file": "word_070.mp3"
+  },
+  {
+    "id": "071",
+    "word": "भरतः",
+    "hint": "bharataḥ",
+    "level": 2,
+    "file": "word_071.mp3"
+  },
+  {
+    "id": "072",
+    "word": "नवो",
+    "hint": "navo",
+    "level": 1,
+    "file": "word_072.mp3"
+  },
+  {
+    "id": "073",
+    "word": "सुधा",
+    "hint": "sudhā",
+    "level": 1,
+    "file": "word_073.mp3"
+  },
+  {
+    "id": "074",
+    "word": "नखः",
+    "hint": "nakhaḥ",
+    "level": 2,
+    "file": "word_074.mp3"
+  },
+  {
+    "id": "075",
+    "word": "गुरु",
+    "hint": "guru",
+    "level": 1,
+    "file": "word_075.mp3"
+  },
+  {
+    "id": "076",
+    "word": "पितुः",
+    "hint": "pituḥ",
+    "level": 2,
+    "file": "word_076.mp3"
+  },
+  {
+    "id": "077",
+    "word": "मातुः",
+    "hint": "mātuḥ",
+    "level": 2,
+    "file": "word_077.mp3"
+  },
+  {
+    "id": "078",
+    "word": "मीनः",
+    "hint": "mīnaḥ",
+    "level": 2,
+    "file": "word_078.mp3"
+  },
+  {
+    "id": "079",
+    "word": "लवनम्",
+    "hint": "lavanam",
+    "level": 2,
+    "file": "word_079.mp3"
+  },
+  {
+    "id": "080",
+    "word": "नीवार",
+    "hint": "nīvāra",
+    "level": 1,
+    "file": "word_080.mp3"
+  },
+  {
+    "id": "081",
+    "word": "सूकरः",
+    "hint": "sūkaraḥ",
+    "level": 2,
+    "file": "word_081.mp3"
+  },
+  {
+    "id": "082",
+    "word": "कीटः",
+    "hint": "kīṭaḥ",
+    "level": 2,
+    "file": "word_082.mp3"
+  },
+  {
+    "id": "083",
+    "word": "कोपः",
+    "hint": "kopaḥ",
+    "level": 2,
+    "file": "word_083.mp3"
+  },
+  {
+    "id": "084",
+    "word": "गोपालः",
+    "hint": "gopālaḥ",
+    "level": 2,
+    "file": "word_084.mp3"
+  },
+  {
+    "id": "085",
+    "word": "गोपी",
+    "hint": "gopī",
+    "level": 1,
+    "file": "word_085.mp3"
+  },
+  {
+    "id": "086",
+    "word": "गोपिका",
+    "hint": "gopikā",
+    "level": 1,
+    "file": "word_086.mp3"
+  },
+  {
+    "id": "087",
+    "word": "राधिका",
+    "hint": "rādhikā",
+    "level": 1,
+    "file": "word_087.mp3"
+  },
+  {
+    "id": "088",
+    "word": "रेवती",
+    "hint": "revatī",
+    "level": 1,
+    "file": "word_088.mp3"
+  },
+  {
+    "id": "089",
+    "word": "हवनम्",
+    "hint": "havanam",
+    "level": 2,
+    "file": "word_089.mp3"
+  },
+  {
+    "id": "090",
+    "word": "हलः",
+    "hint": "halaḥ",
+    "level": 2,
+    "file": "word_090.mp3"
+  },
+  {
+    "id": "091",
+    "word": "हरणम्",
+    "hint": "haraṇam",
+    "level": 2,
+    "file": "word_091.mp3"
+  },
+  {
+    "id": "092",
+    "word": "शौनकः",
+    "hint": "śaunakaḥ",
+    "level": 2,
+    "file": "word_092.mp3"
+  },
+  {
+    "id": "093",
+    "word": "तापः",
+    "hint": "tāpaḥ",
+    "level": 2,
+    "file": "word_093.mp3"
+  },
+  {
+    "id": "094",
+    "word": "कोटि",
+    "hint": "koṭi",
+    "level": 1,
+    "file": "word_094.mp3"
+  },
+  {
+    "id": "095",
+    "word": "वनम्",
+    "hint": "vanam",
+    "level": 2,
+    "file": "word_095.mp3"
+  },
+  {
+    "id": "096",
+    "word": "वारण",
+    "hint": "vāraṇa",
+    "level": 1,
+    "file": "word_096.mp3"
+  },
+  {
+    "id": "097",
+    "word": "कुलपतिः",
+    "hint": "kulapatiḥ",
+    "level": 2,
+    "file": "word_097.mp3"
+  },
+  {
+    "id": "098",
+    "word": "कूपम्",
+    "hint": "kūpam",
+    "level": 2,
+    "file": "word_098.mp3"
+  },
+  {
+    "id": "099",
+    "word": "कैटभः",
+    "hint": "kaiṭabhaḥ",
+    "level": 2,
+    "file": "word_099.mp3"
+  },
+  {
+    "id": "100",
+    "word": "मधु",
+    "hint": "madhu",
+    "level": 1,
+    "file": "word_100.mp3"
+  },
+  {
+    "id": "101",
+    "word": "माधवः",
+    "hint": "mādhavaḥ",
+    "level": 2,
+    "file": "word_101.mp3"
+  },
+  {
+    "id": "102",
+    "word": "फलम्",
+    "hint": "phalam",
+    "level": 2,
+    "file": "word_102.mp3"
+  },
+  {
+    "id": "103",
+    "word": "झषः",
+    "hint": "jhaṣaḥ",
+    "level": 2,
+    "file": "word_103.mp3"
+  },
+  {
+    "id": "104",
+    "word": "कटकम्",
+    "hint": "kaṭakam",
+    "level": 2,
+    "file": "word_104.mp3"
+  },
+  {
+    "id": "105",
+    "word": "डमरुः",
+    "hint": "ḍamaruḥ",
+    "level": 2,
+    "file": "word_105.mp3"
+  },
+  {
+    "id": "106",
+    "word": "यशोदा",
+    "hint": "yaśodā",
+    "level": 1,
+    "file": "word_106.mp3"
+  },
+  {
+    "id": "107",
+    "word": "यवनः",
+    "hint": "yavanaḥ",
+    "level": 2,
+    "file": "word_107.mp3"
+  },
+  {
+    "id": "108",
+    "word": "हतकः",
+    "hint": "hatakaḥ",
+    "level": 2,
+    "file": "word_108.mp3"
+  },
+  {
+    "id": "109",
+    "word": "हलायुधः",
+    "hint": "halāyudhaḥ",
+    "level": 2,
+    "file": "word_109.mp3"
+  },
+  {
+    "id": "110",
+    "word": "मापिका",
+    "hint": "māpikā",
+    "level": 1,
+    "file": "word_110.mp3"
+  },
+  {
+    "id": "111",
+    "word": "पेटिका",
+    "hint": "peṭikā",
+    "level": 1,
+    "file": "word_111.mp3"
+  },
+  {
+    "id": "112",
+    "word": "केतकी",
+    "hint": "ketakī",
+    "level": 1,
+    "file": "word_112.mp3"
+  },
+  {
+    "id": "113",
+    "word": "सविता",
+    "hint": "savitā",
+    "level": 1,
+    "file": "word_113.mp3"
+  },
+  {
+    "id": "114",
+    "word": "सनातन",
+    "hint": "sanātana",
+    "level": 1,
+    "file": "word_114.mp3"
+  },
+  {
+    "id": "115",
+    "word": "बालौ",
+    "hint": "bālau",
+    "level": 1,
+    "file": "word_115.mp3"
+  },
+  {
+    "id": "116",
+    "word": "बालिका",
+    "hint": "bālikā",
+    "level": 1,
+    "file": "word_116.mp3"
+  },
+  {
+    "id": "117",
+    "word": "नासिका",
+    "hint": "nāsikā",
+    "level": 1,
+    "file": "word_117.mp3"
+  },
+  {
+    "id": "118",
+    "word": "फेनकम्",
+    "hint": "phenakam",
+    "level": 2,
+    "file": "word_118.mp3"
+  },
+  {
+    "id": "119",
+    "word": "कोविदः",
+    "hint": "kovidaḥ",
+    "level": 2,
+    "file": "word_119.mp3"
+  },
+  {
+    "id": "120",
+    "word": "पुरुषः",
+    "hint": "puruṣaḥ",
+    "level": 2,
+    "file": "word_120.mp3"
+  },
+  {
+    "id": "121",
+    "word": "कापुरुषः",
+    "hint": "kāpuruṣaḥ",
+    "level": 2,
+    "file": "word_121.mp3"
+  },
+  {
+    "id": "122",
+    "word": "कौतुकम्",
+    "hint": "kautukam",
+    "level": 2,
+    "file": "word_122.mp3"
+  },
+  {
+    "id": "123",
+    "word": "कुतुहलम्",
+    "hint": "kutuhalam",
+    "level": 2,
+    "file": "word_123.mp3"
+  },
+  {
+    "id": "124",
+    "word": "कौमोदकी",
+    "hint": "kaumodakī",
+    "level": 1,
+    "file": "word_124.mp3"
+  },
+  {
+    "id": "125",
+    "word": "खादति",
+    "hint": "khādati",
+    "level": 1,
+    "file": "word_125.mp3"
+  },
+  {
+    "id": "126",
+    "word": "जवनिका",
+    "hint": "javanikā",
+    "level": 1,
+    "file": "word_126.mp3"
+  },
+  {
+    "id": "127",
+    "word": "जननी",
+    "hint": "jananī",
+    "level": 1,
+    "file": "word_127.mp3"
+  },
+  {
+    "id": "128",
+    "word": "धवलः",
+    "hint": "dhavalaḥ",
+    "level": 2,
+    "file": "word_128.mp3"
+  },
+  {
+    "id": "129",
+    "word": "धूसरः",
+    "hint": "dhūsaraḥ",
+    "level": 2,
+    "file": "word_129.mp3"
+  },
+  {
+    "id": "130",
+    "word": "मौनी",
+    "hint": "maunī",
+    "level": 2,
+    "file": "word_130.mp3"
+  },
+  {
+    "id": "131",
+    "word": "मरकत",
+    "hint": "marakata",
+    "level": 1,
+    "file": "word_131.mp3"
+  },
+  {
+    "id": "132",
+    "word": "पाठयतः",
+    "hint": "pāṭhayataḥ",
+    "level": 2,
+    "file": "word_132.mp3"
+  },
+  {
+    "id": "133",
+    "word": "पठामि",
+    "hint": "paṭhāmi",
+    "level": 1,
+    "file": "word_133.mp3"
+  },
+  {
+    "id": "134",
+    "word": "पठावः",
+    "hint": "paṭhāvaḥ",
+    "level": 2,
+    "file": "word_134.mp3"
+  },
+  {
+    "id": "135",
+    "word": "भवति",
+    "hint": "bhavati",
+    "level": 1,
+    "file": "word_135.mp3"
+  },
+  {
+    "id": "136",
+    "word": "भाति",
+    "hint": "bhāti",
+    "level": 1,
+    "file": "word_136.mp3"
+  },
+  {
+    "id": "137",
+    "word": "रविः",
+    "hint": "raviḥ",
+    "level": 2,
+    "file": "word_137.mp3"
+  },
+  {
+    "id": "138",
+    "word": "माला",
+    "hint": "mālā",
+    "level": 1,
+    "file": "word_138.mp3"
+  },
+  {
+    "id": "139",
+    "word": "मापिका",
+    "hint": "māpikā",
+    "level": 1,
+    "file": "word_139.mp3"
+  },
+  {
+    "id": "140",
+    "word": "करः",
+    "hint": "karaḥ",
+    "level": 2,
+    "file": "word_140.mp3"
+  },
+  {
+    "id": "141",
+    "word": "कणक",
+    "hint": "kaṇaka",
+    "level": 1,
+    "file": "word_141.mp3"
+  },
+  {
+    "id": "142",
+    "word": "नाविकः",
+    "hint": "nāvikaḥ",
+    "level": 2,
+    "file": "word_142.mp3"
+  },
+  {
+    "id": "143",
+    "word": "पीडा",
+    "hint": "pīḍā",
+    "level": 1,
+    "file": "word_143.mp3"
+  },
+  {
+    "id": "144",
+    "word": "वेदना",
+    "hint": "vedanā",
+    "level": 1,
+    "file": "word_144.mp3"
+  },
+  {
+    "id": "145",
+    "word": "कथनम्",
+    "hint": "kathanam",
+    "level": 2,
+    "file": "word_145.mp3"
+  },
+  {
+    "id": "146",
+    "word": "भोजन",
+    "hint": "bhojana",
+    "level": 1,
+    "file": "word_146.mp3"
+  },
+  {
+    "id": "147",
+    "word": "भौतिक",
+    "hint": "bhautika",
+    "level": 1,
+    "file": "word_147.mp3"
+  },
+  {
+    "id": "148",
+    "word": "बीजम्",
+    "hint": "bījam",
+    "level": 2,
+    "file": "word_148.mp3"
+  },
+  {
+    "id": "149",
+    "word": "पीनसः",
+    "hint": "pīnasaḥ",
+    "level": 2,
+    "file": "word_149.mp3"
+  },
+  {
+    "id": "150",
+    "word": "नूपुरम्",
+    "hint": "nūpuram",
+    "level": 2,
+    "file": "word_150.mp3"
+  },
+  {
+    "id": "151",
+    "word": "पूता",
+    "hint": "pūtā",
+    "level": 1,
+    "file": "word_151.mp3"
+  },
+  {
+    "id": "152",
+    "word": "पीयूषः",
+    "hint": "pīyūṣaḥ",
+    "level": 2,
+    "file": "word_152.mp3"
+  },
+  {
+    "id": "153",
+    "word": "यमकम्",
+    "hint": "yamakam",
+    "level": 2,
+    "file": "word_153.mp3"
+  },
+  {
+    "id": "154",
+    "word": "दाडिम",
+    "hint": "dāḍima",
+    "level": 1,
+    "file": "word_154.mp3"
+  },
+  {
+    "id": "155",
+    "word": "नवोीनः",
+    "hint": "navoīnaḥ",
+    "level": 2,
+    "file": "word_155.mp3"
+  },
+  {
+    "id": "156",
+    "word": "मृगः",
+    "hint": "mṛgaḥ",
+    "level": 2,
+    "file": "word_156.mp3"
+  },
+  {
+    "id": "157",
+    "word": "वृकः",
+    "hint": "vṛkaḥ",
+    "level": 2,
+    "file": "word_157.mp3"
+  },
+  {
+    "id": "158",
+    "word": "भूमिः",
+    "hint": "bhūmiḥ",
+    "level": 2,
+    "file": "word_158.mp3"
+  },
+  {
+    "id": "159",
+    "word": "आकाशः",
+    "hint": "ākāśaḥ",
+    "level": 2,
+    "file": "word_159.mp3"
+  },
+  {
+    "id": "160",
+    "word": "वायुः",
+    "hint": "vāyuḥ",
+    "level": 2,
+    "file": "word_160.mp3"
+  },
+  {
+    "id": "161",
+    "word": "हिमालयः",
+    "hint": "himālayaḥ",
+    "level": 2,
+    "file": "word_161.mp3"
+  },
+  {
+    "id": "162",
+    "word": "तृणम्",
+    "hint": "tṛṇam",
+    "level": 2,
+    "file": "word_162.mp3"
+  },
+  {
+    "id": "163",
+    "word": "कीलकम्",
+    "hint": "kīlakam",
+    "level": 2,
+    "file": "word_163.mp3"
+  },
+  {
+    "id": "164",
+    "word": "निधानिका",
+    "hint": "nidhānikā",
+    "level": 1,
+    "file": "word_164.mp3"
+  },
+  {
+    "id": "165",
+    "word": "घटः",
+    "hint": "ghaṭaḥ",
+    "level": 2,
+    "file": "word_165.mp3"
+  },
+  {
+    "id": "166",
+    "word": "गुरवः",
+    "hint": "guravaḥ",
+    "level": 2,
+    "file": "word_166.mp3"
+  },
+  {
+    "id": "167",
+    "word": "गुरू",
+    "hint": "gurū",
+    "level": 1,
+    "file": "word_167.mp3"
+  },
+  {
+    "id": "168",
+    "word": "लघु",
+    "hint": "laghu",
+    "level": 1,
+    "file": "word_168.mp3"
+  },
+  {
+    "id": "169",
+    "word": "खादतमोदत",
+    "hint": "khādatamodata",
+    "level": 1,
+    "file": "word_169.mp3"
+  }
+]

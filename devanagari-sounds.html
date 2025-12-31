@@ -433,11 +433,14 @@
         window.WORDS_READY = WORDS_READY;
 
         wqLoadStatus.textContent = WORDS_READY ? `Loaded ${WORDS.length} words` : "words.json loaded but empty";
-      } catch (e) {
-        console.error(e);
-        WORDS_READY = false;
-        wqLoadStatus.textContent = "Could not load words.json (check filename/location)";
-      }
+ 	  } catch (e) {
+		console.error(e);
+		WORDS_READY = false;
+		window.WORDS_READY = false;
+		window.WORDS = [];
+		wqLoadStatus.textContent = "Could not load words.json (check filename/location)";
+	  }
+
     }
 
     // --- DATA ---

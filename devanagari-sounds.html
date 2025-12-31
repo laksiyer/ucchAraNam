@@ -151,6 +151,11 @@
     }
     .okPill { background:#d4f8d4; border-color:#2f9e44; }
     .badPill { background:#ffd6d6; border-color:#c92a2a; }
+
+     .choiceBtn { font-size: 22px; }
+     .choiceBtn.correct { background: #d4f8d4; border-color: #2f9e44; }
+     .choiceBtn.wrong   { background: #ffd6d6; border-color: #c92a2a; }
+
   </style>
 </head>
 
@@ -170,6 +175,8 @@
       <li><a href="#sec-gunita-quiz">गुणिताक्षर-लेखन-प्रश्नोत्तरी/guṇitākṣara-lekhana-praśnottarī
 </a></li>
       <li><a href="#sec-word-quiz">गुणित-शब्द-लेखन-प्रश्नोत्तरी/guṇita-śabda-lekhana-praśnottarī</a></li>
+      <li><a href="#sec-word-recog">गुणित-शब्द-श्रवण-पठनावगमनम् (Choose)</a></li>
+
     </ul>
   </div>
 
@@ -347,6 +354,58 @@
       </div>
     </div>
   </div>
+<div class="backTop"><a href="#top">↑ Back to top</a></div>
+<h2 id="sec-word-recog">गुणित-शब्द-श्रवण-पठनावगमनम् (Choose)</h2>
+
+<div class="card">
+  <p class="small" style="margin: 0 0 10px;">
+    <b>How to use:</b> Choose a mode. In <b>Hear → Choose</b>, click <b>Play</b> then pick the word you heard.
+    In <b>Read → Choose</b>, read the prompt and pick the matching word. Your streak and score update automatically.
+  </p>
+
+  <div class="row">
+    <span class="pill" id="wrLoadStatus">Words: (loading…)</span>
+
+    <label>
+      Level:
+      <select id="wrLevel">
+        <option value="all" selected>All</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+      </select>
+    </label>
+
+    <label><input type="radio" name="wrMode" value="hear" checked> Hear → Choose</label>
+    <label><input type="radio" name="wrMode" value="read"> Read → Choose</label>
+
+    <button class="ctrlBtn" id="wrPlay" type="button">Play</button>
+    <button class="ctrlBtn" id="wrNext" type="button">Next</button>
+    <button class="ctrlBtn" id="wrReset" type="button">Reset</button>
+
+    <span class="pill" id="wrResult">Ready</span>
+    <span class="pill" id="wrScore">✅ 0  ❌ 0  🔥 0 (best 0)</span>
+  </div>
+
+  <div class="row" style="align-items:flex-start;">
+    <div style="min-width: 220px;">
+      <div class="small" style="margin: 0 0 6px;"><b>Prompt</b></div>
+      <div class="quizBig" id="wrPromptBox">—</div>
+      <div class="small" style="margin-top:10px;">
+        <span class="pill">Audio:</span>
+        <span class="pill" id="wrAudioFile">—</span>
+      </div>
+    </div>
+
+    <div style="flex: 1;">
+      <div class="small" style="margin: 0 0 6px;"><b>Choose one</b></div>
+      <div class="grid" id="wrChoices" style="grid-template-columns: repeat(4, minmax(90px, 1fr)); max-width: 760px;"></div>
+    </div>
+  </div>
+</div>
+
+<div class="backTop"><a href="#top">↑ Back to top</a></div>
 
   <p class="small">Developed by Samskritabharati USA</p>
 
@@ -370,6 +429,8 @@
 
         WORDS = (data || []).filter(x => x && x.word && x.file);
         WORDS_READY = WORDS.length > 0;
+        window.WORDS = WORDS;
+        window.WORDS_READY = WORDS_READY;
 
         wqLoadStatus.textContent = WORDS_READY ? `Loaded ${WORDS.length} words` : "words.json loaded but empty";
       } catch (e) {
@@ -1069,6 +1130,208 @@
 
     // finally: load words.json after page init
     loadWordsJson();
-  </script>
+  
+  // -----------------------------
+  // Word Recognition Quiz (Hear→Choose / Read→Choose)
+  // Requires: WORDS, WORDS_READY, playFile(), AUDIO_BASE_URL
+  // -----------------------------
+  const wrLoadStatus = document.getElementById("wrLoadStatus");
+  const wrLevel = document.getElementById("wrLevel");
+  const wrPlay = document.getElementById("wrPlay");
+  const wrNext = document.getElementById("wrNext");
+  const wrReset = document.getElementById("wrReset");
+  const wrResult = document.getElementById("wrResult");
+  const wrScore = document.getElementById("wrScore");
+  const wrPromptBox = document.getElementById("wrPromptBox");
+  const wrAudioFile = document.getElementById("wrAudioFile");
+  const wrChoices = document.getElementById("wrChoices");
+  const wrModeRadios = document.querySelectorAll('input[name="wrMode"]');
+
+  let wrMode = "hear";
+  let wrCorrect = 0, wrIncorrect = 0, wrStreak = 0, wrBest = 0;
+  let wrAnswer = null;      // {word, file, hint, level, id}
+  let wrOptions = [];       // array of 4 word objects
+  let wrLocked = false;
+
+  function wrSetResult(msg, kind="neutral") {
+    wrResult.textContent = msg;
+    wrResult.classList.remove("okPill","badPill");
+    if (kind === "ok") wrResult.classList.add("okPill");
+    if (kind === "bad") wrResult.classList.add("badPill");
+  }
+
+  function wrUpdateScore() {
+    wrScore.textContent = `✅ ${wrCorrect}  ❌ ${wrIncorrect}  🔥 ${wrStreak} (best ${wrBest})`;
+  }
+
+  function wrPool() {
+    if (!window.WORDS_READY || !Array.isArray(window.WORDS)) return [];
+    const lvl = wrLevel.value;
+    if (lvl === "all") return window.WORDS;
+    return window.WORDS.filter(x => String(x.level ?? "") === String(lvl));
+  }
+
+  function wrPickOne(arr) {
+    return arr[Math.floor(Math.random() * arr.length)];
+  }
+
+  function wrShuffle(a) {
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  function wrClearChoiceStyles() {
+    wrChoices.querySelectorAll("button").forEach(b => b.classList.remove("correct","wrong"));
+  }
+
+  function wrRenderChoices() {
+    wrChoices.innerHTML = "";
+    wrOptions.forEach(opt => {
+      const b = document.createElement("button");
+      b.className = "letterBtn choiceBtn";
+      b.textContent = opt.word;
+      b.title = opt.hint ? opt.hint : "";
+      b.onclick = () => wrChoose(opt, b);
+      wrChoices.appendChild(b);
+    });
+  }
+
+  function wrSetPrompt() {
+    // Prompt box shows something useful depending on mode
+    if (!wrAnswer) { wrPromptBox.textContent = "—"; return; }
+
+    if (wrMode === "hear") {
+      wrPromptBox.textContent = "🔊 Listen";
+    } else {
+      // Read → Choose: show a non-Devanagari prompt (hint) so they choose the matching Devanagari
+      // If your hints are IAST, this works well.
+      wrPromptBox.textContent = wrAnswer.hint || "(hint missing)";
+    }
+    wrAudioFile.textContent = wrAnswer.file || "—";
+  }
+
+  function wrPlayAudio() {
+    if (!wrAnswer) return;
+    if (!wrAnswer.file) return;
+    playFile(wrAnswer.file, "Word");
+  }
+
+  function wrNewQuestion() {
+    const pool = wrPool();
+    if (!pool.length) {
+      wrSetResult("No words (check level / words.json).", "bad");
+      wrAnswer = null;
+      wrOptions = [];
+      wrChoices.innerHTML = "";
+      wrSetPrompt();
+      return;
+    }
+
+    wrLocked = false;
+    wrSetResult("Choose the correct word", "neutral");
+
+    // pick answer
+    wrAnswer = wrPickOne(pool);
+
+    // pick 3 distractors (different words)
+    const distractors = [];
+    const seen = new Set([wrAnswer.word]);
+    while (distractors.length < 3 && seen.size < pool.length) {
+      const d = wrPickOne(pool);
+      if (!seen.has(d.word)) {
+        seen.add(d.word);
+        distractors.push(d);
+      }
+    }
+
+    // build options
+    wrOptions = wrShuffle([wrAnswer, ...distractors]);
+
+    wrRenderChoices();
+    wrSetPrompt();
+
+    // Auto-play in Hear mode
+    if (wrMode === "hear") {
+      wrPlayAudio();
+    }
+  }
+
+  function wrChoose(opt, btn) {
+    if (!wrAnswer || wrLocked) return;
+
+    wrClearChoiceStyles();
+
+    if (opt.word === wrAnswer.word) {
+      btn.classList.add("correct");
+      wrSetResult("✅ Correct", "ok");
+      wrCorrect += 1;
+      wrStreak += 1;
+      if (wrStreak > wrBest) wrBest = wrStreak;
+      wrUpdateScore();
+      wrLocked = true;
+      setTimeout(wrNewQuestion, 650);
+    } else {
+      btn.classList.add("wrong");
+      wrSetResult("❌ Try again", "bad");
+      wrIncorrect += 1;
+      wrStreak = 0;
+      wrUpdateScore();
+      // In Hear mode, replay the audio after a wrong try (helps learning)
+      if (wrMode === "hear") setTimeout(wrPlayAudio, 200);
+    }
+  }
+
+  function wrResetAll() {
+    wrCorrect = 0; wrIncorrect = 0; wrStreak = 0; wrBest = 0;
+    wrUpdateScore();
+    wrSetResult("Ready", "neutral");
+    wrAnswer = null;
+    wrChoices.innerHTML = "";
+    wrPromptBox.textContent = "—";
+    wrAudioFile.textContent = "—";
+  }
+
+  // Hook up controls
+  wrModeRadios.forEach(r => r.addEventListener("change", () => {
+    wrMode = document.querySelector('input[name="wrMode"]:checked').value;
+    wrNewQuestion();
+  }));
+
+  wrLevel.addEventListener("change", wrNewQuestion);
+  wrPlay.addEventListener("click", wrPlayAudio);
+  wrNext.addEventListener("click", wrNewQuestion);
+  wrReset.addEventListener("click", wrResetAll);
+
+  // Keep the load status in sync with your words.json loader
+  function wrRefreshLoadStatus() {
+    if (window.WORDS_READY && Array.isArray(window.WORDS)) {
+      wrLoadStatus.textContent = `Words loaded: ${window.WORDS.length}`;
+    } else {
+      wrLoadStatus.textContent = "Words: not loaded (check words.json)";
+    }
+  }
+
+  // Call this after your words.json finishes loading.
+  // If your code already calls loadWordsJson(), just add:
+  // setTimeout(wrInitAfterLoad, 300);
+  function wrInitAfterLoad() {
+    wrRefreshLoadStatus();
+    wrUpdateScore();
+    wrNewQuestion();
+  }
+
+  // Safe init: try a few times (words.json might load asynchronously)
+  (function bootWR(attempt=0){
+    wrRefreshLoadStatus();
+    if (window.WORDS_READY) {
+      wrInitAfterLoad();
+    } else if (attempt < 15) {
+      setTimeout(() => bootWR(attempt+1), 200);
+    }
+  })();
+</script>
 </body>
 </html>

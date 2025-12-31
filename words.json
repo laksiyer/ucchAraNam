@@ -1181,5 +1181,236 @@
     "hint": "khādatamodata",
     "level": 1,
     "file": "word_169.mp3"
+  },
+  {
+    "id": "170",
+    "word": "अच्",
+    "hint": "ac",
+    "level": 2,
+    "file": "word_170.mp3"
+  },
+  {
+    "id": "171",
+    "word": "मत्",
+    "hint": "mat",
+    "level": 2,
+    "file": "word_171.mp3"
+  },
+  {
+    "id": "172",
+    "word": "पठ्",
+    "hint": "paṭh",
+    "level": 2,
+    "file": "word_172.mp3"
+  },
+  {
+    "id": "173",
+    "word": "जश्",
+    "hint": "jaś",
+    "level": 2,
+    "file": "word_173.mp3"
+  },
+  {
+    "id": "174",
+    "word": "इक्",
+    "hint": "ik",
+    "level": 2,
+    "file": "word_174.mp3"
+  },
+  {
+    "id": "175",
+    "word": "वस्",
+    "hint": "vas",
+    "level": 2,
+    "file": "word_175.mp3"
+  },
+  {
+    "id": "176",
+    "word": "इण्",
+    "hint": "iṇ",
+    "level": 2,
+    "file": "word_176.mp3"
+  },
+  {
+    "id": "177",
+    "word": "नम्",
+    "hint": "nam",
+    "level": 2,
+    "file": "word_177.mp3"
+  },
+  {
+    "id": "178",
+    "word": "खय्",
+    "hint": "khay",
+    "level": 2,
+    "file": "word_178.mp3"
+  },
+  {
+    "id": "179",
+    "word": "अल्",
+    "hint": "al",
+    "level": 2,
+    "file": "word_179.mp3"
+  },
+  {
+    "id": "180",
+    "word": "वयस्",
+    "hint": "vayas",
+    "level": 2,
+    "file": "word_180.mp3"
+  },
+  {
+    "id": "181",
+    "word": "शरत्",
+    "hint": "śarat",
+    "level": 2,
+    "file": "word_181.mp3"
+  },
+  {
+    "id": "182",
+    "word": "सरस्",
+    "hint": "saras",
+    "level": 2,
+    "file": "word_182.mp3"
+  },
+  {
+    "id": "183",
+    "word": "तरप्",
+    "hint": "tarap",
+    "level": 2,
+    "file": "word_183.mp3"
+  },
+  {
+    "id": "184",
+    "word": "मघवत्",
+    "hint": "maghavat",
+    "level": 2,
+    "file": "word_184.mp3"
+  },
+  {
+    "id": "185",
+    "word": "भवत्",
+    "hint": "bhavat",
+    "level": 2,
+    "file": "word_185.mp3"
+  },
+  {
+    "id": "186",
+    "word": "अपठन्",
+    "hint": "apaṭhan",
+    "level": 2,
+    "file": "word_186.mp3"
+  },
+  {
+    "id": "187",
+    "word": "अखादत्",
+    "hint": "akhādat",
+    "level": 2,
+    "file": "word_187.mp3"
+  },
+  {
+    "id": "188",
+    "word": "मनस्",
+    "hint": "manas",
+    "level": 3,
+    "file": "word_188.mp3"
+  },
+  {
+    "id": "189",
+    "word": "अकरवम्",
+    "hint": "akaravam",
+    "level": 2,
+    "file": "word_189.mp3"
+  },
+  {
+    "id": "190",
+    "word": "अंहस्",
+    "hint": "aṃhas",
+    "level": 2,
+    "file": "word_190.mp3"
+  },
+  {
+    "id": "191",
+    "word": "संयति",
+    "hint": "saṃyati",
+    "level": 3,
+    "file": "word_191.mp3"
+  },
+  {
+    "id": "192",
+    "word": "शिरांसि",
+    "hint": "śirāṃsi",
+    "level": 3,
+    "file": "word_192.mp3"
+  },
+  {
+    "id": "193",
+    "word": "पतितपावनः",
+    "hint": "patitapāvanaḥ",
+    "level": 2,
+    "file": "word_193.mp3"
+  },
+  {
+    "id": "194",
+    "word": "निषसाद",
+    "hint": "niṣasāda",
+    "level": 1,
+    "file": "word_194.mp3"
+  },
+  {
+    "id": "195",
+    "word": "मीमांसा",
+    "hint": "mīmāṃsā",
+    "level": 3,
+    "file": "word_195.mp3"
+  },
+  {
+    "id": "196",
+    "word": "संहिता",
+    "hint": "saṃhitā",
+    "level": 3,
+    "file": "word_196.mp3"
+  },
+  {
+    "id": "197",
+    "word": "विंशति",
+    "hint": "viṃśati",
+    "level": 3,
+    "file": "word_197.mp3"
+  },
+  {
+    "id": "198",
+    "word": "संसारः",
+    "hint": "saṃsāraḥ",
+    "level": 3,
+    "file": "word_198.mp3"
+  },
+  {
+    "id": "199",
+    "word": "हंसिनी",
+    "hint": "haṃsinī",
+    "level": 3,
+    "file": "word_199.mp3"
+  },
+  {
+    "id": "200",
+    "word": "संसदि",
+    "hint": "saṃsadi",
+    "level": 3,
+    "file": "word_200.mp3"
+  },
+  {
+    "id": "201",
+    "word": "संयुगे",
+    "hint": "saṃyuge",
+    "level": 3,
+    "file": "word_201.mp3"
+  },
+  {
+    "id": "202",
+    "word": "वासांसि",
+    "hint": "vāsāṃsi",
+    "level": 3,
+    "file": "word_202.mp3"
   }
 ]

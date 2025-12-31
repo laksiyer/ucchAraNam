@@ -50,6 +50,23 @@
     .letterBtn.correct { background: #d4f8d4; border-color: #2f9e44; }
     .letterBtn.wrong   { background: #ffd6d6; border-color: #c92a2a; }
 
+    /* ---------- TOC + Back-to-top ---------- */
+    .tocCard{
+      border: 1px solid #e5e7eb;
+      border-radius: 14px;
+      padding: 12px 14px;
+      background: #ffffff;
+      box-shadow: 0 1px 2px rgba(0,0,0,.04);
+      max-width: 980px;
+      margin: 10px 0 18px;
+    }
+    .tocCard h3{ margin: 0 0 8px; font-size: 14px; }
+    .tocCard ul{ margin: 0; padding-left: 18px; }
+    .tocCard li{ margin: 4px 0; }
+    .tocCard a{ text-decoration: none; }
+    .backTop { font-size: 13px; margin: 8px 0 16px; }
+    .backTop a{ text-decoration:none; }
+
     /* ---------- GUNITA COLOR SYSTEM (color-blind friendly) ---------- */
     #gunita-consonants .letterBtn { background: #ffffff; border-color: #cfcfcf; }
     #gunita-matras .letterBtn { background: #e7f1ff; border-color: #2b6cb0; }
@@ -137,8 +154,21 @@
   </style>
 </head>
 
-<body>
+<body id="top">
   <h1>Devanagari Pronunciation Tool</h1>
+
+  <!-- TOC -->
+  <div class="tocCard">
+    <h3>Contents</h3>
+    <ul>
+      <li><a href="#sec-vowels">स्वराः</a></li>
+      <li><a href="#sec-vargiya">वर्गीय व्यञ्जनानि</a></li>
+      <li><a href="#sec-avargiya">अवर्गीय व्यञ्जनानि</a></li>
+      <li><a href="#sec-gunita">गुणिताक्षराणि</a></li>
+      <li><a href="#sec-gunita-quiz">गुणिताक्षर-लेखन-प्रश्नोत्तरी</a></li>
+      <li><a href="#sec-word-quiz">गुणित-शब्द-लेखन-प्रश्नोत्तरी</a></li>
+    </ul>
+  </div>
 
   <div class="row">
     <span class="pill" id="status">Ready</span>
@@ -166,17 +196,23 @@
     <span class="pill" id="scorePill">✅ 0  ❌ 0  🔥 0 (best 0)</span>
   </div>
 
-  <h2>स्वराः</h2>
+  <!-- VOWELS -->
+  <h2 id="sec-vowels">स्वराः</h2>
   <div class="grid" id="grid-vowels"></div>
+  <div class="backTop"><a href="#top">↑ Back to top</a></div>
 
-  <h2>वर्गीय व्यञ्जनानि</h2>
+  <!-- VARGIYA -->
+  <h2 id="sec-vargiya">वर्गीय व्यञ्जनानि</h2>
   <div class="grid5" id="grid-vargiya"></div>
+  <div class="backTop"><a href="#top">↑ Back to top</a></div>
 
-  <h2>अवर्गीय व्यञ्जनानि</h2>
+  <!-- AVARGIYA -->
+  <h2 id="sec-avargiya">अवर्गीय व्यञ्जनानि</h2>
   <div class="line" id="line-avargiya"></div>
+  <div class="backTop"><a href="#top">↑ Back to top</a></div>
 
   <!-- GUNITA SECTION -->
-  <h2>गुणिताक्षराणि (Work in progress)</h2>
+  <h2 id="sec-gunita">गुणिताक्षराणि (Work in progress)</h2>
   <div class="row">
     <span class="pill">1) Pick a consonant → 2) Pick a vowel/mātrā</span>
     <span class="pill" id="gunita-status">Selected: —</span>
@@ -195,9 +231,10 @@
   <div class="row">
     <div id="gunita-display">—</div>
   </div>
+  <div class="backTop"><a href="#top">↑ Back to top</a></div>
 
   <!-- GUNITA WRITING QUIZ (akshara) -->
-  <h2>गुणिताक्षर-लेखन-प्रश्नोत्तरी (listen → write)</h2>
+  <h2 id="sec-gunita-quiz">गुणिताक्षर-लेखन-प्रश्नोत्तरी (listen → write)</h2>
   <div class="card">
     <p class="small" style="margin: 0 0 10px;">
       <b>How to use:</b> Click <b>Next (play)</b> to hear a guṇitākṣara. Write it on the canvas <i>or</i> type it in the box.
@@ -245,9 +282,10 @@
       </div>
     </div>
   </div>
+  <div class="backTop"><a href="#top">↑ Back to top</a></div>
 
-  <!-- NEW: WORD QUIZ (words.json) -->
-  <h2>गुणित-शब्द-लेखन-प्रश्नोत्तरी (listen → write)</h2>
+  <!-- WORD QUIZ (words.json) -->
+  <h2 id="sec-word-quiz">गुणित-शब्द-लेखन-प्रश्नोत्तरी (listen → write)</h2>
   <div class="card">
     <p class="small" style="margin: 0 0 10px;">
       <b>How to use:</b> Click <b>Next (play)</b> to hear a word. Write it on the canvas <i>or</i> type it in the box.
@@ -282,9 +320,7 @@
     <div class="quizGrid">
       <div>
         <canvas class="drawCanvas" id="wordCanvas" width="1400" height="520"></canvas>
-        <p class="small">
-          Note: Scoring uses the typed answer; the drawing is for practice.
-        </p>
+        <p class="small">Note: Scoring uses the typed answer; the drawing is for practice.</p>
       </div>
 
       <div>
@@ -372,6 +408,7 @@
       { key:"jha", deva:"झ", iast:"jha", hk:"jha", hint:"jha", file:"jha.mp3" },
       { key:"nya", deva:"ञ", iast:"ña",  hk:"Ja",  hint:"ña",  file:"nya.mp3" },
 
+      /* Retroflex base sounds (your gunita files should be: tta_a.mp3 etc) */
       { key:"tta",  deva:"ट", iast:"ṭa",  hk:"Ta",  hint:"ṭa",  file:"ta_retro.mp3" },
       { key:"ttha", deva:"ठ", iast:"ṭha", hk:"Tha", hint:"ṭha", file:"tha_retro.mp3" },
       { key:"dda",  deva:"ड", iast:"ḍa",  hk:"Da",  hint:"ḍa",  file:"da_retro.mp3" },
@@ -832,10 +869,6 @@
       dqCurrent = null;
     }
 
-    // Canvas drawing (mouse + touch)
-    let drawing = false;
-    let lastX = 0, lastY = 0;
-
     function dqPos(evt, canv) {
       const rect = canv.getBoundingClientRect();
       const clientX = (evt.touches && evt.touches[0]) ? evt.touches[0].clientX : evt.clientX;
@@ -888,10 +921,8 @@
       canv.addEventListener("touchend", end, {passive:false});
     }
 
-    // wire akshara canvas
     wireCanvas(canvas, ctx);
 
-    // Wire akshara quiz buttons
     dqNext.addEventListener("click", dqNewQuestion);
     dqReplay.addEventListener("click", dqPlayCurrent);
     dqClear.addEventListener("click", dqClearCanvas);
@@ -900,7 +931,6 @@
     dqCheck.addEventListener("click", dqCheckTyped);
     dqTyped.addEventListener("keydown", (e) => { if (e.key === "Enter") dqCheckTyped(); });
 
-    // init akshara quiz
     dqClearCanvas();
     dqUpdateScore();
 
@@ -925,7 +955,7 @@
     const wctx = wordCanvas.getContext("2d");
 
     let wqCorrect = 0, wqIncorrect = 0, wqStreak = 0, wqBest = 0;
-    let wqCurrent = null; // {word, hint, level, file, id}
+    let wqCurrent = null;
 
     function wqUpdateScore() {
       wqScore.textContent = `✅ ${wqCorrect}  ❌ ${wqIncorrect}  🔥 ${wqStreak} (best ${wqBest})`;
@@ -970,15 +1000,9 @@
     }
 
     function wqNewQuestion() {
-      if (!WORDS_READY) {
-        wqSetPill("words.json not loaded yet", "bad");
-        return;
-      }
+      if (!WORDS_READY) { wqSetPill("words.json not loaded yet", "bad"); return; }
       wqCurrent = wqPickWord();
-      if (!wqCurrent) {
-        wqSetPill("No words for this level", "bad");
-        return;
-      }
+      if (!wqCurrent) { wqSetPill("No words for this level", "bad"); return; }
       wqExpected.textContent = "—";
       wqPromptText.textContent = wqCurrent.file;
       wqTyped.value = "";
@@ -1001,10 +1025,7 @@
 
       wqExpected.textContent = wqCurrent.word;
 
-      if (!user) {
-        wqSetPill("Type your answer first (or press Reveal).", "bad");
-        return;
-      }
+      if (!user) { wqSetPill("Type your answer first (or press Reveal).", "bad"); return; }
 
       if (user === exp) {
         wqCorrect += 1;
@@ -1030,10 +1051,8 @@
       wqCurrent = null;
     }
 
-    // wire word canvas
     wireCanvas(wordCanvas, wctx);
 
-    // wire word quiz buttons
     wqNext.addEventListener("click", wqNewQuestion);
     wqReplay.addEventListener("click", wqPlayCurrent);
     wqClear.addEventListener("click", wqClearCanvas);
@@ -1042,7 +1061,6 @@
     wqCheck.addEventListener("click", wqCheckTyped);
     wqTyped.addEventListener("keydown", (e) => { if (e.key === "Enter") wqCheckTyped(); });
 
-    // init word quiz UI
     wqClearCanvas();
     wqUpdateScore();
 

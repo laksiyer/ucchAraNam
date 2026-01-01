@@ -454,7 +454,7 @@
 </p>
 <div class="card">
   <p class="small" style="margin:0 0 10px;">
-    <b>Browse + Practice:</b> Start with <b>विशिष्टानि</b> where you can also see how the conjunct is formed
+    <b>Browse + Practice:</b> Start with <b>विशिष्टानि</b> or Special consonants where you can also see how the conjunct is formed
     (e.g., <b>त् + र → त्र</b>). Use the quizzes for listening and reading recognition.
   </p>
 
@@ -1442,8 +1442,12 @@
   }));
 
   wrLevel.addEventListener("change", wrNewQuestion);
-  wrPlay.addEventListener("click", wrPlayAudio);
-  wrNext.addEventListener("click", wrNewQuestion);
+  wrPlay.addEventListener("click", () => {
+  wrUserHasInteracted = true; // if you’re using this flag
+  if (!wrAnswer) wrNewQuestion();   // Start if needed
+  else wrPlayAudio();               // Otherwise replay
+  });
+  wrNext.addEventListener("click", () => { wrUserHasInteracted = true; wrNewQuestion(); });
   wrReset.addEventListener("click", wrResetAll);
 
   // Keep the load status in sync with your words.json loader
@@ -1737,7 +1741,10 @@ cqModeRadios.forEach(r => r.addEventListener("change", () => {
   cqNewQuestion();
 }));
 
-cqPlay.addEventListener("click", cqPlayNowQuiz);
+cqPlay.addEventListener("click", () => {
+  if (!cqAnswer) cqNewQuestion();   // start quiz if nothing yet
+  else cqPlayNowQuiz();             // otherwise replay audio
+});
 cqNext.addEventListener("click", cqNewQuestion);
 cqReset.addEventListener("click", cqResetAll);
 

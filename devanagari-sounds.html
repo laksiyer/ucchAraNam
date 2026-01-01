@@ -1423,11 +1423,13 @@
   // Call this after your words.json finishes loading.
   // If your code already calls loadWordsJson(), just add:
   // setTimeout(wrInitAfterLoad, 300);
-  function wrInitAfterLoad() {
-    wrRefreshLoadStatus();
-    wrUpdateScore();
-    wrNewQuestion();
-  }
+ function wrInitAfterLoad() {
+  wrRefreshLoadStatus();
+  wrUpdateScore();
+  wrSetResult("Ready — click Play or Next", "neutral");
+  // DO NOT auto-start with wrNewQuestion();
+}
+
 
   // Safe init: try a few times (words.json might load asynchronously)
   (function bootWR(attempt=0){
@@ -1476,6 +1478,7 @@ const cjWordHint = document.getElementById("cjWordHint");
 
 let cjList = [];
 let cjIdx = 0;
+let cjCarrier = null; // store the currently shown carrier word
 
 function cjFilteredList() {
   if (!CONJ_READY) return [];
@@ -1501,6 +1504,7 @@ function cjRender() {
     cjWord.textContent = "—";
     cjWordHint.textContent = "—";
     cjStatus.textContent = "No conjuncts (check module or JSON)";
+    cjCarrier = null;
     return;
   }
   if (cjIdx < 0) cjIdx = cjList.length - 1;
@@ -1517,32 +1521,47 @@ function cjRender() {
     cjFormationBox.style.display = "none";
   }
 
-  cjAudio.textContent = x.audio ? x.audio : "(word audio)";
-  const cw = pickCarrierWord(x);
-  if (cw) {
-    cjWord.textContent = cw.word;
-    cjWordHint.textContent = cw.hint || "—";
+  // ✅ Pick the carrier word ONCE and store it globally
+  cjCarrier = pickCarrierWord(x);
+
+  // ✅ Display the carrier word (if any)
+  if (cjCarrier) {
+    cjWord.textContent = cjCarrier.word;
+    cjWordHint.textContent = cjCarrier.hint || "—";
   } else {
     cjWord.textContent = "(no words yet)";
     cjWordHint.textContent = "—";
   }
 
+  // ✅ Show the ACTUAL audio path that Play will use
+  if (x.audio) {
+    cjAudio.textContent = x.audio;
+  } else if (cjCarrier && cjCarrier.file) {
+    cjAudio.textContent = cjCarrier.file;
+  } else {
+    cjAudio.textContent = "(no audio)";
+  }
+
   cjStatus.textContent = `Item ${cjIdx + 1} / ${cjList.length}`;
 }
+
 
 function cjPlayNow() {
   if (!cjList.length) return;
   const x = cjList[cjIdx];
-  // Prefer isolated conjunct audio if present, otherwise play a carrier word
+
+  // Prefer isolated conjunct audio if present
   if (x.audio) {
-    playFile(x.audio.replace(/^conj\//, "conj/"), x.form);
+    playFile(x.audio, x.form);
     return;
   }
-  const cw = pickCarrierWord(x);
-  if (cw && cw.file) {
-    playFile(cw.file.replace(/^conj\//, "conj/"), cw.word);
+
+  // Otherwise play the SAME carrier word shown on screen
+  if (cjCarrier && cjCarrier.file) {
+    playFile(cjCarrier.file, cjCarrier.word);
   }
 }
+
 
 cjModule.addEventListener("change", () => { cjIdx = 0; cjRender(); });
 cjPrev.addEventListener("click", () => { cjIdx--; cjRender(); });

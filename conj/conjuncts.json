@@ -1,0 +1,675 @@
+[
+  {
+    "id": "cj001",
+    "module": "A",
+    "form": "क्ष",
+    "hint": "kṣa",
+    "formation": [
+      "क्",
+      "ष"
+    ],
+    "audio": "conj/special/ksha.mp3",
+    "words": [
+      {
+        "word": "क्षमा",
+        "hint": "kṣamā",
+        "level": 1,
+        "file": "conj/words/cj001_01.mp3"
+      },
+      {
+        "word": "अक्षरम्",
+        "hint": "akṣaram",
+        "level": 1,
+        "file": "conj/words/cj001_02.mp3"
+      },
+      {
+        "word": "क्षेत्रम्",
+        "hint": "kṣetram",
+        "level": 2,
+        "file": "conj/words/cj001_03.mp3"
+      }
+    ]
+  },
+  {
+    "id": "cj002",
+    "module": "A",
+    "form": "त्र",
+    "hint": "tra",
+    "formation": [
+      "त्",
+      "र"
+    ],
+    "audio": "conj/special/tra.mp3",
+    "words": [
+      {
+        "word": "मित्रम्",
+        "hint": "mitram",
+        "level": 1,
+        "file": "conj/words/cj002_01.mp3"
+      },
+      {
+        "word": "पुत्रः",
+        "hint": "putraḥ",
+        "level": 1,
+        "file": "conj/words/cj002_02.mp3"
+      },
+      {
+        "word": "त्रयः",
+        "hint": "trayaḥ",
+        "level": 2,
+        "file": "conj/words/cj002_03.mp3"
+      }
+    ]
+  },
+  {
+    "id": "cj003",
+    "module": "A",
+    "form": "ज्ञ",
+    "hint": "jña",
+    "formation": [
+      "ज्",
+      "ञ"
+    ],
+    "audio": "conj/special/jna.mp3",
+    "words": [
+      {
+        "word": "ज्ञानम्",
+        "hint": "jñānam",
+        "level": 1,
+        "file": "conj/words/cj003_01.mp3"
+      },
+      {
+        "word": "अज्ञानम्",
+        "hint": "ajñānam",
+        "level": 2,
+        "file": "conj/words/cj003_02.mp3"
+      },
+      {
+        "word": "प्रज्ञा",
+        "hint": "prajñā",
+        "level": 3,
+        "file": "conj/words/cj003_03.mp3"
+      }
+    ]
+  },
+  {
+    "id": "cj004",
+    "module": "A",
+    "form": "श्र",
+    "hint": "śra",
+    "formation": [
+      "श्",
+      "र"
+    ],
+    "audio": "conj/special/shra.mp3",
+    "words": [
+      {
+        "word": "श्रवणम्",
+        "hint": "śravaṇam",
+        "level": 1,
+        "file": "conj/words/cj004_01.mp3"
+      },
+      {
+        "word": "श्रीः",
+        "hint": "śrīḥ",
+        "level": 1,
+        "file": "conj/words/cj004_02.mp3"
+      },
+      {
+        "word": "श्रद्धा",
+        "hint": "śraddhā",
+        "level": 3,
+        "file": "conj/words/cj004_03.mp3"
+      }
+    ]
+  },
+  {
+    "id": "cj005",
+    "module": "A",
+    "form": "द्य",
+    "hint": "dya",
+    "formation": [
+      "द्",
+      "य"
+    ],
+    "audio": "conj/special/dya.mp3",
+    "words": [
+      {
+        "word": "विद्या",
+        "hint": "vidyā",
+        "level": 1,
+        "file": "conj/words/cj005_01.mp3"
+      },
+      {
+        "word": "अद्य",
+        "hint": "adya",
+        "level": 1,
+        "file": "conj/words/cj005_02.mp3"
+      },
+      {
+        "word": "द्युतिः",
+        "hint": "dyutiḥ",
+        "level": 3,
+        "file": "conj/words/cj005_03.mp3"
+      }
+    ]
+  },
+  {
+    "id": "cj006",
+    "module": "A",
+    "form": "क्त",
+    "hint": "kta",
+    "formation": [
+      "क्",
+      "त"
+    ],
+    "audio": "conj/special/kta.mp3",
+    "words": [
+      {
+        "word": "भक्तः",
+        "hint": "bhaktaḥ",
+        "level": 1,
+        "file": "conj/words/cj006_01.mp3"
+      },
+      {
+        "word": "शक्तिः",
+        "hint": "śaktiḥ",
+        "level": 2,
+        "file": "conj/words/cj006_02.mp3"
+      },
+      {
+        "word": "युक्तम्",
+        "hint": "yuktam",
+        "level": 2,
+        "file": "conj/words/cj006_03.mp3"
+      }
+    ]
+  },
+  {
+    "id": "cj007",
+    "module": "A",
+    "form": "द्म",
+    "hint": "dma",
+    "formation": [
+      "द्",
+      "म"
+    ],
+    "audio": "conj/special/dma.mp3",
+    "words": [
+      {
+        "word": "पद्मम्",
+        "hint": "padmam",
+        "level": 1,
+        "file": "conj/words/cj007_01.mp3"
+      },
+      {
+        "word": "पद्मा",
+        "hint": "padmā",
+        "level": 2,
+        "file": "conj/words/cj007_02.mp3"
+      },
+      {
+        "word": "सद्म",
+        "hint": "sadma",
+        "level": 3,
+        "file": "conj/words/cj007_03.mp3"
+      }
+    ]
+  },
+  {
+    "id": "cj008",
+    "module": "A",
+    "form": "ह्य",
+    "hint": "hya",
+    "formation": [
+      "ह्",
+      "य"
+    ],
+    "audio": "conj/special/hya.mp3",
+    "words": [
+      {
+        "word": "गृह्यम्",
+        "hint": "gṛhyam",
+        "level": 3,
+        "file": "conj/words/cj008_01.mp3"
+      },
+      {
+        "word": "ह्यः",
+        "hint": "hyaḥ",
+        "level": 4,
+        "file": "conj/words/cj008_02.mp3"
+      },
+      {
+        "word": "ह्यस्तनम्",
+        "hint": "hyastanam",
+        "level": 4,
+        "file": "conj/words/cj008_03.mp3"
+      }
+    ]
+  },
+  {
+    "id": "cj009",
+    "module": "B",
+    "form": "क्र",
+    "hint": "kra",
+    "formation": [
+      "क्",
+      "र"
+    ],
+    "audio": null,
+    "words": [
+      {
+        "word": "क्रमः",
+        "hint": "kramaḥ",
+        "level": 1,
+        "file": "conj/words/cj009_01.mp3"
+      },
+      {
+        "word": "क्रिया",
+        "hint": "kriyā",
+        "level": 2,
+        "file": "conj/words/cj009_02.mp3"
+      }
+    ]
+  },
+  {
+    "id": "cj010",
+    "module": "B",
+    "form": "ग्र",
+    "hint": "gra",
+    "formation": [
+      "ग्",
+      "र"
+    ],
+    "audio": null,
+    "words": [
+      {
+        "word": "ग्रामः",
+        "hint": "grāmaḥ",
+        "level": 1,
+        "file": "conj/words/cj010_01.mp3"
+      },
+      {
+        "word": "ग्रहः",
+        "hint": "grahaḥ",
+        "level": 2,
+        "file": "conj/words/cj010_02.mp3"
+      }
+    ]
+  },
+  {
+    "id": "cj011",
+    "module": "B",
+    "form": "प्र",
+    "hint": "pra",
+    "formation": [
+      "प्",
+      "र"
+    ],
+    "audio": null,
+    "words": [
+      {
+        "word": "प्रथमः",
+        "hint": "prathamaḥ",
+        "level": 1,
+        "file": "conj/words/cj011_01.mp3"
+      },
+      {
+        "word": "प्रकाशः",
+        "hint": "prakāśaḥ",
+        "level": 2,
+        "file": "conj/words/cj011_02.mp3"
+      }
+    ]
+  },
+  {
+    "id": "cj012",
+    "module": "B",
+    "form": "ब्र",
+    "hint": "bra",
+    "formation": [
+      "ब्",
+      "र"
+    ],
+    "audio": null,
+    "words": [
+      {
+        "word": "ब्राह्मणः",
+        "hint": "brāhmaṇaḥ",
+        "level": 3,
+        "file": "conj/words/cj012_01.mp3"
+      },
+      {
+        "word": "ब्रह्म",
+        "hint": "brahma",
+        "level": 2,
+        "file": "conj/words/cj012_02.mp3"
+      }
+    ]
+  },
+  {
+    "id": "cj013",
+    "module": "B",
+    "form": "द्र",
+    "hint": "dra",
+    "formation": [
+      "द्",
+      "र"
+    ],
+    "audio": null,
+    "words": [
+      {
+        "word": "द्रवः",
+        "hint": "dravaḥ",
+        "level": 3,
+        "file": "conj/words/cj013_01.mp3"
+      },
+      {
+        "word": "द्रुतम्",
+        "hint": "drutam",
+        "level": 3,
+        "file": "conj/words/cj013_02.mp3"
+      }
+    ]
+  },
+  {
+    "id": "cj014",
+    "module": "B",
+    "form": "द्व",
+    "hint": "dva",
+    "formation": [
+      "द्",
+      "व"
+    ],
+    "audio": null,
+    "words": [
+      {
+        "word": "द्वारम्",
+        "hint": "dvāram",
+        "level": 1,
+        "file": "conj/words/cj014_01.mp3"
+      },
+      {
+        "word": "द्वितीयः",
+        "hint": "dvitīyaḥ",
+        "level": 2,
+        "file": "conj/words/cj014_02.mp3"
+      }
+    ]
+  },
+  {
+    "id": "cj015",
+    "module": "C",
+    "form": "न्त",
+    "hint": "nta",
+    "formation": [
+      "न्",
+      "त"
+    ],
+    "audio": null,
+    "words": [
+      {
+        "word": "अन्तः",
+        "hint": "antaḥ",
+        "level": 1,
+        "file": "conj/words/cj015_01.mp3"
+      },
+      {
+        "word": "अन्तरम्",
+        "hint": "antaram",
+        "level": 2,
+        "file": "conj/words/cj015_02.mp3"
+      }
+    ]
+  },
+  {
+    "id": "cj016",
+    "module": "C",
+    "form": "न्द",
+    "hint": "nda",
+    "formation": [
+      "न्",
+      "द"
+    ],
+    "audio": null,
+    "words": [
+      {
+        "word": "गन्धः",
+        "hint": "gandhaḥ",
+        "level": 2,
+        "file": "conj/words/cj016_01.mp3"
+      },
+      {
+        "word": "वन्दना",
+        "hint": "vandanā",
+        "level": 2,
+        "file": "conj/words/cj016_02.mp3"
+      }
+    ]
+  },
+  {
+    "id": "cj017",
+    "module": "C",
+    "form": "स्त",
+    "hint": "sta",
+    "formation": [
+      "स्",
+      "त"
+    ],
+    "audio": null,
+    "words": [
+      {
+        "word": "अस्ति",
+        "hint": "asti",
+        "level": 1,
+        "file": "conj/words/cj017_01.mp3"
+      },
+      {
+        "word": "वस्तु",
+        "hint": "vastu",
+        "level": 2,
+        "file": "conj/words/cj017_02.mp3"
+      }
+    ]
+  },
+  {
+    "id": "cj018",
+    "module": "C",
+    "form": "स्थ",
+    "hint": "stha",
+    "formation": [
+      "स्",
+      "थ"
+    ],
+    "audio": null,
+    "words": [
+      {
+        "word": "स्थानम्",
+        "hint": "sthānam",
+        "level": 1,
+        "file": "conj/words/cj018_01.mp3"
+      },
+      {
+        "word": "स्थिरः",
+        "hint": "sthiraḥ",
+        "level": 2,
+        "file": "conj/words/cj018_02.mp3"
+      }
+    ]
+  },
+  {
+    "id": "cj019",
+    "module": "C",
+    "form": "श्च",
+    "hint": "śca",
+    "formation": [
+      "श्",
+      "च"
+    ],
+    "audio": null,
+    "words": [
+      {
+        "word": "पश्चात्",
+        "hint": "paścāt",
+        "level": 3,
+        "file": "conj/words/cj019_01.mp3"
+      },
+      {
+        "word": "वृश्चिका",
+        "hint": "vṛścikā",
+        "level": 4,
+        "file": "conj/words/cj019_02.mp3"
+      }
+    ]
+  },
+  {
+    "id": "cj020",
+    "module": "C",
+    "form": "ष्ट",
+    "hint": "ṣṭa",
+    "formation": [
+      "ष्",
+      "ट"
+    ],
+    "audio": null,
+    "words": [
+      {
+        "word": "कष्टम्",
+        "hint": "kaṣṭam",
+        "level": 2,
+        "file": "conj/words/cj020_01.mp3"
+      },
+      {
+        "word": "दृष्टिः",
+        "hint": "dṛṣṭiḥ",
+        "level": 3,
+        "file": "conj/words/cj020_02.mp3"
+      }
+    ]
+  },
+  {
+    "id": "cj021",
+    "module": "C",
+    "form": "त्व",
+    "hint": "tva",
+    "formation": [
+      "त्",
+      "व"
+    ],
+    "audio": null,
+    "words": [
+      {
+        "word": "त्वम्",
+        "hint": "tvam",
+        "level": 1,
+        "file": "conj/words/cj021_01.mp3"
+      },
+      {
+        "word": "तत्त्वम्",
+        "hint": "tattvam",
+        "level": 2,
+        "file": "conj/words/cj021_02.mp3"
+      }
+    ]
+  },
+  {
+    "id": "cj022",
+    "module": "C",
+    "form": "त्त",
+    "hint": "tta",
+    "formation": [
+      "त्",
+      "त"
+    ],
+    "audio": null,
+    "words": [
+      {
+        "word": "सत्ताम्",
+        "hint": "sattām",
+        "level": 3,
+        "file": "conj/words/cj022_01.mp3"
+      },
+      {
+        "word": "उत्तमः",
+        "hint": "uttamaḥ",
+        "level": 2,
+        "file": "conj/words/cj022_02.mp3"
+      }
+    ]
+  },
+  {
+    "id": "cj023",
+    "module": "C",
+    "form": "द्ध",
+    "hint": "ddha",
+    "formation": [
+      "द्",
+      "ध"
+    ],
+    "audio": null,
+    "words": [
+      {
+        "word": "बुद्धिः",
+        "hint": "buddhiḥ",
+        "level": 2,
+        "file": "conj/words/cj023_01.mp3"
+      },
+      {
+        "word": "शुद्धः",
+        "hint": "śuddhaḥ",
+        "level": 2,
+        "file": "conj/words/cj023_02.mp3"
+      }
+    ]
+  },
+  {
+    "id": "cj024",
+    "module": "C",
+    "form": "न्न",
+    "hint": "nna",
+    "formation": [
+      "न्",
+      "न"
+    ],
+    "audio": null,
+    "words": [
+      {
+        "word": "अन्नम्",
+        "hint": "annam",
+        "level": 1,
+        "file": "conj/words/cj024_01.mp3"
+      },
+      {
+        "word": "आपन्नः",
+        "hint": "āpannaḥ",
+        "level": 4,
+        "file": "conj/words/cj024_02.mp3"
+      }
+    ]
+  },
+  {
+    "id": "cj025",
+    "module": "C",
+    "form": "म्प",
+    "hint": "mpa",
+    "formation": [
+      "म्",
+      "प"
+    ],
+    "audio": null,
+    "words": [
+      {
+        "word": "कम्पः",
+        "hint": "kampaḥ",
+        "level": 2,
+        "file": "conj/words/cj025_01.mp3"
+      },
+      {
+        "word": "सम्पदा",
+        "hint": "sampadā",
+        "level": 3,
+        "file": "conj/words/cj025_02.mp3"
+      }
+    ]
+  }
+]

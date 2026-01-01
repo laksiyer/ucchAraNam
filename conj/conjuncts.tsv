@@ -1,0 +1,26 @@
+id	module	form	hint	c1	c2	audio
+cj001	A	क्ष	kṣa	क्	ष	conj/special/ksha.mp3
+cj002	A	त्र	tra	त्	र	conj/special/tra.mp3
+cj003	A	ज्ञ	jña	ज्	ञ	conj/special/jna.mp3
+cj004	A	श्र	śra	श्	र	conj/special/shra.mp3
+cj005	A	द्य	dya	द्	य	conj/special/dya.mp3
+cj006	A	क्त	kta	क्	त	conj/special/kta.mp3
+cj007	A	द्म	dma	द्	म	conj/special/dma.mp3
+cj008	A	ह्य	hya	ह्	य	conj/special/hya.mp3
+cj009	B	क्र	kra	क्	र	
+cj010	B	ग्र	gra	ग्	र	
+cj011	B	प्र	pra	प्	र	
+cj012	B	ब्र	bra	ब्	र	
+cj013	B	द्र	dra	द्	र	
+cj014	B	द्व	dva	द्	व	
+cj015	C	न्त	nta	न्	त	
+cj016	C	न्द	nda	न्	द	
+cj017	C	स्त	sta	स्	त	
+cj018	C	स्थ	stha	स्	थ	
+cj019	C	श्च	śca	श्	च	
+cj020	C	ष्ट	ṣṭa	ष्	ट	
+cj021	C	त्व	tva	त्	व	
+cj022	C	त्त	tta	त्	त	
+cj023	C	द्ध	ddha	द्	ध	
+cj024	C	न्न	nna	न्	न	
+cj025	C	म्प	mpa	म्	प	

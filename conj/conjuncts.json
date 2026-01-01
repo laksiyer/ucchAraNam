@@ -434,8 +434,8 @@
     "audio": null,
     "words": [
       {
-        "word": "गन्धः",
-        "hint": "gandhaḥ",
+        "word": "छन्दः",
+        "hint": "chandaḥ",
         "level": 2,
         "file": "conj/words/cj016_01.mp3"
       },
@@ -669,6 +669,201 @@
         "hint": "sampadā",
         "level": 3,
         "file": "conj/words/cj025_02.mp3"
+      }
+    ]
+  },
+  {
+    "id": "cj026",
+    "module": "D",
+    "form": "र्क",
+    "hint": "rka",
+    "formation": [
+      "र्",
+      "क"
+    ],
+    "audio": null,
+    "words": [
+      {
+        "word": "अर्कः",
+        "hint": "arkaḥ",
+        "level": 1,
+        "file": "conj/words/cj026_01.mp3"
+      },
+      {
+        "word": "तर्कः",
+        "hint": "tarkaḥ",
+        "level": 2,
+        "file": "conj/words/cj026_02.mp3"
+      }
+    ]
+  },
+  {
+    "id": "cj027",
+    "module": "D",
+    "form": "र्ग",
+    "hint": "rga",
+    "formation": [
+      "र्",
+      "ग"
+    ],
+    "audio": null,
+    "words": [
+      {
+        "word": "मार्गः",
+        "hint": "mārgaḥ",
+        "level": 1,
+        "file": "conj/words/cj027_01.mp3"
+      },
+      {
+        "word": "वर्गः",
+        "hint": "vargaḥ",
+        "level": 2,
+        "file": "conj/words/cj027_02.mp3"
+      }
+    ]
+  },
+  {
+    "id": "cj028",
+    "module": "D",
+    "form": "र्त",
+    "hint": "rta",
+    "formation": [
+      "र्",
+      "त"
+    ],
+    "audio": null,
+    "words": [
+      {
+        "word": "कर्ता",
+        "hint": "kartā",
+        "level": 1,
+        "file": "conj/words/cj028_01.mp3"
+      }
+    ]
+  },
+  {
+    "id": "cj029",
+    "module": "D",
+    "form": "र्थ",
+    "hint": "rtha",
+    "formation": [
+      "र्",
+      "थ"
+    ],
+    "audio": null,
+    "words": [
+      {
+        "word": "अर्थः",
+        "hint": "arthaḥ",
+        "level": 1,
+        "file": "conj/words/cj029_01.mp3"
+      },
+      {
+        "word": "पार्थः",
+        "hint": "pārthaḥ",
+        "level": 2,
+        "file": "conj/words/cj029_02.mp3"
+      }
+    ]
+  },
+  {
+    "id": "cj030",
+    "module": "D",
+    "form": "र्द",
+    "hint": "rda",
+    "formation": [
+      "र्",
+      "द"
+    ],
+    "audio": null,
+    "words": [
+      {
+        "word": "कपर्दः",
+        "hint": "kapardaḥ",
+        "level": 1,
+        "file": "conj/words/cj030_01.mp3"
+      },
+      {
+        "word": "हार्दम्",
+        "hint": "hārdam",
+        "level": 2,
+        "file": "conj/words/cj030_02.mp3"
+      }
+    ]
+  },
+  {
+    "id": "cj031",
+    "module": "D",
+    "form": "र्ध",
+    "hint": "rdha",
+    "formation": [
+      "र्",
+      "ध"
+    ],
+    "audio": null,
+    "words": [
+      {
+        "word": "अर्धः",
+        "hint": "ardhaḥ",
+        "level": 1,
+        "file": "conj/words/cj031_01.mp3"
+      }
+    ]
+  },
+  {
+    "id": "cj032",
+    "module": "D",
+    "form": "र्प",
+    "hint": "rpa",
+    "formation": [
+      "र्",
+      "प"
+    ],
+    "audio": null,
+    "words": [
+      {
+        "word": "सर्पः",
+        "hint": "sarpaḥ",
+        "level": 1,
+        "file": "conj/words/cj032_01.mp3"
+      }
+    ]
+  },
+  {
+    "id": "cj033",
+    "module": "D",
+    "form": "र्भ",
+    "hint": "rbha",
+    "formation": [
+      "र्",
+      "भ"
+    ],
+    "audio": null,
+    "words": [
+      {
+        "word": "गर्भः",
+        "hint": "garbhaḥ",
+        "level": 1,
+        "file": "conj/words/cj033_01.mp3"
+      }
+    ]
+  },
+  {
+    "id": "cj034",
+    "module": "D",
+    "form": "र्म",
+    "hint": "rma",
+    "formation": [
+      "र्",
+      "म"
+    ],
+    "audio": null,
+    "words": [
+      {
+        "word": "कर्म",
+        "hint": "karma",
+        "level": 1,
+        "file": "conj/words/cj034_01.mp3"
       }
     ]
   }

@@ -1,0 +1,746 @@
+[
+  {
+    "conj_id": "cj001",
+    "word": "क्षमा",
+    "hint": "kṣamā",
+    "level": 1,
+    "file": "conj/words/cj001_01.mp3",
+    "idx": 1
+  },
+  {
+    "conj_id": "cj001",
+    "word": "अक्षरम्",
+    "hint": "akṣaram",
+    "level": 1,
+    "file": "conj/words/cj001_02.mp3",
+    "idx": 2
+  },
+  {
+    "conj_id": "cj001",
+    "word": "क्षेत्रम्",
+    "hint": "kṣetram",
+    "level": 2,
+    "file": "conj/words/cj001_03.mp3",
+    "idx": 3
+  },
+  {
+    "conj_id": "cj002",
+    "word": "मित्रम्",
+    "hint": "mitram",
+    "level": 1,
+    "file": "conj/words/cj002_01.mp3",
+    "idx": 1
+  },
+  {
+    "conj_id": "cj002",
+    "word": "पुत्रः",
+    "hint": "putraḥ",
+    "level": 1,
+    "file": "conj/words/cj002_02.mp3",
+    "idx": 2
+  },
+  {
+    "conj_id": "cj002",
+    "word": "त्रयः",
+    "hint": "trayaḥ",
+    "level": 2,
+    "file": "conj/words/cj002_03.mp3",
+    "idx": 3
+  },
+  {
+    "conj_id": "cj003",
+    "word": "ज्ञानम्",
+    "hint": "jñānam",
+    "level": 1,
+    "file": "conj/words/cj003_01.mp3",
+    "idx": 1
+  },
+  {
+    "conj_id": "cj003",
+    "word": "अज्ञानम्",
+    "hint": "ajñānam",
+    "level": 2,
+    "file": "conj/words/cj003_02.mp3",
+    "idx": 2
+  },
+  {
+    "conj_id": "cj003",
+    "word": "प्रज्ञा",
+    "hint": "prajñā",
+    "level": 3,
+    "file": "conj/words/cj003_03.mp3",
+    "idx": 3
+  },
+  {
+    "conj_id": "cj004",
+    "word": "श्रवणम्",
+    "hint": "śravaṇam",
+    "level": 1,
+    "file": "conj/words/cj004_01.mp3",
+    "idx": 1
+  },
+  {
+    "conj_id": "cj004",
+    "word": "श्रीः",
+    "hint": "śrīḥ",
+    "level": 1,
+    "file": "conj/words/cj004_02.mp3",
+    "idx": 2
+  },
+  {
+    "conj_id": "cj004",
+    "word": "श्रद्धा",
+    "hint": "śraddhā",
+    "level": 3,
+    "file": "conj/words/cj004_03.mp3",
+    "idx": 3
+  },
+  {
+    "conj_id": "cj005",
+    "word": "विद्या",
+    "hint": "vidyā",
+    "level": 1,
+    "file": "conj/words/cj005_01.mp3",
+    "idx": 1
+  },
+  {
+    "conj_id": "cj005",
+    "word": "अद्य",
+    "hint": "adya",
+    "level": 1,
+    "file": "conj/words/cj005_02.mp3",
+    "idx": 2
+  },
+  {
+    "conj_id": "cj005",
+    "word": "द्युतिः",
+    "hint": "dyutiḥ",
+    "level": 3,
+    "file": "conj/words/cj005_03.mp3",
+    "idx": 3
+  },
+  {
+    "conj_id": "cj006",
+    "word": "भक्तः",
+    "hint": "bhaktaḥ",
+    "level": 1,
+    "file": "conj/words/cj006_01.mp3",
+    "idx": 1
+  },
+  {
+    "conj_id": "cj006",
+    "word": "शक्तिः",
+    "hint": "śaktiḥ",
+    "level": 2,
+    "file": "conj/words/cj006_02.mp3",
+    "idx": 2
+  },
+  {
+    "conj_id": "cj006",
+    "word": "युक्तम्",
+    "hint": "yuktam",
+    "level": 2,
+    "file": "conj/words/cj006_03.mp3",
+    "idx": 3
+  },
+  {
+    "conj_id": "cj007",
+    "word": "पद्मम्",
+    "hint": "padmam",
+    "level": 1,
+    "file": "conj/words/cj007_01.mp3",
+    "idx": 1
+  },
+  {
+    "conj_id": "cj007",
+    "word": "पद्मा",
+    "hint": "padmā",
+    "level": 2,
+    "file": "conj/words/cj007_02.mp3",
+    "idx": 2
+  },
+  {
+    "conj_id": "cj007",
+    "word": "सद्म",
+    "hint": "sadma",
+    "level": 3,
+    "file": "conj/words/cj007_03.mp3",
+    "idx": 3
+  },
+  {
+    "conj_id": "cj008",
+    "word": "गृह्यम्",
+    "hint": "gṛhyam",
+    "level": 3,
+    "file": "conj/words/cj008_01.mp3",
+    "idx": 1
+  },
+  {
+    "conj_id": "cj008",
+    "word": "ह्यः",
+    "hint": "hyaḥ",
+    "level": 4,
+    "file": "conj/words/cj008_02.mp3",
+    "idx": 2
+  },
+  {
+    "conj_id": "cj008",
+    "word": "ह्यस्तनम्",
+    "hint": "hyastanam",
+    "level": 4,
+    "file": "conj/words/cj008_03.mp3",
+    "idx": 3
+  },
+  {
+    "conj_id": "cj009",
+    "word": "क्रमः",
+    "hint": "kramaḥ",
+    "level": 1,
+    "file": "conj/words/cj009_01.mp3",
+    "idx": 1
+  },
+  {
+    "conj_id": "cj009",
+    "word": "क्रिया",
+    "hint": "kriyā",
+    "level": 2,
+    "file": "conj/words/cj009_02.mp3",
+    "idx": 2
+  },
+  {
+    "conj_id": "cj010",
+    "word": "ग्रामः",
+    "hint": "grāmaḥ",
+    "level": 1,
+    "file": "conj/words/cj010_01.mp3",
+    "idx": 1
+  },
+  {
+    "conj_id": "cj010",
+    "word": "ग्रहः",
+    "hint": "grahaḥ",
+    "level": 2,
+    "file": "conj/words/cj010_02.mp3",
+    "idx": 2
+  },
+  {
+    "conj_id": "cj011",
+    "word": "प्रथमः",
+    "hint": "prathamaḥ",
+    "level": 1,
+    "file": "conj/words/cj011_01.mp3",
+    "idx": 1
+  },
+  {
+    "conj_id": "cj011",
+    "word": "प्रकाशः",
+    "hint": "prakāśaḥ",
+    "level": 2,
+    "file": "conj/words/cj011_02.mp3",
+    "idx": 2
+  },
+  {
+    "conj_id": "cj012",
+    "word": "ब्राह्मणः",
+    "hint": "brāhmaṇaḥ",
+    "level": 3,
+    "file": "conj/words/cj012_01.mp3",
+    "idx": 1
+  },
+  {
+    "conj_id": "cj012",
+    "word": "ब्रह्म",
+    "hint": "brahma",
+    "level": 2,
+    "file": "conj/words/cj012_02.mp3",
+    "idx": 2
+  },
+  {
+    "conj_id": "cj013",
+    "word": "द्रवः",
+    "hint": "dravaḥ",
+    "level": 3,
+    "file": "conj/words/cj013_01.mp3",
+    "idx": 1
+  },
+  {
+    "conj_id": "cj013",
+    "word": "द्रुतम्",
+    "hint": "drutam",
+    "level": 3,
+    "file": "conj/words/cj013_02.mp3",
+    "idx": 2
+  },
+  {
+    "conj_id": "cj014",
+    "word": "द्वारम्",
+    "hint": "dvāram",
+    "level": 1,
+    "file": "conj/words/cj014_01.mp3",
+    "idx": 1
+  },
+  {
+    "conj_id": "cj014",
+    "word": "द्वितीयः",
+    "hint": "dvitīyaḥ",
+    "level": 2,
+    "file": "conj/words/cj014_02.mp3",
+    "idx": 2
+  },
+  {
+    "conj_id": "cj015",
+    "word": "अन्तः",
+    "hint": "antaḥ",
+    "level": 1,
+    "file": "conj/words/cj015_01.mp3",
+    "idx": 1
+  },
+  {
+    "conj_id": "cj015",
+    "word": "अन्तरम्",
+    "hint": "antaram",
+    "level": 2,
+    "file": "conj/words/cj015_02.mp3",
+    "idx": 2
+  },
+  {
+    "conj_id": "cj016",
+    "word": "छन्दः",
+    "hint": "chandaḥ",
+    "level": 2,
+    "file": "conj/words/cj016_01.mp3",
+    "idx": 1
+  },
+  {
+    "conj_id": "cj016",
+    "word": "वन्दना",
+    "hint": "vandanā",
+    "level": 2,
+    "file": "conj/words/cj016_02.mp3",
+    "idx": 2
+  },
+  {
+    "conj_id": "cj017",
+    "word": "अस्ति",
+    "hint": "asti",
+    "level": 1,
+    "file": "conj/words/cj017_01.mp3",
+    "idx": 1
+  },
+  {
+    "conj_id": "cj017",
+    "word": "वस्तु",
+    "hint": "vastu",
+    "level": 2,
+    "file": "conj/words/cj017_02.mp3",
+    "idx": 2
+  },
+  {
+    "conj_id": "cj018",
+    "word": "स्थानम्",
+    "hint": "sthānam",
+    "level": 1,
+    "file": "conj/words/cj018_01.mp3",
+    "idx": 1
+  },
+  {
+    "conj_id": "cj018",
+    "word": "स्थिरः",
+    "hint": "sthiraḥ",
+    "level": 2,
+    "file": "conj/words/cj018_02.mp3",
+    "idx": 2
+  },
+  {
+    "conj_id": "cj019",
+    "word": "पश्चात्",
+    "hint": "paścāt",
+    "level": 3,
+    "file": "conj/words/cj019_01.mp3",
+    "idx": 1
+  },
+  {
+    "conj_id": "cj019",
+    "word": "वृश्चिका",
+    "hint": "vṛścikā",
+    "level": 4,
+    "file": "conj/words/cj019_02.mp3",
+    "idx": 2
+  },
+  {
+    "conj_id": "cj020",
+    "word": "कष्टम्",
+    "hint": "kaṣṭam",
+    "level": 2,
+    "file": "conj/words/cj020_01.mp3",
+    "idx": 1
+  },
+  {
+    "conj_id": "cj020",
+    "word": "दृष्टिः",
+    "hint": "dṛṣṭiḥ",
+    "level": 3,
+    "file": "conj/words/cj020_02.mp3",
+    "idx": 2
+  },
+  {
+    "conj_id": "cj021",
+    "word": "त्वम्",
+    "hint": "tvam",
+    "level": 1,
+    "file": "conj/words/cj021_01.mp3",
+    "idx": 1
+  },
+  {
+    "conj_id": "cj021",
+    "word": "तत्त्वम्",
+    "hint": "tattvam",
+    "level": 2,
+    "file": "conj/words/cj021_02.mp3",
+    "idx": 2
+  },
+  {
+    "conj_id": "cj022",
+    "word": "सत्ताम्",
+    "hint": "sattām",
+    "level": 3,
+    "file": "conj/words/cj022_01.mp3",
+    "idx": 1
+  },
+  {
+    "conj_id": "cj022",
+    "word": "उत्तमः",
+    "hint": "uttamaḥ",
+    "level": 2,
+    "file": "conj/words/cj022_02.mp3",
+    "idx": 2
+  },
+  {
+    "conj_id": "cj023",
+    "word": "बुद्धिः",
+    "hint": "buddhiḥ",
+    "level": 2,
+    "file": "conj/words/cj023_01.mp3",
+    "idx": 1
+  },
+  {
+    "conj_id": "cj023",
+    "word": "शुद्धः",
+    "hint": "śuddhaḥ",
+    "level": 2,
+    "file": "conj/words/cj023_02.mp3",
+    "idx": 2
+  },
+  {
+    "conj_id": "cj024",
+    "word": "अन्नम्",
+    "hint": "annam",
+    "level": 1,
+    "file": "conj/words/cj024_01.mp3",
+    "idx": 1
+  },
+  {
+    "conj_id": "cj024",
+    "word": "आपन्नः",
+    "hint": "āpannaḥ",
+    "level": 4,
+    "file": "conj/words/cj024_02.mp3",
+    "idx": 2
+  },
+  {
+    "conj_id": "cj025",
+    "word": "कम्पः",
+    "hint": "kampaḥ",
+    "level": 2,
+    "file": "conj/words/cj025_01.mp3",
+    "idx": 1
+  },
+  {
+    "conj_id": "cj025",
+    "word": "सम्पदा",
+    "hint": "sampadā",
+    "level": 3,
+    "file": "conj/words/cj025_02.mp3",
+    "idx": 2
+  },
+  {
+    "conj_id": "cj026",
+    "word": "अर्कः",
+    "hint": "arkaḥ",
+    "level": 1,
+    "file": "conj/words/cj026_01.mp3",
+    "idx": 1
+  },
+  {
+    "conj_id": "cj026",
+    "word": "तर्कः",
+    "hint": "tarkaḥ",
+    "level": 2,
+    "file": "conj/words/cj026_02.mp3",
+    "idx": 2
+  },
+  {
+    "conj_id": "cj027",
+    "word": "मार्गः",
+    "hint": "mārgaḥ",
+    "level": 1,
+    "file": "conj/words/cj027_01.mp3",
+    "idx": 1
+  },
+  {
+    "conj_id": "cj027",
+    "word": "वर्गः",
+    "hint": "vargaḥ",
+    "level": 2,
+    "file": "conj/words/cj027_02.mp3",
+    "idx": 2
+  },
+  {
+    "conj_id": "cj028",
+    "word": "कर्ता",
+    "hint": "kartā",
+    "level": 1,
+    "file": "conj/words/cj028_01.mp3",
+    "idx": 1
+  },
+  {
+    "conj_id": "cj029",
+    "word": "अर्थः",
+    "hint": "arthaḥ",
+    "level": 1,
+    "file": "conj/words/cj029_01.mp3",
+    "idx": 1
+  },
+  {
+    "conj_id": "cj029",
+    "word": "पार्थः",
+    "hint": "pārthaḥ",
+    "level": 2,
+    "file": "conj/words/cj029_02.mp3",
+    "idx": 2
+  },
+  {
+    "conj_id": "cj030",
+    "word": "कपर्दः",
+    "hint": "kapardaḥ",
+    "level": 1,
+    "file": "conj/words/cj030_01.mp3",
+    "idx": 1
+  },
+  {
+    "conj_id": "cj030",
+    "word": "हार्दम्",
+    "hint": "hārdam",
+    "level": 2,
+    "file": "conj/words/cj030_02.mp3",
+    "idx": 2
+  },
+  {
+    "conj_id": "cj031",
+    "word": "अर्धः",
+    "hint": "ardhaḥ",
+    "level": 1,
+    "file": "conj/words/cj031_01.mp3",
+    "idx": 1
+  },
+  {
+    "conj_id": "cj032",
+    "word": "सर्पः",
+    "hint": "sarpaḥ",
+    "level": 1,
+    "file": "conj/words/cj032_01.mp3",
+    "idx": 1
+  },
+  {
+    "conj_id": "cj033",
+    "word": "गर्भः",
+    "hint": "garbhaḥ",
+    "level": 1,
+    "file": "conj/words/cj033_01.mp3",
+    "idx": 1
+  },
+  {
+    "conj_id": "cj034",
+    "word": "कर्म",
+    "hint": "karma",
+    "level": 1,
+    "file": "conj/words/cj034_01.mp3",
+    "idx": 1
+  },
+  {
+    "conj_id": "cj035",
+    "word": "स्त्री",
+    "hint": "strī",
+    "level": 2,
+    "file": "conj/words/cj035_01.mp3",
+    "idx": 1
+  },
+  {
+    "conj_id": "cj035",
+    "word": "शास्त्रम्",
+    "hint": "śāstram",
+    "level": 3,
+    "file": "conj/words/cj035_02.mp3",
+    "idx": 2
+  },
+  {
+    "conj_id": "cj036",
+    "word": "कृष्णः",
+    "hint": "kṛṣṇaḥ",
+    "level": 2,
+    "file": "conj/words/cj036_01.mp3",
+    "idx": 1
+  },
+  {
+    "conj_id": "cj036",
+    "word": "तृष्णा",
+    "hint": "tṛṣṇā",
+    "level": 3,
+    "file": "conj/words/cj036_02.mp3",
+    "idx": 2
+  },
+  {
+    "conj_id": "cj037",
+    "word": "मन्त्रः",
+    "hint": "mantraḥ",
+    "level": 2,
+    "file": "conj/words/cj037_01.mp3",
+    "idx": 1
+  },
+  {
+    "conj_id": "cj037",
+    "word": "तन्त्रम्",
+    "hint": "tantram",
+    "level": 3,
+    "file": "conj/words/cj037_02.mp3",
+    "idx": 2
+  },
+  {
+    "conj_id": "cj038",
+    "word": "राष्ट्रम्",
+    "hint": "rāṣṭram",
+    "level": 3,
+    "file": "conj/words/cj038_01.mp3",
+    "idx": 1
+  },
+  {
+    "conj_id": "cj038",
+    "word": "दृष्टिः",
+    "hint": "dṛṣṭiḥ",
+    "level": 3,
+    "file": "conj/words/cj038_02.mp3",
+    "idx": 2
+  },
+  {
+    "conj_id": "cj039",
+    "word": "ध्यानम्",
+    "hint": "dhyānam",
+    "level": 2,
+    "file": "conj/words/cj039_01.mp3",
+    "idx": 1
+  },
+  {
+    "conj_id": "cj039",
+    "word": "अध्ययनम्",
+    "hint": "adhyayanam",
+    "level": 1,
+    "file": "conj/words/cj039_02.mp3",
+    "idx": 2
+  },
+  {
+    "conj_id": "cj040",
+    "word": "ब्रह्म",
+    "hint": "brahma",
+    "level": 2,
+    "file": "conj/words/cj040_01.mp3",
+    "idx": 1
+  },
+  {
+    "conj_id": "cj040",
+    "word": "ब्राह्मणः",
+    "hint": "brāhmaṇaḥ",
+    "level": 3,
+    "file": "conj/words/cj040_02.mp3",
+    "idx": 2
+  },
+  {
+    "conj_id": "cj041",
+    "word": "अह्न",
+    "hint": "ahna",
+    "level": 2,
+    "file": "conj/words/cj041_01.mp3",
+    "idx": 1
+  },
+  {
+    "conj_id": "cj041",
+    "word": "चिह्नम्",
+    "hint": "cihnam",
+    "level": 2,
+    "file": "conj/words/cj041_02.mp3",
+    "idx": 2
+  },
+  {
+    "conj_id": "cj042",
+    "word": "अस्मि",
+    "hint": "asmi",
+    "level": 2,
+    "file": "conj/words/cj042_01.mp3",
+    "idx": 1
+  },
+  {
+    "conj_id": "cj042",
+    "word": "भस्म",
+    "hint": "bhasma",
+    "level": 2,
+    "file": "conj/words/cj042_02.mp3",
+    "idx": 2
+  },
+  {
+    "conj_id": "cj043",
+    "word": "सप्त",
+    "hint": "sapta",
+    "level": 2,
+    "file": "conj/words/cj043_01.mp3",
+    "idx": 1
+  },
+  {
+    "conj_id": "cj043",
+    "word": "आप्तः",
+    "hint": "āptaḥ",
+    "level": 2,
+    "file": "conj/words/cj043_02.mp3",
+    "idx": 2
+  },
+  {
+    "conj_id": "cj044",
+    "word": "दम्भः",
+    "hint": "dambhaḥ",
+    "level": 2,
+    "file": "conj/words/cj044_01.mp3",
+    "idx": 1
+  },
+  {
+    "conj_id": "cj044",
+    "word": "स्तम्भः",
+    "hint": "stambhaḥ",
+    "level": 2,
+    "file": "conj/words/cj044_02.mp3",
+    "idx": 2
+  },
+  {
+    "conj_id": "cj045",
+    "word": "तीक्ष्ण",
+    "hint": "tīkṣṇa",
+    "level": 3,
+    "file": "conj/words/cj045_01.mp3",
+    "idx": 1
+  },
+  {
+    "conj_id": "cj045",
+    "word": "अक्ष्णम्",
+    "hint": "akṣṇam",
+    "level": 3,
+    "file": "conj/words/cj045_02.mp3",
+    "idx": 2
+  }
+]

@@ -866,5 +866,247 @@
         "file": "conj/words/cj034_01.mp3"
       }
     ]
+  },
+  {
+    "id": "cj035",
+    "module": "E",
+    "form": "स्त्र",
+    "hint": "stra",
+    "formation": null,
+    "audio": null,
+    "words": [
+      {
+        "word": "स्त्री",
+        "hint": "strī",
+        "level": 2,
+        "file": "conj/words/cj035_01.mp3"
+      },
+      {
+        "word": "शास्त्रम्",
+        "hint": "śāstram",
+        "level": 3,
+        "file": "conj/words/cj035_02.mp3"
+      }
+    ]
+  },
+  {
+    "id": "cj036",
+    "module": "E",
+    "form": "ष्ण",
+    "hint": "ṣṇa",
+    "formation": null,
+    "audio": null,
+    "words": [
+      {
+        "word": "कृष्णः",
+        "hint": "kṛṣṇaḥ",
+        "level": 2,
+        "file": "conj/words/cj036_01.mp3"
+      },
+      {
+        "word": "तृष्णा",
+        "hint": "tṛṣṇā",
+        "level": 3,
+        "file": "conj/words/cj036_02.mp3"
+      }
+    ]
+  },
+  {
+    "id": "cj037",
+    "module": "E",
+    "form": "न्त्र",
+    "hint": "ntra",
+    "formation": null,
+    "audio": null,
+    "words": [
+      {
+        "word": "मन्त्रः",
+        "hint": "mantraḥ",
+        "level": 2,
+        "file": "conj/words/cj037_01.mp3"
+      },
+      {
+        "word": "तन्त्रम्",
+        "hint": "tantram",
+        "level": 3,
+        "file": "conj/words/cj037_02.mp3"
+      }
+    ]
+  },
+  {
+    "id": "cj038",
+    "module": "E",
+    "form": "ष्ट्र",
+    "hint": "ṣṭra",
+    "formation": null,
+    "audio": null,
+    "words": [
+      {
+        "word": "राष्ट्रम्",
+        "hint": "rāṣṭram",
+        "level": 3,
+        "file": "conj/words/cj038_01.mp3"
+      },
+      {
+        "word": "दृष्टिः",
+        "hint": "dṛṣṭiḥ",
+        "level": 3,
+        "file": "conj/words/cj038_02.mp3"
+      }
+    ]
+  },
+  {
+    "id": "cj039",
+    "module": "E",
+    "form": "ध्य",
+    "hint": "dhya",
+    "formation": null,
+    "audio": null,
+    "words": [
+      {
+        "word": "ध्यानम्",
+        "hint": "dhyānam",
+        "level": 2,
+        "file": "conj/words/cj039_01.mp3"
+      },
+      {
+        "word": "अध्ययनम्",
+        "hint": "adhyayanam",
+        "level": 1,
+        "file": "conj/words/cj039_02.mp3"
+      }
+    ]
+  },
+  {
+    "id": "cj040",
+    "module": "E",
+    "form": "ह्म",
+    "hint": "hma",
+    "formation": null,
+    "audio": null,
+    "words": [
+      {
+        "word": "ब्रह्म",
+        "hint": "brahma",
+        "level": 2,
+        "file": "conj/words/cj040_01.mp3"
+      },
+      {
+        "word": "ब्राह्मणः",
+        "hint": "brāhmaṇaḥ",
+        "level": 3,
+        "file": "conj/words/cj040_02.mp3"
+      }
+    ]
+  },
+  {
+    "id": "cj041",
+    "module": "E",
+    "form": "ह्न",
+    "hint": "hna",
+    "formation": null,
+    "audio": null,
+    "words": [
+      {
+        "word": "अह्न",
+        "hint": "ahna",
+        "level": 2,
+        "file": "conj/words/cj041_01.mp3"
+      },
+      {
+        "word": "अह्न",
+        "hint": "ahna",
+        "level": 2,
+        "file": "conj/words/cj041_02.mp3"
+      }
+    ]
+  },
+  {
+    "id": "cj042",
+    "module": "E",
+    "form": "स्म",
+    "hint": "sma",
+    "formation": null,
+    "audio": null,
+    "words": [
+      {
+        "word": "अस्मि",
+        "hint": "asmi",
+        "level": 2,
+        "file": "conj/words/cj042_01.mp3"
+      },
+      {
+        "word": "भस्म",
+        "hint": "bhasma",
+        "level": 2,
+        "file": "conj/words/cj042_02.mp3"
+      }
+    ]
+  },
+  {
+    "id": "cj043",
+    "module": "E",
+    "form": "प्त",
+    "hint": "pta",
+    "formation": null,
+    "audio": null,
+    "words": [
+      {
+        "word": "सप्त",
+        "hint": "sapta",
+        "level": 2,
+        "file": "conj/words/cj043_01.mp3"
+      },
+      {
+        "word": "आप्तः",
+        "hint": "āptaḥ",
+        "level": 2,
+        "file": "conj/words/cj043_02.mp3"
+      }
+    ]
+  },
+  {
+    "id": "cj044",
+    "module": "E",
+    "form": "म्भ",
+    "hint": "mbha",
+    "formation": null,
+    "audio": null,
+    "words": [
+      {
+        "word": "दम्भः",
+        "hint": "dambhaḥ",
+        "level": 2,
+        "file": "conj/words/cj044_01.mp3"
+      },
+      {
+        "word": "स्तम्भः",
+        "hint": "stambhaḥ",
+        "level": 2,
+        "file": "conj/words/cj044_02.mp3"
+      }
+    ]
+  },
+  {
+    "id": "cj045",
+    "module": "E",
+    "form": "क्ष्ण",
+    "hint": "kṣṇa",
+    "formation": null,
+    "audio": null,
+    "words": [
+      {
+        "word": "तीक्ष्ण",
+        "hint": "tīkṣṇa",
+        "level": 3,
+        "file": "conj/words/cj041_02.mp3"
+      },
+      {
+        "word": "अक्ष्णम्",
+        "hint": "akṣṇam",
+        "level": 3,
+        "file": "conj/words/cj041_02.mp3"
+      }
+    ]
   }
 ]

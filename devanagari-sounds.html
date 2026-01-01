@@ -155,7 +155,14 @@
      .choiceBtn { font-size: 22px; }
      .choiceBtn.correct { background: #d4f8d4; border-color: #2f9e44; }
      .choiceBtn.wrong   { background: #ffd6d6; border-color: #c92a2a; }
-
+.formation {
+  font-size: 28px;
+  border: 1px dashed #ddd;
+  border-radius: 12px;
+  padding: 10px 12px;
+  background: #fafafa;
+  display: inline-block;
+}
   </style>
 </head>
 
@@ -176,6 +183,8 @@
 </a></li>
       <li><a href="#sec-word-quiz">गुणित-शब्द-लेखन-प्रश्नोत्तरी/guṇita-śabda-lekhana-praśnottarī</a></li>
       <li><a href="#sec-word-recog">गुणित-शब्द-श्रवण-पठनावगमनम् guṇita-śabda-śravaṇa-paṭhanāvagamanam </a></li>
+</a></li>
+     <li><a href="#sec-conj">संयुक्ताक्षराणि</a></li>
 
     </ul>
   </div>
@@ -406,6 +415,100 @@
 </div>
 
 <div class="backTop"><a href="#top">↑ Back to top</a></div>
+<h2 id="sec-conj">संयुक्ताक्षराणि</h2>
+
+<div class="card">
+  <p class="small" style="margin:0 0 10px;">
+    <b>Browse + Practice:</b> Start with <b>विशिष्टानि</b> where you can also see how the conjunct is formed
+    (e.g., <b>त् + र → त्र</b>). Use the quizzes for listening and reading recognition.
+  </p>
+
+  <div class="row">
+    <span class="pill" id="cjLoad">Conjuncts: (loading…)</span>
+
+    <label>
+      Module:
+      <select id="cjModule">
+        <option value="A" selected>विशिष्टानि (Special)</option>
+        <option value="B">रकारान्त (… + र)</option>
+        <option value="C">Common clusters</option>
+        <option value="ALL">All</option>
+      </select>
+    </label>
+
+    <button class="ctrlBtn" id="cjPrev" type="button">Prev</button>
+    <button class="ctrlBtn" id="cjPlay" type="button">Play</button>
+    <button class="ctrlBtn" id="cjNext" type="button">Next</button>
+
+    <span class="pill" id="cjStatus">Ready</span>
+  </div>
+
+  <div class="row" style="align-items:flex-start;">
+    <div style="min-width: 260px;">
+      <div class="small" style="margin:0 0 6px;"><b>Conjunct</b></div>
+      <div class="quizBig" id="cjForm">—</div>
+
+      <div class="small" style="margin-top:10px;">
+        <span class="pill">Hint:</span> <span class="pill" id="cjHint">—</span>
+      </div>
+
+      <div id="cjFormationBox" style="margin-top:10px; display:none;">
+        <div class="small" style="margin:0 0 6px;"><b>Formation</b></div>
+        <div class="formation" id="cjFormation">—</div>
+      </div>
+
+      <div class="small" style="margin-top:10px;">
+        <span class="pill">Audio:</span> <span class="pill" id="cjAudio">—</span>
+      </div>
+    </div>
+
+    <div style="flex: 1;">
+      <div class="small" style="margin:0 0 6px;"><b>Practice word (carrier)</b></div>
+      <div class="quizBig" id="cjWord">—</div>
+      <div class="small" style="margin-top:10px;">
+        <span class="pill">Word hint:</span> <span class="pill" id="cjWordHint">—</span>
+      </div>
+      <div class="small" style="margin-top:10px;">
+        Click <b>Play</b> to hear either the conjunct (if available) or a word containing it.
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <h3 style="margin:0 0 8px;">Conjunct Recognition Quiz</h3>
+  <p class="small" style="margin:0 0 10px;">
+    Choose a mode. In <b>Hear → Choose</b>, click <b>Play</b> and pick the correct conjunct.
+    In <b>Read → Choose</b>, read the hint (IAST) and pick the matching conjunct.
+  </p>
+
+  <div class="row">
+    <label><input type="radio" name="cqMode" value="hear" checked> Hear → Choose</label>
+    <label><input type="radio" name="cqMode" value="read"> Read → Choose</label>
+
+    <button class="ctrlBtn" id="cqPlay" type="button">Play</button>
+    <button class="ctrlBtn" id="cqNext" type="button">Next</button>
+    <button class="ctrlBtn" id="cqReset" type="button">Reset</button>
+
+    <span class="pill" id="cqResult">Ready</span>
+    <span class="pill" id="cqScore">✅ 0  ❌ 0  🔥 0 (best 0)</span>
+  </div>
+
+  <div class="row" style="align-items:flex-start;">
+    <div style="min-width: 220px;">
+      <div class="small" style="margin:0 0 6px;"><b>Prompt</b></div>
+      <div class="quizBig" id="cqPrompt">—</div>
+    </div>
+
+    <div style="flex:1;">
+      <div class="small" style="margin:0 0 6px;"><b>Choose one</b></div>
+      <div class="grid" id="cqChoices" style="grid-template-columns: repeat(4, minmax(90px, 1fr)); max-width: 760px;"></div>
+    </div>
+  </div>
+</div>
+
+<div class="backTop"><a href="#top">↑ Back to top</a></div>
+
 
   <p class="small">Developed by Samskritabharati USA</p>
 
@@ -1335,6 +1438,263 @@
       setTimeout(() => bootWR(attempt+1), 200);
     }
   })();
+  // -----------------------------
+// Conjuncts loader + browser + quiz
+// -----------------------------
+let CONJ = [];
+let CONJ_READY = false;
+
+async function loadConjunctsJson() {
+  try {
+    const res = await fetch("conj/conjuncts.json?v=" + Date.now());
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    CONJ = await res.json();
+    CONJ_READY = Array.isArray(CONJ) && CONJ.length > 0;
+    document.getElementById("cjLoad").textContent = CONJ_READY ? `Conjuncts loaded: ${CONJ.length}` : "Conjuncts: empty";
+  } catch (e) {
+    console.error(e);
+    CONJ = [];
+    CONJ_READY = false;
+    document.getElementById("cjLoad").textContent = "Could not load conj/conjuncts.json";
+  }
+}
+
+// ---- Browse UI ----
+const cjModule = document.getElementById("cjModule");
+const cjPrev = document.getElementById("cjPrev");
+const cjPlay = document.getElementById("cjPlay");
+const cjNext = document.getElementById("cjNext");
+const cjStatus = document.getElementById("cjStatus");
+
+const cjForm = document.getElementById("cjForm");
+const cjHint = document.getElementById("cjHint");
+const cjFormationBox = document.getElementById("cjFormationBox");
+const cjFormation = document.getElementById("cjFormation");
+const cjAudio = document.getElementById("cjAudio");
+const cjWord = document.getElementById("cjWord");
+const cjWordHint = document.getElementById("cjWordHint");
+
+let cjList = [];
+let cjIdx = 0;
+
+function cjFilteredList() {
+  if (!CONJ_READY) return [];
+  const m = cjModule.value;
+  if (m === "ALL") return CONJ.slice();
+  return CONJ.filter(x => x.module === m);
+}
+
+function pickCarrierWord(conjObj) {
+  const w = conjObj.words || [];
+  if (!w.length) return null;
+  return w[Math.floor(Math.random() * w.length)];
+}
+
+function cjRender() {
+  cjList = cjFilteredList();
+  if (!cjList.length) {
+    cjForm.textContent = "—";
+    cjHint.textContent = "—";
+    cjFormationBox.style.display = "none";
+    cjFormation.textContent = "—";
+    cjAudio.textContent = "—";
+    cjWord.textContent = "—";
+    cjWordHint.textContent = "—";
+    cjStatus.textContent = "No conjuncts (check module or JSON)";
+    return;
+  }
+  if (cjIdx < 0) cjIdx = cjList.length - 1;
+  if (cjIdx >= cjList.length) cjIdx = 0;
+
+  const x = cjList[cjIdx];
+  cjForm.textContent = x.form || "—";
+  cjHint.textContent = x.hint || "—";
+
+  if (x.formation && x.formation.length === 2 && x.module === "A") {
+    cjFormationBox.style.display = "block";
+    cjFormation.textContent = `${x.formation[0]}  +  ${x.formation[1]}  →  ${x.form}`;
+  } else {
+    cjFormationBox.style.display = "none";
+  }
+
+  cjAudio.textContent = x.audio ? x.audio : "(word audio)";
+  const cw = pickCarrierWord(x);
+  if (cw) {
+    cjWord.textContent = cw.word;
+    cjWordHint.textContent = cw.hint || "—";
+  } else {
+    cjWord.textContent = "(no words yet)";
+    cjWordHint.textContent = "—";
+  }
+
+  cjStatus.textContent = `Item ${cjIdx + 1} / ${cjList.length}`;
+}
+
+function cjPlayNow() {
+  if (!cjList.length) return;
+  const x = cjList[cjIdx];
+  // Prefer isolated conjunct audio if present, otherwise play a carrier word
+  if (x.audio) {
+    playFile(x.audio.replace(/^conj\//, "conj/"), x.form);
+    return;
+  }
+  const cw = pickCarrierWord(x);
+  if (cw && cw.file) {
+    playFile(cw.file.replace(/^conj\//, "conj/"), cw.word);
+  }
+}
+
+cjModule.addEventListener("change", () => { cjIdx = 0; cjRender(); });
+cjPrev.addEventListener("click", () => { cjIdx--; cjRender(); });
+cjNext.addEventListener("click", () => { cjIdx++; cjRender(); });
+cjPlay.addEventListener("click", cjPlayNow);
+
+// ---- Quiz (Hear→Choose / Read→Choose) ----
+const cqModeRadios = document.querySelectorAll('input[name="cqMode"]');
+const cqPlay = document.getElementById("cqPlay");
+const cqNext = document.getElementById("cqNext");
+const cqReset = document.getElementById("cqReset");
+const cqResult = document.getElementById("cqResult");
+const cqScore = document.getElementById("cqScore");
+const cqPrompt = document.getElementById("cqPrompt");
+const cqChoices = document.getElementById("cqChoices");
+
+let cqMode = "hear";
+let cqCorrect = 0, cqIncorrect = 0, cqStreak = 0, cqBest = 0;
+let cqAnswer = null;
+let cqOptions = [];
+let cqLocked = false;
+
+function cqSetResult(msg, kind="neutral") {
+  cqResult.textContent = msg;
+  cqResult.classList.remove("okPill","badPill");
+  if (kind === "ok") cqResult.classList.add("okPill");
+  if (kind === "bad") cqResult.classList.add("badPill");
+}
+
+function cqUpdateScore() {
+  cqScore.textContent = `✅ ${cqCorrect}  ❌ ${cqIncorrect}  🔥 ${cqStreak} (best ${cqBest})`;
+}
+
+function shuffle(a) {
+  for (let i=a.length-1; i>0; i--) {
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+
+function conjPoolForQuiz() {
+  // match the browse module selector to keep learning focused
+  if (!CONJ_READY) return [];
+  const m = cjModule.value;
+  const pool = (m === "ALL") ? CONJ : CONJ.filter(x => x.module === m);
+  return pool.filter(x => x && x.form);
+}
+
+function cqRenderChoices() {
+  cqChoices.innerHTML = "";
+  cqOptions.forEach(opt => {
+    const b = document.createElement("button");
+    b.className = "letterBtn choiceBtn";
+    b.textContent = opt.form;
+    b.title = opt.hint || "";
+    b.onclick = () => cqChoose(opt, b);
+    cqChoices.appendChild(b);
+  });
+}
+
+function cqNewQuestion() {
+  const pool = conjPoolForQuiz();
+  if (!pool.length) {
+    cqSetResult("No conjuncts available.", "bad");
+    cqPrompt.textContent = "—";
+    cqChoices.innerHTML = "";
+    cqAnswer = null;
+    return;
+  }
+  cqLocked = false;
+  cqSetResult("Choose the correct conjunct", "neutral");
+
+  cqAnswer = pool[Math.floor(Math.random()*pool.length)];
+
+  const distractors = [];
+  const seen = new Set([cqAnswer.id]);
+  while (distractors.length < 3 && seen.size < pool.length) {
+    const d = pool[Math.floor(Math.random()*pool.length)];
+    if (!seen.has(d.id)) {
+      seen.add(d.id);
+      distractors.push(d);
+    }
+  }
+  cqOptions = shuffle([cqAnswer, ...distractors]);
+
+  cqPrompt.textContent = (cqMode === "hear") ? "🔊 Listen" : (cqAnswer.hint || "(hint missing)");
+  cqRenderChoices();
+
+  if (cqMode === "hear") cqPlayNowQuiz();
+}
+
+function cqPlayNowQuiz() {
+  if (!cqAnswer) return;
+
+  // Use isolated conjunct audio if present else carrier word audio
+  if (cqAnswer.audio) {
+    playFile(cqAnswer.audio, cqAnswer.form);
+    return;
+  }
+  const cw = pickCarrierWord(cqAnswer);
+  if (cw && cw.file) playFile(cw.file, cw.word);
+}
+
+function cqChoose(opt, btn) {
+  if (!cqAnswer || cqLocked) return;
+
+  // clear styles
+  cqChoices.querySelectorAll("button").forEach(b => b.classList.remove("correct","wrong"));
+
+  if (opt.id === cqAnswer.id) {
+    btn.classList.add("correct");
+    cqSetResult("✅ Correct", "ok");
+    cqCorrect++; cqStreak++; if (cqStreak > cqBest) cqBest = cqStreak;
+    cqUpdateScore();
+    cqLocked = true;
+    setTimeout(cqNewQuestion, 650);
+  } else {
+    btn.classList.add("wrong");
+    cqSetResult("❌ Try again", "bad");
+    cqIncorrect++; cqStreak = 0;
+    cqUpdateScore();
+    if (cqMode === "hear") setTimeout(cqPlayNowQuiz, 250);
+  }
+}
+
+function cqResetAll() {
+  cqCorrect = 0; cqIncorrect = 0; cqStreak = 0; cqBest = 0;
+  cqUpdateScore();
+  cqSetResult("Ready", "neutral");
+  cqPrompt.textContent = "—";
+  cqChoices.innerHTML = "";
+  cqAnswer = null;
+}
+
+cqModeRadios.forEach(r => r.addEventListener("change", () => {
+  cqMode = document.querySelector('input[name="cqMode"]:checked').value;
+  cqNewQuestion();
+}));
+
+cqPlay.addEventListener("click", cqPlayNowQuiz);
+cqNext.addEventListener("click", cqNewQuestion);
+cqReset.addEventListener("click", cqResetAll);
+
+// Boot
+(async function bootConjuncts(){
+  await loadConjunctsJson();
+  cjIdx = 0;
+  cjRender();
+  cqUpdateScore();
+  cqNewQuestion();
+})();
 </script>
 </body>
 </html>

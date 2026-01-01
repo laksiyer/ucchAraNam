@@ -1741,7 +1741,8 @@ cqReset.addEventListener("click", cqResetAll);
   cjIdx = 0;
   cjRender();
   cqUpdateScore();
-  cqNewQuestion();
+  // Do not auto-start the quiz on load
+  cqSetResult("Ready — click Next (play) to begin.", "neutral");
 })();
 </script>
 </body>

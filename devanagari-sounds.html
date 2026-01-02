@@ -337,6 +337,55 @@ canvas { touch-action: none; }
   font-weight: 400;
   color: #334155;
 }
+/* --- Mobile fix: keep Prompt + Choices from spilling off-screen --- */
+@media (max-width: 600px) {
+
+  /* Word Recognition quiz (gunita words: Hear/Read → Choose) */
+  .card--wordRecog .row { 
+    flex-wrap: wrap;          /* allow wrapping on small screens */
+  }
+  .card--wordRecog #wrPromptBox {
+    width: 100%;
+    max-width: 100%;
+  }
+  .card--wordRecog #wrChoices {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+  .card--wordRecog #wrChoices button {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  /* Conjunct Recognition quiz (Hear/Read → Choose) */
+  .card--conjQuiz .row {
+    flex-wrap: wrap;
+  }
+  .card--conjQuiz #cqPromptBox {
+    width: 100%;
+    max-width: 100%;
+  }
+  .card--conjQuiz #cqChoices {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+  .card--conjQuiz #cqChoices button {
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+/* extra-small phones: 1 column choices */
+@media (max-width: 380px) {
+  .card--wordRecog #wrChoices,
+  .card--conjQuiz  #cqChoices {
+    grid-template-columns: 1fr;
+  }
+}
 
 
  </style>

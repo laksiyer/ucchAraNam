@@ -660,14 +660,6 @@ canvas { touch-action: none; }
       </div>
     </div>
   </div>
-  <!-- Reveal (for canvas comparison) -->
-<div id="cwqRevealWrap" class="revealWrap" style="display:none; margin-top:10px;">
-  <div class="small" style="margin-bottom:6px;"><b>Reveal</b> (for comparison)</div>
-  <div id="cwqRevealWord" class="revealWord">—</div>
-  <div class="small" style="margin-top:6px;">
-    <span><b>Hint:</b> <span id="cwqRevealHint">—</span></span><br>
-    <span><b>Audio:</b> <span id="cwqRevealFile">—</span></span>
-  </div>
 </div>
 
 </section>
@@ -1669,10 +1661,6 @@ const cwqHint = document.getElementById("cwqHint");
 const cwqFile = document.getElementById("cwqFile");
 
 const cwqRevealBtn  = document.getElementById("cwqRevealBtn");
-const cwqRevealWrap = document.getElementById("cwqRevealWrap");
-const cwqRevealWord = document.getElementById("cwqRevealWord");
-const cwqRevealHint = document.getElementById("cwqRevealHint");
-const cwqRevealFile = document.getElementById("cwqRevealFile");
 
 let cwqAnswer = null; // {conj_id, word, hint, level, file, idx}
 let cwqCorrect = 0, cwqIncorrect = 0, cwqStreak = 0, cwqBest = 0;
@@ -1758,26 +1746,17 @@ function cwqNewQuestion() {
     return;
   }
   cwqAnswer = cwqPickOne(pool);
-  cwqHideReveal();
   cwqTyped.value = "";
   cwqExpected.textContent = ""; // hide
   cwqSetResult("Write the word you hear (canvas or type).", "neutral");
   cwqRenderMeta();
   cwqPlayAudio();
 }
-function cwqHideReveal(){
-  cwqRevealWrap.style.display = "none";
-  cwqRevealWord.textContent = "—";
-  cwqRevealHint.textContent = "—";
-  cwqRevealFile.textContent = "—";
-}
 
-function cwqShowReveal(){
+function cwqRevealExpected() {
   if (!cwqAnswer) return;
-  cwqRevealWrap.style.display = "block";
-  cwqRevealWord.textContent = cwqAnswer.word || "—";
-  cwqRevealHint.textContent = cwqAnswer.hint || "—";
-  cwqRevealFile.textContent = cwqAnswer.file || "—";
+  cwqExpected.textContent = cwqAnswer.word; // show in the existing Expected box
+  cwqSetResult("Revealed — compare with your writing.", "neutral");
 }
 
 // Normalize typed text for grading
@@ -1798,7 +1777,6 @@ function cwqCheckAnswer() {
 
   // Always show expected after checking
   cwqExpected.textContent = cwqAnswer.word;
-  cwqShowReveal();
   if (!typed) {
     cwqSetResult("Type the word to be graded (canvas is visual only).", "bad");
     return;
@@ -1838,6 +1816,7 @@ cwqModule.addEventListener("change", cwqNewQuestion);
 cwqRevealBtn.addEventListener("click", cwqShowReveal);
 cwqReplay.addEventListener("click", cwqPlayAudio);
 cwqClear.addEventListener("click", cwqClearCanvas);
+cwqRevealBtn.addEventListener("click", cwqRevealExpected);
 
 // -----------------------------
 // Canvas drawing (simple, finger/mouse friendly)

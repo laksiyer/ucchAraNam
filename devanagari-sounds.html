@@ -645,21 +645,7 @@ canvas { touch-action: none; }
   </div>
 </div>
 
-    <div style="flex:1; min-width:260px;">
-      <div class="small" style="margin-bottom:6px;"><b>Typing box</b> (graded)</div>
-      <input id="cwqTyped" class="textboxDeva" type="text"
-  placeholder="Type the word in Devanāgarī…" autocomplete="off" />
-      <div class="small" style="margin-top:10px;">
-        <b>Expected:</b> <span id="cwqExpected" style="font-size:26px;"></span>
-      </div>
-      <div class="small" style="margin-top:6px;">
-        <b>Hint:</b> <span id="cwqHint"></span>
-      </div>
-      <div class="small" style="margin-top:6px;">
-        <b>Audio file:</b> <span id="cwqFile"></span>
-      </div>
     </div>
-  </div>
 </div>
 
 </section>
@@ -1809,13 +1795,14 @@ function cwqResetAll() {
 }
 
 cwqNext.addEventListener("click", cwqNewQuestion);
+cwqReplay.addEventListener("click", cwqPlayAudio);
 cwqCheck.addEventListener("click", cwqCheckAnswer);
 cwqReset.addEventListener("click", cwqResetAll);
+cwqClear.addEventListener("click", cwqClearCanvas);
+
 cwqLevel.addEventListener("change", cwqNewQuestion);
 cwqModule.addEventListener("change", cwqNewQuestion);
-cwqRevealBtn.addEventListener("click", cwqShowReveal);
-cwqReplay.addEventListener("click", cwqPlayAudio);
-cwqClear.addEventListener("click", cwqClearCanvas);
+
 cwqRevealBtn.addEventListener("click", cwqRevealExpected);
 
 // -----------------------------

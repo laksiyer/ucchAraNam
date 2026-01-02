@@ -1654,7 +1654,6 @@ async function loadConjunctWordsJson() {
 const cwqLoad = document.getElementById("cwqLoad");
 const cwqModule = document.getElementById("cwqModule");
 const cwqLevel = document.getElementById("cwqLevel");
-const cwqPlay = document.getElementById("cwqPlay");
 const cwqNext = document.getElementById("cwqNext");
 const cwqReplay = document.getElementById("cwqReplay");
 const cwqCheck = document.getElementById("cwqCheck");
@@ -1837,6 +1836,8 @@ cwqReset.addEventListener("click", cwqResetAll);
 cwqLevel.addEventListener("change", cwqNewQuestion);
 cwqModule.addEventListener("change", cwqNewQuestion);
 cwqRevealBtn.addEventListener("click", cwqShowReveal);
+cwqReplay.addEventListener("click", cwqPlayAudio);
+cwqClear.addEventListener("click", cwqClearCanvas);
 
 // -----------------------------
 // Canvas drawing (simple, finger/mouse friendly)
@@ -1873,7 +1874,7 @@ cwqClearCanvas();
 
   if (CONJ_WORDS_READY) {
     cwqLoad.textContent = `Conjunct words loaded: ${CONJ_WORDS.length}`;
-    cwqSetResult("Ready — click Play or Next (play).", "neutral");
+    cwqSetResult("Ready — click Next (play) to begin.", "neutral");
   } else {
     cwqLoad.textContent = "Conjunct words not loaded (check conj/conjunct_words.json)";
     cwqSetResult("Could not load conjunct words.", "bad");

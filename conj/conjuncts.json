@@ -1108,5 +1108,399 @@
         "file": "conj/words/cj045_02.mp3"
       }
     ]
+  },
+  {
+    "id": "cj046",
+    "module": "F",
+    "form": "क्य",
+    "hint": "kya",
+    "formation": [
+      "क्",
+      "य"
+    ],
+    "audio": null,
+    "words": [
+      {
+        "word": "आधिक्यम्",
+        "hint": "ādhikyam",
+        "level": 2,
+        "file": "conj/words/cj046_01.mp3"
+      },
+      {
+        "word": "वाक्यम्",
+        "hint": "vākyam",
+        "level": 2,
+        "file": "conj/words/cj046_02.mp3"
+      },
+      {
+        "word": "ऐक्यम्",
+        "hint": "aikyam",
+        "level": 3,
+        "file": "conj/words/cj046_03.mp3"
+      }
+    ]
+  },
+  {
+    "id": "cj047",
+    "module": "F",
+    "form": "ग्य",
+    "hint": "gya",
+    "formation": [
+      "ग्",
+      "य"
+    ],
+    "audio": null,
+    "words": [
+      {
+        "word": "योग्यः",
+        "hint": "yogyaḥ",
+        "level": 2,
+        "file": "conj/words/cj047_01.mp3"
+      },
+      {
+        "word": "भाग्यः",
+        "hint": "bhāgyaḥ",
+        "level": 2,
+        "file": "conj/words/cj047_02.mp3"
+      },
+      {
+        "word": "आरोग्यम्",
+        "hint": "ārogyam",
+        "level": 3,
+        "file": "conj/words/cj047_03.mp3"
+      }
+    ]
+  },
+  {
+    "id": "cj048",
+    "module": "F",
+    "form": "च्य",
+    "hint": "cya",
+    "formation": [
+      "च्",
+      "य"
+    ],
+    "audio": null,
+    "words": [
+      {
+        "word": "वाच्यः",
+        "hint": "vācyaḥ",
+        "level": 3,
+        "file": "conj/words/cj048_01.mp3"
+      },
+      {
+        "word": "उच्यते",
+        "hint": "ucyate",
+        "level": 3,
+        "file": "conj/words/cj048_02.mp3"
+      },
+      {
+        "word": "च्युतिः",
+        "hint": "cyutiḥ",
+        "level": 4,
+        "file": "conj/words/cj048_03.mp3"
+      }
+    ]
+  },
+  {
+    "id": "cj049",
+    "module": "F",
+    "form": "ज्य",
+    "hint": "jya",
+    "formation": [
+      "ज्",
+      "य"
+    ],
+    "audio": null,
+    "words": [
+      {
+        "word": "राज्यम्",
+        "hint": "rājyam",
+        "level": 2,
+        "file": "conj/words/cj049_01.mp3"
+      },
+      {
+        "word": "आज्यम्",
+        "hint": "ājyam",
+        "level": 3,
+        "file": "conj/words/cj049_02.mp3"
+      },
+      {
+        "word": "ज्या",
+        "hint": "jyā",
+        "level": 2,
+        "file": "conj/words/cj049_03.mp3"
+      }
+    ]
+  },
+  {
+    "id": "cj050",
+    "module": "F",
+    "form": "त्य",
+    "hint": "tya",
+    "formation": [
+      "त्",
+      "य"
+    ],
+    "audio": null,
+    "words": [
+      {
+        "word": "सत्यम्",
+        "hint": "satyam",
+        "level": 1,
+        "file": "conj/words/cj050_01.mp3"
+      },
+      {
+        "word": "अपत्यम्",
+        "hint": "apatyam",
+        "level": 2,
+        "file": "conj/words/cj050_02.mp3"
+      },
+      {
+        "word": "अत्यन्तम्",
+        "hint": "atyantam",
+        "level": 3,
+        "file": "conj/words/cj050_03.mp3"
+      }
+    ]
+  },
+  {
+    "id": "cj051",
+    "module": "F",
+    "form": "न्य",
+    "hint": "nya",
+    "formation": [
+      "न्",
+      "य"
+    ],
+    "audio": null,
+    "words": [
+      {
+        "word": "अन्यः",
+        "hint": "anyaḥ",
+        "level": 1,
+        "file": "conj/words/cj051_01.mp3"
+      },
+      {
+        "word": "धन्या",
+        "hint": "dhanyā",
+        "level": 1,
+        "file": "conj/words/cj051_02.mp3"
+      },
+      {
+        "word": "न्यायः",
+        "hint": "nyāyaḥ",
+        "level": 2,
+        "file": "conj/words/cj051_03.mp3"
+      }
+    ]
+  },
+  {
+    "id": "cj052",
+    "module": "F",
+    "form": "क्व",
+    "hint": "kva",
+    "formation": [
+      "क्",
+      "व"
+    ],
+    "audio": null,
+    "words": [
+      {
+        "word": "क्वचित्",
+        "hint": "kvacit",
+        "level": 2,
+        "file": "conj/words/cj052_01.mp3"
+      },
+      {
+        "word": "पक्वम्",
+        "hint": "pakvam",
+        "level": 3,
+        "file": "conj/words/cj052_02.mp3"
+      },
+      {
+        "word": "क्वथितम्",
+        "hint": "kvathitam",
+        "level": 3,
+        "file": "conj/words/cj052_03.mp3"
+      }
+    ]
+  },
+  {
+    "id": "cj053",
+    "module": "F",
+    "form": "स्व",
+    "hint": "sva",
+    "formation": [
+      "स्",
+      "व"
+    ],
+    "audio": null,
+    "words": [
+      {
+        "word": "आस्वादनम्",
+        "hint": "āsvādanam",
+        "level": 2,
+        "file": "conj/words/cj053_01.mp3"
+      },
+      {
+        "word": "स्व",
+        "hint": "sva",
+        "level": 2,
+        "file": "conj/words/cj053_02.mp3"
+      },
+      {
+        "word": "स्वामी",
+        "hint": "svāmī",
+        "level": 3,
+        "file": "conj/words/cj053_03.mp3"
+      }
+    ]
+  },
+  {
+    "id": "cj054",
+    "module": "F",
+    "form": "व्य",
+    "hint": "vya",
+    "formation": [
+      "व्",
+      "य"
+    ],
+    "audio": null,
+    "words": [
+      {
+        "word": "व्यायामः",
+        "hint": "vyāyāmaḥ",
+        "level": 2,
+        "file": "conj/words/cj054_01.mp3"
+      },
+      {
+        "word": "व्यवहारः",
+        "hint": "vyavahāraḥ",
+        "level": 4,
+        "file": "conj/words/cj054_02.mp3"
+      },
+      {
+        "word": "अव्ययम्",
+        "hint": "avyayam",
+        "level": 3,
+        "file": "conj/words/cj054_03.mp3"
+      }
+    ]
+  },
+  {
+    "id": "cj055",
+    "module": "F",
+    "form": "ल्य",
+    "hint": "lya",
+    "formation": [
+      "ल्",
+      "य"
+    ],
+    "audio": null,
+    "words": [
+      {
+        "word": "शल्यः",
+        "hint": "śalyaḥ",
+        "level": 4,
+        "file": "conj/words/cj055_01.mp3"
+      },
+      {
+        "word": "आकल्यम्",
+        "hint": "ākalyam",
+        "level": 2,
+        "file": "conj/words/cj055_02.mp3"
+      },
+      {
+        "word": "ल्यप्",
+        "hint": "lyap",
+        "level": 3,
+        "file": "conj/words/cj055_03.mp3"
+      }
+    ]
+  },
+  {
+    "id": "cj056",
+    "module": "G",
+    "form": "ङ्क",
+    "hint": "ṅka",
+    "formation": [
+      "ङ्",
+      "क"
+    ],
+    "audio": null,
+    "words": []
+  },
+  {
+    "id": "cj057",
+    "module": "G",
+    "form": "ङ्ग",
+    "hint": "ṅga",
+    "formation": [
+      "ङ्",
+      "ग"
+    ],
+    "audio": null,
+    "words": []
+  },
+  {
+    "id": "cj058",
+    "module": "G",
+    "form": "ञ्च",
+    "hint": "ñca",
+    "formation": [
+      "ञ्",
+      "च"
+    ],
+    "audio": null,
+    "words": []
+  },
+  {
+    "id": "cj059",
+    "module": "G",
+    "form": "ञ्ज",
+    "hint": "ñja",
+    "formation": [
+      "ञ्",
+      "ज"
+    ],
+    "audio": null,
+    "words": []
+  },
+  {
+    "id": "cj060",
+    "module": "G",
+    "form": "ण्ट",
+    "hint": "ṇṭa",
+    "formation": [
+      "ण्",
+      "ट"
+    ],
+    "audio": null,
+    "words": []
+  },
+  {
+    "id": "cj061",
+    "module": "G",
+    "form": "ण्ड",
+    "hint": "ṇḍa",
+    "formation": [
+      "ण्",
+      "ड"
+    ],
+    "audio": null,
+    "words": []
+  },
+  {
+    "id": "cj062",
+    "module": "G",
+    "form": "म्ब",
+    "hint": "mba",
+    "formation": [
+      "म्",
+      "ब"
+    ],
+    "audio": null,
+    "words": []
   }
 ]

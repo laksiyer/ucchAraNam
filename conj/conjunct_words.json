@@ -742,5 +742,245 @@
     "level": 3,
     "file": "conj/words/cj045_02.mp3",
     "idx": 2
+  },
+  {
+    "conj_id": "cj046",
+    "word": "आधिक्यम्",
+    "hint": "ādhikyam",
+    "level": 2,
+    "file": "conj/words/cj046_01.mp3",
+    "idx": 1
+  },
+  {
+    "conj_id": "cj046",
+    "word": "वाक्यम्",
+    "hint": "vākyam",
+    "level": 2,
+    "file": "conj/words/cj046_02.mp3",
+    "idx": 2
+  },
+  {
+    "conj_id": "cj046",
+    "word": "ऐक्यम्",
+    "hint": "aikyam",
+    "level": 3,
+    "file": "conj/words/cj046_03.mp3",
+    "idx": 3
+  },
+  {
+    "conj_id": "cj047",
+    "word": "योग्यः",
+    "hint": "yogyaḥ",
+    "level": 2,
+    "file": "conj/words/cj047_01.mp3",
+    "idx": 1
+  },
+  {
+    "conj_id": "cj047",
+    "word": "भाग्यः",
+    "hint": "bhāgyaḥ",
+    "level": 2,
+    "file": "conj/words/cj047_02.mp3",
+    "idx": 2
+  },
+  {
+    "conj_id": "cj047",
+    "word": "आरोग्यम्",
+    "hint": "ārogyam",
+    "level": 3,
+    "file": "conj/words/cj047_03.mp3",
+    "idx": 3
+  },
+  {
+    "conj_id": "cj048",
+    "word": "वाच्यः",
+    "hint": "vācyaḥ",
+    "level": 3,
+    "file": "conj/words/cj048_01.mp3",
+    "idx": 1
+  },
+  {
+    "conj_id": "cj048",
+    "word": "उच्यते",
+    "hint": "ucyate",
+    "level": 3,
+    "file": "conj/words/cj048_02.mp3",
+    "idx": 2
+  },
+  {
+    "conj_id": "cj048",
+    "word": "च्युतिः",
+    "hint": "cyutiḥ",
+    "level": 4,
+    "file": "conj/words/cj048_03.mp3",
+    "idx": 3
+  },
+  {
+    "conj_id": "cj049",
+    "word": "राज्यम्",
+    "hint": "rājyam",
+    "level": 2,
+    "file": "conj/words/cj049_01.mp3",
+    "idx": 1
+  },
+  {
+    "conj_id": "cj049",
+    "word": "आज्यम्",
+    "hint": "ājyam",
+    "level": 3,
+    "file": "conj/words/cj049_02.mp3",
+    "idx": 2
+  },
+  {
+    "conj_id": "cj049",
+    "word": "ज्या",
+    "hint": "jyā",
+    "level": 2,
+    "file": "conj/words/cj049_03.mp3",
+    "idx": 3
+  },
+  {
+    "conj_id": "cj050",
+    "word": "सत्यम्",
+    "hint": "satyam",
+    "level": 1,
+    "file": "conj/words/cj050_01.mp3",
+    "idx": 1
+  },
+  {
+    "conj_id": "cj050",
+    "word": "अपत्यम्",
+    "hint": "apatyam",
+    "level": 2,
+    "file": "conj/words/cj050_02.mp3",
+    "idx": 2
+  },
+  {
+    "conj_id": "cj050",
+    "word": "अत्यन्तम्",
+    "hint": "atyantam",
+    "level": 3,
+    "file": "conj/words/cj050_03.mp3",
+    "idx": 3
+  },
+  {
+    "conj_id": "cj051",
+    "word": "अन्यः",
+    "hint": "anyaḥ",
+    "level": 1,
+    "file": "conj/words/cj051_01.mp3",
+    "idx": 1
+  },
+  {
+    "conj_id": "cj051",
+    "word": "धन्या",
+    "hint": "dhanyā",
+    "level": 1,
+    "file": "conj/words/cj051_02.mp3",
+    "idx": 2
+  },
+  {
+    "conj_id": "cj051",
+    "word": "न्यायः",
+    "hint": "nyāyaḥ",
+    "level": 2,
+    "file": "conj/words/cj051_03.mp3",
+    "idx": 3
+  },
+  {
+    "conj_id": "cj052",
+    "word": "क्वचित्",
+    "hint": "kvacit",
+    "level": 2,
+    "file": "conj/words/cj052_01.mp3",
+    "idx": 1
+  },
+  {
+    "conj_id": "cj052",
+    "word": "पक्वम्",
+    "hint": "pakvam",
+    "level": 3,
+    "file": "conj/words/cj052_02.mp3",
+    "idx": 2
+  },
+  {
+    "conj_id": "cj052",
+    "word": "क्वथितम्",
+    "hint": "kvathitam",
+    "level": 3,
+    "file": "conj/words/cj052_03.mp3",
+    "idx": 3
+  },
+  {
+    "conj_id": "cj053",
+    "word": "आस्वादनम्",
+    "hint": "āsvādanam",
+    "level": 2,
+    "file": "conj/words/cj053_01.mp3",
+    "idx": 1
+  },
+  {
+    "conj_id": "cj053",
+    "word": "स्व",
+    "hint": "sva",
+    "level": 2,
+    "file": "conj/words/cj053_02.mp3",
+    "idx": 2
+  },
+  {
+    "conj_id": "cj053",
+    "word": "स्वामी",
+    "hint": "svāmī",
+    "level": 3,
+    "file": "conj/words/cj053_03.mp3",
+    "idx": 3
+  },
+  {
+    "conj_id": "cj054",
+    "word": "व्यायामः",
+    "hint": "vyāyāmaḥ",
+    "level": 2,
+    "file": "conj/words/cj054_01.mp3",
+    "idx": 1
+  },
+  {
+    "conj_id": "cj054",
+    "word": "व्यवहारः",
+    "hint": "vyavahāraḥ",
+    "level": 4,
+    "file": "conj/words/cj054_02.mp3",
+    "idx": 2
+  },
+  {
+    "conj_id": "cj054",
+    "word": "अव्ययम्",
+    "hint": "avyayam",
+    "level": 3,
+    "file": "conj/words/cj054_03.mp3",
+    "idx": 3
+  },
+  {
+    "conj_id": "cj055",
+    "word": "शल्यः",
+    "hint": "śalyaḥ",
+    "level": 4,
+    "file": "conj/words/cj055_01.mp3",
+    "idx": 1
+  },
+  {
+    "conj_id": "cj055",
+    "word": "आकल्यम्",
+    "hint": "ākalyam",
+    "level": 2,
+    "file": "conj/words/cj055_02.mp3",
+    "idx": 2
+  },
+  {
+    "conj_id": "cj055",
+    "word": "ल्यप्",
+    "hint": "lyap",
+    "level": 3,
+    "file": "conj/words/cj055_03.mp3",
+    "idx": 3
   }
 ]

@@ -174,6 +174,119 @@ canvas { touch-action: none; }
   border: 2px solid #c9d6ff;
   background: #f6f8ff;
 }
+/* --- Section theming (subtle, color-blind friendly) --- */
+.card {
+  border: 1px solid #e6e6e6;
+  border-radius: 16px;
+  background: #fff;
+  padding: 14px;
+  box-shadow: 0 1px 2px rgba(0,0,0,.05);
+  margin: 14px 0;
+}
+
+/* Accent bar on the left */
+.cardAccent {
+  position: relative;
+  overflow: hidden;
+}
+.cardAccent::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 10px;
+  background: #ddd; /* overridden per section */
+  opacity: 0.9;
+}
+
+/* Variants */
+.card--letters { background: #fbfdff; border-color: #dbeafe; }
+.card--letters.cardAccent::before { background: #2563eb; } /* blue */
+
+.card--gunita { background: #fffdf6; border-color: #fde68a; }
+.card--gunita.cardAccent::before { background: #d97706; } /* amber */
+
+.card--gunitaQuiz { background: #f7fffb; border-color: #bbf7d0; }
+.card--gunitaQuiz.cardAccent::before { background: #16a34a; } /* green */
+
+.card--wordQuiz { background: #fbf7ff; border-color: #e9d5ff; }
+.card--wordQuiz.cardAccent::before { background: #7c3aed; } /* purple */
+
+.card--wordRecog { background: #f7fbff; border-color: #bae6fd; }
+.card--wordRecog.cardAccent::before { background: #0284c7; } /* cyan-blue */
+
+.card--conj { background: #fff7f8; border-color: #fecaca; }
+.card--conj.cardAccent::before { background: #e11d48; } /* rose/red */
+
+.card--conjQuiz { background: #f8fafc; border-color: #cbd5e1; }
+.card--conjQuiz.cardAccent::before { background: #334155; } /* slate */
+
+/* --- TOC styling --- */
+.tocCard {
+  background: #f8fafc;              /* very light slate */
+  border: 1px solid #cbd5e1;        /* slate border */
+  border-radius: 16px;
+  padding: 14px 16px;
+  margin: 16px 0;
+  box-shadow: 0 1px 2px rgba(0,0,0,.05);
+  position: relative;
+}
+
+/* Accent bar on the left (matches conjunct quiz slate) */
+.tocCard::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 10px;
+  background: #334155;              /* slate accent */
+  border-radius: 16px 0 0 16px;
+}
+
+/* TOC title */
+.tocCard h3 {
+  margin: 0 0 10px 0;
+  padding-left: 10px;
+  color: #334155;
+  font-size: 1.1rem;
+}
+
+/* Lists */
+.tocCard ul {
+  list-style: none;
+  padding-left: 18px;
+  margin: 0;
+}
+
+.tocCard li {
+  margin: 6px 0;
+}
+
+/* Nested lists (Gunita, Conjunct subsections) */
+.tocCard ul ul {
+  margin-top: 6px;
+  padding-left: 16px;
+  border-left: 2px solid #e2e8f0;
+}
+
+/* Links */
+.tocCard a {
+  text-decoration: none;
+  color: #0f172a;                   /* slate-900 */
+  font-weight: 500;
+}
+
+.tocCard a:hover {
+  color: #2563eb;                   /* blue hover */
+  text-decoration: underline;
+}
+
+/* Subsection links slightly lighter */
+.tocCard ul ul a {
+  font-weight: 400;
+  color: #334155;
+}
+
 
  </style>
 </head>
@@ -181,7 +294,6 @@ canvas { touch-action: none; }
 <body id="top">
   <h1>Devanagari Pronunciation Tool</h1>
 
-  <!-- TOC -->
 <!-- TOC -->
 <div class="tocCard">
   <h3>Contents</h3>
@@ -303,7 +415,7 @@ canvas { touch-action: none; }
 
   <!-- GUNITA WRITING QUIZ (akshara) -->
   <h2 id="sec-gunita-quiz">गुणिताक्षर-लेखन-प्रश्नोत्तरी (listen → write)</h2>
-  <div class="card">
+  <div class="card cardAccent card--gunitaQuiz">
     <p class="small" style="margin: 0 0 10px;">
       <b>How to use:</b> Click <b>Next (play)</b> to hear a guṇitākṣara. Write it on the canvas <i>or</i> type it in the box.
       Click <b>Check</b> (typing is graded). Use <b>Replay</b> to hear again, <b>Clear</b> to erase, and <b>Reveal</b> to see the answer.
@@ -354,7 +466,7 @@ canvas { touch-action: none; }
 
   <!-- WORD QUIZ (words.json) -->
   <h2 id="sec-word-quiz">गुणित-शब्द-लेखन-प्रश्नोत्तरी (listen → write)</h2>
-  <div class="card">
+   <div class="card cardAccent card--wordQuiz">
     <p class="small" style="margin: 0 0 10px;">
       <b>How to use:</b> Click <b>Next (play)</b> to hear a word. Write it on the canvas <i>or</i> type it in the box.
       Click <b>Check</b> (typing is graded). Use <b>Replay</b> to hear again, <b>Clear</b> to erase, and <b>Reveal</b> to see the answer.
@@ -415,7 +527,7 @@ canvas { touch-action: none; }
 <div class="backTop"><a href="#top">↑ Back to top</a></div>
 <h2 id="sec-word-recog">गुणित-शब्द-श्रवण-पठनावगमनम् guṇita-śabda-śravaṇa-paṭhanāvagamanam </h2>
 
-<div class="card">
+<div class="card cardAccent card--wordRecog">
   <p class="small" style="margin: 0 0 10px;">
     <b>How to use:</b> Choose a mode. In <b>Hear → Choose</b>, click <b>Play</b> then pick the word you heard.
     In <b>Read → Choose</b>, read the prompt and pick the matching word. Your streak and score update automatically.
@@ -463,9 +575,10 @@ canvas { touch-action: none; }
   </div>
 </div>
 
+
 <div class="backTop"><a href="#top">↑ Back to top</a></div>
 <h2 id="sec-conj">संयुक्ताक्षराणि / saṃyuktākṣarāṇi — Conjunct consonants</h2>
-<div class="card">
+<div class="card cardAccent card--gunita">
   <p class="small" style="margin:0 0 8px;">
     <b>How to use:</b><br>
     Select a <b>Module</b> to choose a conjunct group.<br>
@@ -532,7 +645,7 @@ canvas { touch-action: none; }
   </div>
 </div>
 
-<div class="card">
+<div class="card cardAccent card--conj">
   <h3 style="margin:0 0 8px;">Conjunct Recognition Quiz</h3>
   <p class="small" style="margin:0 0 10px;">
     Choose a mode. In <b>Hear → Choose</b>, click <b>Play</b> and pick the correct conjunct.
@@ -567,7 +680,8 @@ canvas { touch-action: none; }
 
 <div class="backTop"><a href="#top">↑ Back to top</a></div>
 <!-- Conjunct Word Writing Quiz -->
-<section id="sec-conj-word-quiz" class="card" style="margin-top:18px;">
+
+<section id="sec-conj-word-quiz" class="card cardAccent card--conjQuiz" style="margin-top:18px;">
   <h2 style="margin:0 0 6px;">संयुक्ताक्षर-शब्द-लेखन-प्रश्नोत्तरी (Conjunct Word Writing Quiz)</h2>
 
   <p class="small" style="margin:0 0 10px;">

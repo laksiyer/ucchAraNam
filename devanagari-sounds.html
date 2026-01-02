@@ -337,50 +337,46 @@ canvas { touch-action: none; }
   font-weight: 400;
   color: #334155;
 }
-/* ---------- Mobile: force quiz layouts to wrap nicely ---------- */
+/* ========= Mobile fix: word-choice buttons must NOT use narrow "letter" pills ========= */
 @media (max-width: 700px) {
 
-  /* Any row inside these cards should be allowed to wrap */
-  .card--wordRecog .row,
-  .card--conjQuiz .row {
-    flex-wrap: wrap !important;
-  }
-
-  /* Prevent "fixed-width" children from pushing off-screen */
-  .card--wordRecog .row > *,
-  .card--conjQuiz  .row > * {
-    min-width: 0 !important;
-    max-width: 100% !important;
-  }
-
-  /* Word Recognition: make choices wrap */
-  #wrChoices {
+  /* Make the CHOICES area wrap cleanly */
+  #wrChoices, #cqChoices {
     display: flex !important;
     flex-wrap: wrap !important;
-    width: 100% !important;
     gap: 10px !important;
+    width: 100% !important;
   }
+
+  /* Word-choice buttons: override letter-pill sizing */
   #wrChoices .choiceBtn,
-  #wrChoices button {
-    flex: 1 1 calc(50% - 10px) !important;  /* 2 per row */
-    max-width: calc(50% - 10px) !important;
-  }
-
-  /* Conjunct Recognition: make choices wrap */
-  #cqChoices {
-    display: flex !important;
-    flex-wrap: wrap !important;
-    width: 100% !important;
-    gap: 10px !important;
-  }
+  #wrChoices button,
   #cqChoices .choiceBtn,
   #cqChoices button {
     flex: 1 1 calc(50% - 10px) !important;
     max-width: calc(50% - 10px) !important;
+
+    /* IMPORTANT overrides (prevents scrunching/clipping) */
+    width: auto !important;
+    min-width: 0 !important;
+    height: auto !important;
+    min-height: 56px !important;
+
+    padding: 10px 12px !important;
+    border-radius: 16px !important;
+
+    /* Let words fit */
+    white-space: normal !important;     /* allow wrapping */
+    overflow: visible !important;        /* don't clip glyphs */
+    text-overflow: clip !important;
+    line-height: 1.25 !important;
+
+    /* Devanagari readability */
+    font-size: 26px !important;
   }
 }
 
-/* Extra-small phones: 1 per row */
+/* Extra small phones: 1 per row */
 @media (max-width: 380px) {
   #wrChoices .choiceBtn, #wrChoices button,
   #cqChoices .choiceBtn, #cqChoices button {

@@ -164,6 +164,17 @@
   display: inline-block;
 }
 canvas { touch-action: none; }
+.revealWrap { border-top: 1px solid #eee; padding-top: 10px; }
+.revealWord {
+  font-family: "Noto Sans Devanagari", system-ui, Arial, sans-serif;
+  font-size: 56px;
+  line-height: 1.15;
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 2px solid #c9d6ff;
+  background: #f6f8ff;
+}
+
  </style>
 </head>
 
@@ -586,6 +597,7 @@ canvas { touch-action: none; }
 <button id="cwqPlay" class="ctrlBtn" type="button">Play</button>
 <button id="cwqNext" class="ctrlBtn" type="button">Next (play)</button>
 <button id="cwqCheck" class="ctrlBtn" type="button">Check</button>
+<button id="cwqRevealBtn" class="letterBtn">Reveal</button>
 <button id="cwqReset" class="ctrlBtn" type="button">Reset</button>
 <button id="cwqClear" class="ctrlBtn" type="button">Clear canvas</button>
 
@@ -617,6 +629,16 @@ canvas { touch-action: none; }
       </div>
     </div>
   </div>
+  <!-- Reveal (for canvas comparison) -->
+<div id="cwqRevealWrap" class="revealWrap" style="display:none; margin-top:10px;">
+  <div class="small" style="margin-bottom:6px;"><b>Reveal</b> (for comparison)</div>
+  <div id="cwqRevealWord" class="revealWord">—</div>
+  <div class="small" style="margin-top:6px;">
+    <span><b>Hint:</b> <span id="cwqRevealHint">—</span></span><br>
+    <span><b>Audio:</b> <span id="cwqRevealFile">—</span></span>
+  </div>
+</div>
+
 </section>
 <div class="backTop"><a href="#top">↑ Back to top</a></div>
   <p class="small">Developed by Samskritabharati USA</p>
@@ -1615,6 +1637,12 @@ const cwqExpected = document.getElementById("cwqExpected");
 const cwqHint = document.getElementById("cwqHint");
 const cwqFile = document.getElementById("cwqFile");
 
+const cwqRevealBtn  = document.getElementById("cwqRevealBtn");
+const cwqRevealWrap = document.getElementById("cwqRevealWrap");
+const cwqRevealWord = document.getElementById("cwqRevealWord");
+const cwqRevealHint = document.getElementById("cwqRevealHint");
+const cwqRevealFile = document.getElementById("cwqRevealFile");
+
 let cwqAnswer = null; // {conj_id, word, hint, level, file, idx}
 let cwqCorrect = 0, cwqIncorrect = 0, cwqStreak = 0, cwqBest = 0;
 
@@ -1705,6 +1733,21 @@ function cwqNewQuestion() {
   cwqRenderMeta();
   cwqPlayAudio();
 }
+function cwqHideReveal(){
+  cwqRevealWrap.style.display = "none";
+  cwqRevealWord.textContent = "—";
+  cwqRevealHint.textContent = "—";
+  cwqRevealFile.textContent = "—";
+}
+
+function cwqShowReveal(){
+  if (!cwqCurrent) return; // cwqCurrent should be your current word object
+  cwqRevealWrap.style.display = "block";
+  cwqRevealWord.textContent = cwqCurrent.word || "—";
+  cwqRevealHint.textContent = cwqCurrent.hint || "—";
+  cwqRevealFile.textContent = cwqCurrent.file || "—";
+}
+
 
 // Normalize typed text for grading
 function cwqNorm(s) {

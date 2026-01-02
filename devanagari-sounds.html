@@ -25,6 +25,7 @@
     .grid5 { display:grid; grid-template-columns: repeat(5, minmax(54px, 1fr)); gap: 10px; max-width: 520px; }
     .line { display:flex; gap:10px; flex-wrap: wrap; max-width: 900px; }
 
+
 /* Ensure cards never clip content on small screens */
 .card {
   box-sizing: border-box;
@@ -44,6 +45,35 @@
 }
 .cardHelp {
   margin: 0 0 10px;
+}
+/* On phones: make quiz choices wrap as a grid */
+@media (max-width: 600px) {
+
+  /* Conjunct Recognition Quiz */
+  #cqChoices {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  /* Word Recognition (Hear/Read → Choose) */
+  #wrChoices {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  /* Fit buttons properly */
+  #cqChoices button,
+  #wrChoices button {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  /* Prevent prompt boxes from causing overflow */
+  #wrPromptBox, #cqPromptBox {
+    max-width: 100%;
+  }
 }
 
     .letterBtn{

@@ -1723,10 +1723,11 @@ function cwqNewQuestion() {
   if (!pool.length) {
     cwqSetResult("No conjunct words found for this filter.", "bad");
     cwqAnswer = null;
-    cwqRenderMeta();
+	cwqRenderMeta();
     return;
   }
   cwqAnswer = cwqPickOne(pool);
+  cwqHideReveal();
   cwqTyped.value = "";
   cwqExpected.textContent = ""; // hide
   cwqSetResult("Write the word you hear (canvas or type).", "neutral");
@@ -1741,13 +1742,12 @@ function cwqHideReveal(){
 }
 
 function cwqShowReveal(){
-  if (!cwqCurrent) return; // cwqCurrent should be your current word object
+  if (!cwqAnswer) return;
   cwqRevealWrap.style.display = "block";
-  cwqRevealWord.textContent = cwqCurrent.word || "—";
-  cwqRevealHint.textContent = cwqCurrent.hint || "—";
-  cwqRevealFile.textContent = cwqCurrent.file || "—";
+  cwqRevealWord.textContent = cwqAnswer.word || "—";
+  cwqRevealHint.textContent = cwqAnswer.hint || "—";
+  cwqRevealFile.textContent = cwqAnswer.file || "—";
 }
-
 
 // Normalize typed text for grading
 function cwqNorm(s) {
@@ -1767,7 +1767,7 @@ function cwqCheckAnswer() {
 
   // Always show expected after checking
   cwqExpected.textContent = cwqAnswer.word;
-
+  cwqShowReveal();
   if (!typed) {
     cwqSetResult("Type the word to be graded (canvas is visual only).", "bad");
     return;
@@ -1810,6 +1810,7 @@ cwqCheck.addEventListener("click", cwqCheckAnswer);
 cwqReset.addEventListener("click", cwqResetAll);
 cwqLevel.addEventListener("change", cwqNewQuestion);
 cwqModule.addEventListener("change", cwqNewQuestion);
+cwqRevealBtn.addEventListener("click", cwqShowReveal);
 
 // -----------------------------
 // Canvas drawing (simple, finger/mouse friendly)

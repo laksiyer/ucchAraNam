@@ -337,53 +337,55 @@ canvas { touch-action: none; }
   font-weight: 400;
   color: #334155;
 }
-/* --- Mobile fix: keep Prompt + Choices from spilling off-screen --- */
-@media (max-width: 600px) {
+/* ---------- Mobile: force quiz layouts to wrap nicely ---------- */
+@media (max-width: 700px) {
 
-  /* Word Recognition quiz (gunita words: Hear/Read → Choose) */
-  .card--wordRecog .row { 
-    flex-wrap: wrap;          /* allow wrapping on small screens */
-  }
-  .card--wordRecog #wrPromptBox {
-    width: 100%;
-    max-width: 100%;
-  }
-  .card--wordRecog #wrChoices {
-    width: 100%;
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 10px;
-  }
-  .card--wordRecog #wrChoices button {
-    width: 100%;
-    max-width: 100%;
-  }
-
-  /* Conjunct Recognition quiz (Hear/Read → Choose) */
+  /* Any row inside these cards should be allowed to wrap */
+  .card--wordRecog .row,
   .card--conjQuiz .row {
-    flex-wrap: wrap;
+    flex-wrap: wrap !important;
   }
-  .card--conjQuiz #cqPromptBox {
-    width: 100%;
-    max-width: 100%;
+
+  /* Prevent "fixed-width" children from pushing off-screen */
+  .card--wordRecog .row > *,
+  .card--conjQuiz  .row > * {
+    min-width: 0 !important;
+    max-width: 100% !important;
   }
-  .card--conjQuiz #cqChoices {
-    width: 100%;
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 10px;
+
+  /* Word Recognition: make choices wrap */
+  #wrChoices {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    width: 100% !important;
+    gap: 10px !important;
   }
-  .card--conjQuiz #cqChoices button {
-    width: 100%;
-    max-width: 100%;
+  #wrChoices .choiceBtn,
+  #wrChoices button {
+    flex: 1 1 calc(50% - 10px) !important;  /* 2 per row */
+    max-width: calc(50% - 10px) !important;
+  }
+
+  /* Conjunct Recognition: make choices wrap */
+  #cqChoices {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    width: 100% !important;
+    gap: 10px !important;
+  }
+  #cqChoices .choiceBtn,
+  #cqChoices button {
+    flex: 1 1 calc(50% - 10px) !important;
+    max-width: calc(50% - 10px) !important;
   }
 }
 
-/* extra-small phones: 1 column choices */
+/* Extra-small phones: 1 per row */
 @media (max-width: 380px) {
-  .card--wordRecog #wrChoices,
-  .card--conjQuiz  #cqChoices {
-    grid-template-columns: 1fr;
+  #wrChoices .choiceBtn, #wrChoices button,
+  #cqChoices .choiceBtn, #cqChoices button {
+    flex: 1 1 100% !important;
+    max-width: 100% !important;
   }
 }
 

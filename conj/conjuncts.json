@@ -1429,7 +1429,26 @@
       "क"
     ],
     "audio": null,
-    "words": []
+    "words": [
+      {
+        "word": "अङ्कः",
+        "hint": "aṅkaḥ",
+        "level": 1,
+        "file": "conj/words/cj056_01.mp3"
+      },
+      {
+        "word": "शङ्का",
+        "hint": "aṅkanam",
+        "level": 3,
+        "file": "conj/words/cj056_02.mp3"
+      },
+      {
+        "word": "अङ्कितः",
+        "hint": "aṅkitaḥ",
+        "level": 3,
+        "file": "conj/words/cj056_03.mp3"
+      }
+    ]
   },
   {
     "id": "cj057",
@@ -1441,7 +1460,26 @@
       "ग"
     ],
     "audio": null,
-    "words": []
+    "words": [
+      {
+        "word": "अङ्गम्",
+        "hint": "aṅgam",
+        "level": 1,
+        "file": "conj/words/cj057_01.mp3"
+      },
+      {
+        "word": "गङ्गा",
+        "hint": "gaṅgā",
+        "level": 2,
+        "file": "conj/words/cj057_02.mp3"
+      },
+      {
+        "word": "अङ्गुली",
+        "hint": "aṅgulī",
+        "level": 3,
+        "file": "conj/words/cj057_03.mp3"
+      }
+    ]
   },
   {
     "id": "cj058",
@@ -1453,7 +1491,26 @@
       "च"
     ],
     "audio": null,
-    "words": []
+    "words": [
+      {
+        "word": "पञ्च",
+        "hint": "pañca",
+        "level": 1,
+        "file": "conj/words/cj058_01.mp3"
+      },
+      {
+        "word": "चञ्चुः",
+        "hint": "pañcamaḥ",
+        "level": 3,
+        "file": "conj/words/cj058_02.mp3"
+      },
+      {
+        "word": "पञ्चाशत्",
+        "hint": "pañcāśat",
+        "level": 4,
+        "file": "conj/words/cj058_03.mp3"
+      }
+    ]
   },
   {
     "id": "cj059",
@@ -1465,7 +1522,26 @@
       "ज"
     ],
     "audio": null,
-    "words": []
+    "words": [
+      {
+        "word": "अञ्जलिः",
+        "hint": "añjaliḥ",
+        "level": 2,
+        "file": "conj/words/cj059_01.mp3"
+      },
+      {
+        "word": "अञ्जनम्",
+        "hint": "añjanam",
+        "level": 3,
+        "file": "conj/words/cj059_02.mp3"
+      },
+      {
+        "word": "खञ्जः",
+        "hint": "añjasā",
+        "level": 2,
+        "file": "conj/words/cj059_03.mp3"
+      }
+    ]
   },
   {
     "id": "cj060",
@@ -1477,7 +1553,26 @@
       "ट"
     ],
     "audio": null,
-    "words": []
+    "words": [
+      {
+        "word": "घण्टा",
+        "hint": "ghaṇṭā",
+        "level": 1,
+        "file": "conj/words/cj060_01.mp3"
+      },
+      {
+        "word": "कण्टकः",
+        "hint": "kaṇṭakaḥ",
+        "level": 2,
+        "file": "conj/words/cj060_02.mp3"
+      },
+      {
+        "word": "निघण्टुः",
+        "hint": "kaṇṭhaḥ",
+        "level": 2,
+        "file": "conj/words/cj060_03.mp3"
+      }
+    ]
   },
   {
     "id": "cj061",
@@ -1489,7 +1584,26 @@
       "ड"
     ],
     "audio": null,
-    "words": []
+    "words": [
+      {
+        "word": "दण्डः",
+        "hint": "daṇḍaḥ",
+        "level": 1,
+        "file": "conj/words/cj061_01.mp3"
+      },
+      {
+        "word": "पाण्डवाः",
+        "hint": "pāṇḍavaḥ",
+        "level": 3,
+        "file": "conj/words/cj061_02.mp3"
+      },
+      {
+        "word": "मण्डलम्",
+        "hint": "maṇḍalam",
+        "level": 3,
+        "file": "conj/words/cj061_03.mp3"
+      }
+    ]
   },
   {
     "id": "cj062",
@@ -1501,6 +1615,25 @@
       "ब"
     ],
     "audio": null,
-    "words": []
+    "words": [
+      {
+        "word": "अम्बा",
+        "hint": "ambā",
+        "level": 2,
+        "file": "conj/words/cj062_01.mp3"
+      },
+      {
+        "word": "सम्बन्धः",
+        "hint": "sambandhaḥ",
+        "level": 3,
+        "file": "conj/words/cj062_02.mp3"
+      },
+      {
+        "word": "अम्बुदः",
+        "hint": "lambaḥ",
+        "level": 3,
+        "file": "conj/words/cj062_03.mp3"
+      }
+    ]
   }
 ]

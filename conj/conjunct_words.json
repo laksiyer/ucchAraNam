@@ -982,5 +982,173 @@
     "level": 3,
     "file": "conj/words/cj055_03.mp3",
     "idx": 3
+  },
+  {
+    "conj_id": "cj056",
+    "word": "अङ्कः",
+    "hint": "aṅkaḥ",
+    "level": 1,
+    "file": "conj/words/cj056_01.mp3",
+    "idx": 1
+  },
+  {
+    "conj_id": "cj056",
+    "word": "शङ्का",
+    "hint": "aṅkanam",
+    "level": 3,
+    "file": "conj/words/cj056_02.mp3",
+    "idx": 2
+  },
+  {
+    "conj_id": "cj056",
+    "word": "अङ्कितः",
+    "hint": "aṅkitaḥ",
+    "level": 3,
+    "file": "conj/words/cj056_03.mp3",
+    "idx": 3
+  },
+  {
+    "conj_id": "cj057",
+    "word": "अङ्गम्",
+    "hint": "aṅgam",
+    "level": 1,
+    "file": "conj/words/cj057_01.mp3",
+    "idx": 1
+  },
+  {
+    "conj_id": "cj057",
+    "word": "गङ्गा",
+    "hint": "gaṅgā",
+    "level": 2,
+    "file": "conj/words/cj057_02.mp3",
+    "idx": 2
+  },
+  {
+    "conj_id": "cj057",
+    "word": "अङ्गुली",
+    "hint": "aṅgulī",
+    "level": 3,
+    "file": "conj/words/cj057_03.mp3",
+    "idx": 3
+  },
+  {
+    "conj_id": "cj058",
+    "word": "पञ्च",
+    "hint": "pañca",
+    "level": 1,
+    "file": "conj/words/cj058_01.mp3",
+    "idx": 1
+  },
+  {
+    "conj_id": "cj058",
+    "word": "चञ्चुः",
+    "hint": "pañcamaḥ",
+    "level": 3,
+    "file": "conj/words/cj058_02.mp3",
+    "idx": 2
+  },
+  {
+    "conj_id": "cj058",
+    "word": "पञ्चाशत्",
+    "hint": "pañcāśat",
+    "level": 4,
+    "file": "conj/words/cj058_03.mp3",
+    "idx": 3
+  },
+  {
+    "conj_id": "cj059",
+    "word": "अञ्जलिः",
+    "hint": "añjaliḥ",
+    "level": 2,
+    "file": "conj/words/cj059_01.mp3",
+    "idx": 1
+  },
+  {
+    "conj_id": "cj059",
+    "word": "अञ्जनम्",
+    "hint": "añjanam",
+    "level": 3,
+    "file": "conj/words/cj059_02.mp3",
+    "idx": 2
+  },
+  {
+    "conj_id": "cj059",
+    "word": "खञ्जः",
+    "hint": "añjasā",
+    "level": 2,
+    "file": "conj/words/cj059_03.mp3",
+    "idx": 3
+  },
+  {
+    "conj_id": "cj060",
+    "word": "घण्टा",
+    "hint": "ghaṇṭā",
+    "level": 1,
+    "file": "conj/words/cj060_01.mp3",
+    "idx": 1
+  },
+  {
+    "conj_id": "cj060",
+    "word": "कण्टकः",
+    "hint": "kaṇṭakaḥ",
+    "level": 2,
+    "file": "conj/words/cj060_02.mp3",
+    "idx": 2
+  },
+  {
+    "conj_id": "cj060",
+    "word": "निघण्टुः",
+    "hint": "kaṇṭhaḥ",
+    "level": 2,
+    "file": "conj/words/cj060_03.mp3",
+    "idx": 3
+  },
+  {
+    "conj_id": "cj061",
+    "word": "दण्डः",
+    "hint": "daṇḍaḥ",
+    "level": 1,
+    "file": "conj/words/cj061_01.mp3",
+    "idx": 1
+  },
+  {
+    "conj_id": "cj061",
+    "word": "पाण्डवाः",
+    "hint": "pāṇḍavaḥ",
+    "level": 3,
+    "file": "conj/words/cj061_02.mp3",
+    "idx": 2
+  },
+  {
+    "conj_id": "cj061",
+    "word": "मण्डलम्",
+    "hint": "maṇḍalam",
+    "level": 3,
+    "file": "conj/words/cj061_03.mp3",
+    "idx": 3
+  },
+  {
+    "conj_id": "cj062",
+    "word": "अम्बा",
+    "hint": "ambā",
+    "level": 2,
+    "file": "conj/words/cj062_01.mp3",
+    "idx": 1
+  },
+  {
+    "conj_id": "cj062",
+    "word": "सम्बन्धः",
+    "hint": "sambandhaḥ",
+    "level": 3,
+    "file": "conj/words/cj062_02.mp3",
+    "idx": 2
+  },
+  {
+    "conj_id": "cj062",
+    "word": "अम्बुदः",
+    "hint": "lambaḥ",
+    "level": 3,
+    "file": "conj/words/cj062_03.mp3",
+    "idx": 3
   }
 ]

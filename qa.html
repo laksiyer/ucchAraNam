@@ -1,0 +1,475 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Recording Evaluator — Devanagari Pronunciation Tool</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    body { font-family: system-ui, Arial, sans-serif; padding: 16px; max-width: 980px; margin: 0 auto; }
+    h1 { font-size: 20px; margin: 0 0 10px; }
+    .small { font-size: 13px; color:#666; }
+    .row { display:flex; gap:10px; align-items:center; flex-wrap: wrap; margin: 10px 0; }
+    .card { border:1px solid #e9ecef; border-radius: 14px; padding: 12px 14px; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,.05); }
+    .pill { font-size: 13px; padding: 6px 10px; border-radius: 999px; border: 1px solid #ddd; background:#fafafa; display:inline-block; }
+    .okPill { background:#d4f8d4; border-color:#2f9e44; }
+    .badPill { background:#ffd6d6; border-color:#c92a2a; }
+    .warnPill { background:#fff3bf; border-color:#f59f00; }
+
+    .btn {
+      font-size: 14px; padding: 9px 12px; border-radius: 12px; border: 1px solid #ddd;
+      background: white; cursor: pointer; box-shadow: 0 1px 2px rgba(0,0,0,.06);
+    }
+    .btn:active { transform: scale(0.98); }
+    .btn.primary { border-color:#b6d7ff; background:#f1f8ff; }
+    .btn.good { border-color:#2f9e44; background:#eaffea; }
+    .btn.bad  { border-color:#c92a2a; background:#ffecec; }
+    .btn.warn { border-color:#f59f00; background:#fff7d6; }
+
+    select, input[type="text"], textarea {
+      font-size: 14px; padding: 8px 10px; border-radius: 10px; border: 1px solid #ddd;
+    }
+    textarea { width: 100%; min-height: 64px; resize: vertical; }
+
+    .big {
+      font-family: "Noto Sans Devanagari", system-ui, Arial, sans-serif;
+      font-size: 42px;
+      line-height: 1.1;
+      margin: 6px 0 2px;
+    }
+    .hint { font-size: 16px; color:#333; }
+    code { background:#f6f8fa; padding:2px 6px; border-radius: 6px; }
+
+    @media (max-width: 600px){
+      .big { font-size: 36px; }
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Recording Evaluator</h1>
+  <p class="small">
+    Use this page to quickly approve / reject recordings. Decisions are stored locally in this browser
+    (no server needed). Export the report to share with your team or to identify files to redo.
+  </p>
+
+  <div class="card" style="margin: 10px 0;">
+    <div class="row">
+      <span class="pill" id="loadStatus">Loading datasets…</span>
+
+      <label class="small">
+        Category:
+        <select id="category">
+          <option value="gunita_words" selected>Guṇita words (words.json)</option>
+          <option value="conj_words">Conjunct words (conj/conjunct_words.json)</option>
+          <option value="conj_audio">Conjunct audio (conj/conjuncts.json audio field)</option>
+          <option value="vowels">Vowels (embedded list)</option>
+          <option value="vyanjana">Consonants (embedded list)</option>
+        </select>
+      </label>
+
+      <label class="small">
+        Level:
+        <select id="level">
+          <option value="all" selected>All</option>
+          <option value="1">1</option><option value="2">2</option>
+          <option value="3">3</option><option value="4">4</option>
+        </select>
+      </label>
+
+      <button class="btn" id="prevBtn">Prev</button>
+      <button class="btn primary" id="playBtn">Play</button>
+      <button class="btn" id="nextBtn">Next</button>
+
+      <span class="pill" id="statusPill">Ready</span>
+      <span class="pill" id="posPill">—</span>
+    </div>
+
+    <div style="margin-top:8px;">
+      <div class="small">Expected</div>
+      <div class="big" id="expected">—</div>
+      <div class="hint" id="expectedHint">—</div>
+      <div class="small" style="margin-top:6px;">Audio file</div>
+      <div><code id="audioFile">—</code></div>
+    </div>
+
+    <div class="row" style="margin-top: 12px;">
+      <button class="btn good" id="approveBtn">Approve (A)</button>
+      <button class="btn bad"  id="rejectBtn">Reject (R)</button>
+      <button class="btn warn" id="redoBtn">Needs redo</button>
+      <button class="btn" id="clearDecisionBtn">Clear decision</button>
+    </div>
+
+    <div style="margin-top:10px;">
+      <div class="small">Notes (optional)</div>
+      <textarea id="notes" placeholder="e.g., aspirate too strong, retroflex unclear, vowel length off…"></textarea>
+      <div class="row" style="margin-top:10px;">
+        <button class="btn" id="saveNotesBtn">Save notes</button>
+        <button class="btn" id="exportBtn">Export results (JSON)</button>
+        <button class="btn" id="resetLocalBtn" title="Clears local approvals in this browser only">Reset local data</button>
+      </div>
+
+      <p class="small" style="margin: 8px 0 0;">
+        Shortcuts: <b>P</b> play, <b>N</b> next, <b>A</b> approve, <b>R</b> reject.
+      </p>
+    </div>
+  </div>
+
+  <script>
+    // -----------------------------
+    // CONFIG
+    // -----------------------------
+    const AUDIO_BASE_URL = "https://laksiyer.github.io/ucchAraNam/audio/";
+    const QA_KEY = "ucchAraNam_QA_v1";
+
+    // Embedded minimal lists (for vowels + consonants). You can expand anytime.
+    const VOWELS = [
+      { id:"v_a",  word:"अ", hint:"a",  file:"a.mp3", level:1 },
+      { id:"v_aa", word:"आ", hint:"ā",  file:"aa.mp3", level:1 },
+      { id:"v_i",  word:"इ", hint:"i",  file:"i.mp3", level:1 },
+      { id:"v_ii", word:"ई", hint:"ī",  file:"ii.mp3", level:1 },
+      { id:"v_u",  word:"उ", hint:"u",  file:"u.mp3", level:1 },
+      { id:"v_uu", word:"ऊ", hint:"ū",  file:"uu.mp3", level:1 },
+      { id:"v_ri", word:"ऋ", hint:"ṛ",  file:"ri.mp3", level:2 },
+      { id:"v_rri",word:"ॠ", hint:"ṝ",  file:"rri.mp3", level:3 },
+      { id:"v_e",  word:"ए", hint:"e",  file:"e.mp3", level:1 },
+      { id:"v_ai", word:"ऐ", hint:"ai", file:"ai.mp3", level:2 },
+      { id:"v_o",  word:"ओ", hint:"o",  file:"o.mp3", level:1 },
+      { id:"v_au", word:"औ", hint:"au", file:"au.mp3", level:2 },
+      { id:"v_am", word:"अं", hint:"aṃ", file:"am.mp3", level:2 },
+      { id:"v_ah", word:"अः", hint:"aḥ", file:"ah.mp3", level:2 }
+    ];
+
+    // Consonants (base sounds). Adjust filenames to match your repository if needed.
+    const VYANJANA = [
+      { id:"c_ka", word:"क", hint:"ka", file:"ka.mp3", level:1 },
+      { id:"c_kha", word:"ख", hint:"kha", file:"kha.mp3", level:1 },
+      { id:"c_ga", word:"ग", hint:"ga", file:"ga.mp3", level:1 },
+      { id:"c_gha", word:"घ", hint:"gha", file:"gha.mp3", level:2 },
+      { id:"c_nga", word:"ङ", hint:"ṅa", file:"nga.mp3", level:3 },
+
+      { id:"c_tta", word:"ट", hint:"ṭa", file:"tta.mp3", level:2 },
+      { id:"c_ttha", word:"ठ", hint:"ṭha", file:"ttha.mp3", level:2 },
+      { id:"c_dda", word:"ड", hint:"ḍa", file:"dda.mp3", level:2 },
+      { id:"c_ddha", word:"ढ", hint:"ḍha", file:"ddha.mp3", level:3 },
+      { id:"c_nna", word:"ण", hint:"ṇa", file:"nna.mp3", level:3 },
+
+      { id:"c_ta", word:"त", hint:"ta", file:"ta.mp3", level:1 },
+      { id:"c_tha", word:"थ", hint:"tha", file:"tha.mp3", level:1 },
+      { id:"c_da", word:"द", hint:"da", file:"da.mp3", level:1 },
+      { id:"c_dha", word:"ध", hint:"dha", file:"dha.mp3", level:2 },
+      { id:"c_na", word:"न", hint:"na", file:"na.mp3", level:1 },
+
+      { id:"c_ya", word:"य", hint:"ya", file:"ya.mp3", level:1 },
+      { id:"c_ra", word:"र", hint:"ra", file:"ra.mp3", level:1 },
+      { id:"c_la", word:"ल", hint:"la", file:"la.mp3", level:1 },
+      { id:"c_va", word:"व", hint:"va", file:"va.mp3", level:1 },
+      { id:"c_sa", word:"स", hint:"sa", file:"sa.mp3", level:1 },
+      { id:"c_ha", word:"ह", hint:"ha", file:"ha.mp3", level:1 }
+    ];
+
+    // Datasets loaded from JSON
+    let WORDS = [];           // words.json
+    let CONJ = [];            // conj/conjuncts.json
+    let CONJ_WORDS = [];      // conj/conjunct_words.json
+
+    // UI refs
+    const loadStatus = document.getElementById("loadStatus");
+    const category = document.getElementById("category");
+    const levelSel = document.getElementById("level");
+    const statusPill = document.getElementById("statusPill");
+    const posPill = document.getElementById("posPill");
+    const expected = document.getElementById("expected");
+    const expectedHint = document.getElementById("expectedHint");
+    const audioFile = document.getElementById("audioFile");
+    const notesBox = document.getElementById("notes");
+
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const playBtn = document.getElementById("playBtn");
+
+    const approveBtn = document.getElementById("approveBtn");
+    const rejectBtn  = document.getElementById("rejectBtn");
+    const redoBtn    = document.getElementById("redoBtn");
+    const clearDecisionBtn = document.getElementById("clearDecisionBtn");
+
+    const saveNotesBtn = document.getElementById("saveNotesBtn");
+    const exportBtn = document.getElementById("exportBtn");
+    const resetLocalBtn = document.getElementById("resetLocalBtn");
+
+    // Audio player
+    const player = new Audio();
+    player.preload = "auto";
+
+    // State
+    let idx = 0;
+    let list = [];
+
+    // QA store { key: {decision, notes, ts, file} }
+    function loadQA() {
+      try { return JSON.parse(localStorage.getItem(QA_KEY) || "{}"); }
+      catch(e){ return {}; }
+    }
+    function saveQA(obj) {
+      localStorage.setItem(QA_KEY, JSON.stringify(obj));
+    }
+    function itemKey(item) {
+      // stable key used across reloads
+      // Prefer explicit id; else fall back to file path.
+      return item.id || (item.file ? ("file:" + item.file) : ("txt:" + (item.word||"")));
+    }
+
+    function setPill(el, msg, kind="neutral") {
+      el.textContent = msg;
+      el.classList.remove("okPill","badPill","warnPill");
+      if (kind === "ok") el.classList.add("okPill");
+      if (kind === "bad") el.classList.add("badPill");
+      if (kind === "warn") el.classList.add("warnPill");
+    }
+
+    function normalizeLevel(val) {
+      return (val === "all") ? null : String(val);
+    }
+
+    function buildList() {
+      const cat = category.value;
+      const lvl = normalizeLevel(levelSel.value);
+
+      let base = [];
+      if (cat === "gunita_words") {
+        base = WORDS.map(x => ({
+          id: "w_" + (x.id || x.file || x.word),
+          word: x.word,
+          hint: x.hint,
+          level: x.level ?? "",
+          file: x.file
+        }));
+      } else if (cat === "conj_words") {
+        base = CONJ_WORDS.map(x => ({
+          id: "cw_" + (x.conj_id || "") + "_" + (x.idx || x.file || x.word),
+          word: x.word,
+          hint: x.hint,
+          level: x.level ?? "",
+          file: x.file
+        }));
+      } else if (cat === "conj_audio") {
+        base = CONJ
+          .filter(x => x && x.audio)
+          .map(x => ({
+            id: "cj_" + x.id,
+            word: x.form || "—",
+            hint: x.hint || x.id || "",
+            level: "",
+            file: x.audio
+          }));
+      } else if (cat === "vowels") {
+        base = VOWELS;
+      } else if (cat === "vyanjana") {
+        base = VYANJANA;
+      }
+
+      if (lvl !== null) {
+        base = base.filter(x => String(x.level ?? "") === lvl);
+      }
+
+      list = base;
+      if (idx >= list.length) idx = 0;
+      if (idx < 0) idx = 0;
+
+      render();
+    }
+
+    function render() {
+      if (!list.length) {
+        expected.textContent = "—";
+        expectedHint.textContent = "—";
+        audioFile.textContent = "—";
+        notesBox.value = "";
+        setPill(statusPill, "No items (check JSON or filters)", "bad");
+        posPill.textContent = "0 / 0";
+        return;
+      }
+
+      const item = list[idx];
+      expected.textContent = item.word || "—";
+      expectedHint.textContent = item.hint || "—";
+      audioFile.textContent = item.file || "—";
+      posPill.textContent = `${idx + 1} / ${list.length}`;
+
+      const qa = loadQA();
+      const k = itemKey(item);
+      const rec = qa[k];
+
+      if (rec?.decision === "approve") setPill(statusPill, "Approved", "ok");
+      else if (rec?.decision === "reject") setPill(statusPill, "Rejected", "bad");
+      else if (rec?.decision === "redo") setPill(statusPill, "Needs redo", "warn");
+      else setPill(statusPill, "Unreviewed", "neutral");
+
+      notesBox.value = rec?.notes || "";
+    }
+
+    function playCurrent() {
+      if (!list.length) return;
+      const item = list[idx];
+      if (!item.file) {
+        setPill(statusPill, "No audio file for this item", "warn");
+        return;
+      }
+      const url = item.file.startsWith("http") ? item.file : (AUDIO_BASE_URL + item.file);
+
+      try { player.pause(); player.currentTime = 0; } catch(e){}
+      player.src = url;
+      player.play().then(() => {
+        // ok
+      }).catch(err => {
+        console.error(err);
+        setPill(statusPill, "Could not play (missing file?)", "bad");
+        alert("Could not play:\n" + url);
+      });
+    }
+
+    function setDecision(decision) {
+      if (!list.length) return;
+      const item = list[idx];
+      const qa = loadQA();
+      const k = itemKey(item);
+      qa[k] = qa[k] || {};
+      qa[k].decision = decision;
+      qa[k].notes = notesBox.value || "";
+      qa[k].ts = new Date().toISOString();
+      qa[k].file = item.file || "";
+      qa[k].word = item.word || "";
+      qa[k].hint = item.hint || "";
+      saveQA(qa);
+      render();
+    }
+
+    function clearDecision() {
+      if (!list.length) return;
+      const item = list[idx];
+      const qa = loadQA();
+      const k = itemKey(item);
+      if (qa[k]) {
+        delete qa[k];
+        saveQA(qa);
+      }
+      render();
+    }
+
+    function saveNotesOnly() {
+      if (!list.length) return;
+      const item = list[idx];
+      const qa = loadQA();
+      const k = itemKey(item);
+      qa[k] = qa[k] || {};
+      qa[k].notes = notesBox.value || "";
+      qa[k].ts = new Date().toISOString();
+      qa[k].file = item.file || "";
+      qa[k].word = item.word || "";
+      qa[k].hint = item.hint || "";
+      saveQA(qa);
+      render();
+      setPill(statusPill, "Notes saved", "ok");
+      setTimeout(render, 600);
+    }
+
+    function exportResults() {
+      const qa = loadQA();
+      const data = {
+        tool: "ucchAraNam QA",
+        exported_at: new Date().toISOString(),
+        audio_base_url: AUDIO_BASE_URL,
+        results: qa
+      };
+      const blob = new Blob([JSON.stringify(data, null, 2)], {type:"application/json"});
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "qa_results.json";
+      a.click();
+      URL.revokeObjectURL(a.href);
+    }
+
+    function resetLocal() {
+      if (!confirm("This clears approvals/notes stored in this browser only. Continue?")) return;
+      localStorage.removeItem(QA_KEY);
+      render();
+    }
+
+    function next() { if (list.length) { idx = (idx + 1) % list.length; render(); } }
+    function prev() { if (list.length) { idx = (idx - 1 + list.length) % list.length; render(); } }
+
+    // Load JSON datasets (optional but best)
+    async function loadJson(url) {
+      const res = await fetch(url + "?v=" + Date.now());
+      if (!res.ok) throw new Error(url + " HTTP " + res.status);
+      return await res.json();
+    }
+
+    async function boot() {
+      try {
+        // These must match your repo paths.
+        // words.json is usually alongside your main html.
+        WORDS = await loadJson("words.json");
+      } catch(e) {
+        console.warn("words.json not loaded", e);
+        WORDS = [];
+      }
+
+      try {
+        CONJ = await loadJson("conj/conjuncts.json");
+      } catch(e) {
+        console.warn("conjuncts.json not loaded", e);
+        CONJ = [];
+      }
+
+      try {
+        CONJ_WORDS = await loadJson("conj/conjunct_words.json");
+      } catch(e) {
+        console.warn("conjunct_words.json not loaded", e);
+        CONJ_WORDS = [];
+      }
+
+      const okParts = [];
+      okParts.push(`words: ${WORDS.length}`);
+      okParts.push(`conj: ${CONJ.length}`);
+      okParts.push(`conj_words: ${CONJ_WORDS.length}`);
+      setPill(loadStatus, "Loaded — " + okParts.join(" | "), "ok");
+
+      buildList();
+    }
+
+    // Events
+    category.addEventListener("change", () => { idx = 0; buildList(); });
+    levelSel.addEventListener("change", () => { idx = 0; buildList(); });
+
+    playBtn.addEventListener("click", playCurrent);
+    nextBtn.addEventListener("click", next);
+    prevBtn.addEventListener("click", prev);
+
+    approveBtn.addEventListener("click", () => setDecision("approve"));
+    rejectBtn.addEventListener("click", () => setDecision("reject"));
+    redoBtn.addEventListener("click", () => setDecision("redo"));
+    clearDecisionBtn.addEventListener("click", clearDecision);
+
+    saveNotesBtn.addEventListener("click", saveNotesOnly);
+    exportBtn.addEventListener("click", exportResults);
+    resetLocalBtn.addEventListener("click", resetLocal);
+
+    // Keyboard shortcuts
+    document.addEventListener("keydown", (e) => {
+      if (e.target && (e.target.tagName === "TEXTAREA" || e.target.tagName === "INPUT")) return;
+      const k = e.key.toLowerCase();
+      if (k === "p") playCurrent();
+      if (k === "n") next();
+      if (k === "a") setDecision("approve");
+      if (k === "r") setDecision("reject");
+    });
+
+    boot();
+  </script>
+</body>
+</html>

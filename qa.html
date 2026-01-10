@@ -16,7 +16,7 @@
       --muted:#666;
       --border:#e6e6e6;
       --shadow:0 1px 2px rgba(0,0,0,.06);
-      --accentBg:#f5f7ff;       /* subtle blue */
+      --accentBg:#f5f7ff;
       --accentBorder:#cbd5ff;
       --okBg:#d4f8d4; --okBd:#2f9e44;
       --badBg:#ffd6d6; --badBd:#c92a2a;
@@ -71,7 +71,7 @@
     }
 
     label{ font-size: 14px; color:#333; }
-    select, input[type="text"], textarea{
+    select, textarea{
       font-size: 14px;
       padding: 8px 10px;
       border-radius: 10px;
@@ -79,7 +79,7 @@
       background:#fff;
       outline:none;
     }
-    select:focus, input[type="text"]:focus, textarea:focus{
+    select:focus, textarea:focus{
       border-color:#b9c2ff;
       box-shadow: 0 0 0 3px rgba(185,194,255,.35);
     }
@@ -196,10 +196,15 @@
       <label>
         Dataset:
         <select id="qaDataset">
-          <option value="gunita_words" selected>Gunita words (words.json)</option>
+          <option value="vowels" selected>Vowels (स्वराः)</option>
+          <option value="vargiya">Vargīya consonants (वर्गीय)</option>
+          <option value="avargiya">Avargīya consonants (अवर्गीय)</option>
+          <option value="gunita">Guṇitākṣarāṇi (गुणिताक्षराणि)</option>
+
+          <option value="gunita_words">Gunita words (words.json)</option>
           <option value="conj_words">Conjunct words (conj/conjunct_words.json)</option>
           <option value="conj_items">Conjunct audios (conj/conjuncts.json)</option>
-          <!-- OPTIONAL: add your own lists here if you want -->
+
           <option value="custom_inline">Custom inline list (edit in qa.html)</option>
         </select>
       </label>
@@ -241,6 +246,11 @@
       <button id="qaClearDecision">Clear decision</button>
       <button id="qaResetAll" class="ghost" title="Clears ALL saved QA decisions for this tool">Reset QA data</button>
     </div>
+
+    <div class="small mutedBox" id="dsHelp" style="margin-top:10px;">
+      <b>Note:</b> For <b>Guṇitākṣarāṇi</b>, this page generates file names like
+      <code>ka_a.mp3</code>, <code>ka_aa.mp3</code>, … based on the stems below. If a stem/file doesn’t match your actual naming, edit the stems list.
+    </div>
   </div>
 
   <div class="grid2" style="margin-top:14px;">
@@ -261,7 +271,7 @@
       </div>
 
       <div class="dangerNote" id="qaMissingNote" style="display:none;">
-        This audio file looks missing or blank. Use Reject (or Clear decision) and fix later.
+        This item has a blank audio path (or a mismatch). Fix the filename or upload later.
       </div>
 
       <div style="margin-top:12px;">
@@ -288,18 +298,19 @@
 
       <h2>Data sources used</h2>
       <div class="small mutedBox">
+        <div><b>Built-in:</b> vowels / consonants / gunita</div>
         <div><b>Gunita words:</b> <code>words.json</code></div>
         <div><b>Conjunct words:</b> <code>conj/conjunct_words.json</code></div>
         <div><b>Conjunct audios:</b> <code>conj/conjuncts.json</code></div>
       </div>
 
       <p class="small" style="margin-top:10px;">
-        If you see “Could not play …”, it usually means the file path in JSON is wrong or the mp3 isn’t uploaded.
+        If you see “Could not play …”, it usually means the file path is wrong or the mp3 isn’t uploaded.
       </p>
 
       <p class="small">
-        Tip: If you want <b>QA for vowels/consonants/gunita letters</b> too, add them into the
-        <span class="linkLike" id="jumpInline">Custom inline list</span> section inside this file.
+        Tip: Want QA for anything else? Add to
+        <span class="linkLike" id="jumpInline">Custom inline list</span> inside this file.
       </p>
     </div>
   </div>
@@ -310,8 +321,142 @@
     // -----------------------------
     const AUDIO_BASE_URL = "https://laksiyer.github.io/ucchAraNam/audio/"; // must end with /
 
-    // OPTIONAL: You can add a small inline list here and pick Dataset = "Custom inline list"
-    // Format: { id, glyph, hint, level, file, module }
+    // --- BUILT-IN DATASETS (edit filenames here if yours differ) ---
+
+    const QA_VOWELS = [
+      { id:"v_a",  glyph:"अ",  hint:"a",   level:1, file:"a.mp3" },
+      { id:"v_aa", glyph:"आ",  hint:"ā",   level:1, file:"aa.mp3" },
+      { id:"v_i",  glyph:"इ",  hint:"i",   level:1, file:"i.mp3" },
+      { id:"v_ii", glyph:"ई",  hint:"ī",   level:1, file:"ii.mp3" },
+      { id:"v_u",  glyph:"उ",  hint:"u",   level:1, file:"u.mp3" },
+      { id:"v_uu", glyph:"ऊ",  hint:"ū",   level:1, file:"uu.mp3" },
+      { id:"v_ri", glyph:"ऋ",  hint:"ṛ",   level:2, file:"ri.mp3" },
+      { id:"v_rri",glyph:"ॠ",  hint:"ṝ",   level:3, file:"rri.mp3" },
+      { id:"v_e",  glyph:"ए",  hint:"e",   level:1, file:"e.mp3" },
+      { id:"v_ai", glyph:"ऐ",  hint:"ai",  level:2, file:"ai.mp3" },
+      { id:"v_o",  glyph:"ओ",  hint:"o",   level:1, file:"o.mp3" },
+      { id:"v_au", glyph:"औ",  hint:"au",  level:2, file:"au.mp3" },
+      { id:"v_am", glyph:"अं", hint:"aṃ",  level:2, file:"am.mp3" },
+      { id:"v_ah", glyph:"अः", hint:"aḥ",  level:2, file:"ah.mp3" }
+    ];
+
+    // Base consonant lists (use YOUR actual filenames)
+    const QA_VARGIYA = [
+      { id:"c_ka", glyph:"क", hint:"ka", level:1, file:"ka.mp3" },
+      { id:"c_kha",glyph:"ख", hint:"kha",level:1, file:"kha.mp3" },
+      { id:"c_ga", glyph:"ग", hint:"ga", level:1, file:"ga.mp3" },
+      { id:"c_gha",glyph:"घ", hint:"gha",level:2, file:"gha.mp3" },
+      { id:"c_nga",glyph:"ङ", hint:"ṅa", level:2, file:"nga.mp3" },
+
+      { id:"c_ca", glyph:"च", hint:"ca", level:1, file:"ca.mp3" },
+      { id:"c_cha",glyph:"छ", hint:"cha",level:1, file:"cha.mp3" },
+      { id:"c_ja", glyph:"ज", hint:"ja", level:1, file:"ja.mp3" },
+      { id:"c_jha",glyph:"झ", hint:"jha",level:2, file:"jha.mp3" },
+      { id:"c_nya",glyph:"ञ", hint:"ña", level:2, file:"nya.mp3" },
+
+      // Your earlier naming for retroflex base files:
+      { id:"c_tta", glyph:"ट", hint:"ṭa",  level:2, file:"ta_retro.mp3" },
+      { id:"c_ttha",glyph:"ठ", hint:"ṭha", level:2, file:"tha_retro.mp3" },
+      { id:"c_dda", glyph:"ड", hint:"ḍa",  level:2, file:"da_retro.mp3" },
+      { id:"c_ddha",glyph:"ढ", hint:"ḍha", level:3, file:"dha_retro.mp3" },
+      { id:"c_nna", glyph:"ण", hint:"ṇa",  level:2, file:"na_retro.mp3" },
+
+      { id:"c_ta",  glyph:"त", hint:"ta",  level:1, file:"ta.mp3" },
+      { id:"c_tha", glyph:"थ", hint:"tha", level:1, file:"tha.mp3" },
+      { id:"c_da",  glyph:"द", hint:"da",  level:1, file:"da.mp3" },
+      { id:"c_dha", glyph:"ध", hint:"dha", level:2, file:"dha.mp3" },
+      { id:"c_na",  glyph:"न", hint:"na",  level:1, file:"na.mp3" },
+
+      { id:"c_pa",  glyph:"प", hint:"pa",  level:1, file:"pa.mp3" },
+      { id:"c_pha", glyph:"फ", hint:"pha", level:2, file:"pha.mp3" },
+      { id:"c_ba",  glyph:"ब", hint:"ba",  level:1, file:"ba.mp3" },
+      { id:"c_bha", glyph:"भ", hint:"bha", level:2, file:"bha.mp3" },
+      { id:"c_ma",  glyph:"म", hint:"ma",  level:1, file:"ma.mp3" }
+    ];
+
+    const QA_AVARGIYA = [
+      { id:"a_ya", glyph:"य", hint:"ya", level:1, file:"ya.mp3" },
+      { id:"a_ra", glyph:"र", hint:"ra", level:1, file:"ra.mp3" },
+      { id:"a_la", glyph:"ल", hint:"la", level:1, file:"la.mp3" },
+      { id:"a_va", glyph:"व", hint:"va", level:1, file:"va.mp3" },
+      { id:"a_sha",glyph:"श", hint:"śa", level:2, file:"sha_palatal.mp3" },
+      { id:"a_ssa",glyph:"ष", hint:"ṣa", level:2, file:"sha_retro.mp3" },
+      { id:"a_sa", glyph:"स", hint:"sa", level:1, file:"sa.mp3" },
+      { id:"a_ha", glyph:"ह", hint:"ha", level:1, file:"ha.mp3" }
+    ];
+
+    // ---- GUNITA GENERATOR ----
+    // This must match YOUR file naming scheme:  stem + "_" + vowelKey + ".mp3"
+    // Example: "ka_a.mp3", "ka_aa.mp3", ... "tta_aa.mp3", etc.
+    const GUNITA_VOWELS = [
+      { key:"a",  label:"अ",  hint:"a"  },
+      { key:"aa", label:"आ",  hint:"ā"  },
+      { key:"i",  label:"इ",  hint:"i"  },
+      { key:"ii", label:"ई",  hint:"ī"  },
+      { key:"u",  label:"उ",  hint:"u"  },
+      { key:"uu", label:"ऊ",  hint:"ū"  },
+      { key:"ri", label:"ऋ",  hint:"ṛ"  },
+      { key:"rri",label:"ॠ",  hint:"ṝ"  },
+      { key:"e",  label:"ए",  hint:"e"  },
+      { key:"ai", label:"ऐ",  hint:"ai" },
+      { key:"o",  label:"ओ",  hint:"o"  },
+      { key:"au", label:"औ",  hint:"au" },
+      { key:"am", label:"अं", hint:"aṃ" },
+      { key:"ah", label:"अः", hint:"aḥ" }
+    ];
+
+    // IMPORTANT: Put YOUR guṇita stems here. This is where most “missing” issues come from.
+    // Use exactly the base you used while naming: e.g. ka_a.mp3 -> stem "ka"
+    // For your retroflex set you said: tta_aa.mp3, ttha_ii.mp3, dda_u.mp3 ...
+    // so stems should be: "tta", "ttha", "dda", "ddha", "nna"
+    const GUNITA_STEMS = [
+      // gutturals
+      { id:"g_ka",  glyph:"क", hint:"ka",  level:1, stem:"ka" },
+      { id:"g_kha", glyph:"ख", hint:"kha", level:1, stem:"kha" },
+      { id:"g_ga",  glyph:"ग", hint:"ga",  level:1, stem:"ga" },
+      { id:"g_gha", glyph:"घ", hint:"gha", level:2, stem:"gha" },
+      { id:"g_nga", glyph:"ङ", hint:"ṅa",  level:2, stem:"nga" },
+
+      // palatals
+      { id:"g_ca",  glyph:"च", hint:"ca",  level:1, stem:"ca" },
+      { id:"g_cha", glyph:"छ", hint:"cha", level:1, stem:"cha" },
+      { id:"g_ja",  glyph:"ज", hint:"ja",  level:1, stem:"ja" },
+      { id:"g_jha", glyph:"झ", hint:"jha", level:2, stem:"jha" },
+      { id:"g_nya", glyph:"ञ", hint:"ña",  level:2, stem:"nya" },
+
+      // retroflex (your NEW convention)
+      { id:"g_tta",  glyph:"ट", hint:"ṭa",  level:2, stem:"tta" },
+      { id:"g_ttha", glyph:"ठ", hint:"ṭha", level:2, stem:"ttha" },
+      { id:"g_dda",  glyph:"ड", hint:"ḍa",  level:2, stem:"dda" },
+      { id:"g_ddha", glyph:"ढ", hint:"ḍha", level:3, stem:"ddha" },
+      { id:"g_nna",  glyph:"ण", hint:"ṇa",  level:2, stem:"nna" },
+
+      // dentals
+      { id:"g_ta",  glyph:"त", hint:"ta",  level:1, stem:"ta" },
+      { id:"g_tha", glyph:"थ", hint:"tha", level:1, stem:"tha" },
+      { id:"g_da",  glyph:"द", hint:"da",  level:1, stem:"da" },
+      { id:"g_dha", glyph:"ध", hint:"dha", level:2, stem:"dha" },
+      { id:"g_na",  glyph:"न", hint:"na",  level:1, stem:"na" },
+
+      // labials
+      { id:"g_pa",  glyph:"प", hint:"pa",  level:1, stem:"pa" },
+      { id:"g_pha", glyph:"फ", hint:"pha", level:2, stem:"pha" },
+      { id:"g_ba",  glyph:"ब", hint:"ba",  level:1, stem:"ba" },
+      { id:"g_bha", glyph:"भ", hint:"bha", level:2, stem:"bha" },
+      { id:"g_ma",  glyph:"म", hint:"ma",  level:1, stem:"ma" },
+
+      // avargiya (optional as gunita)
+      { id:"g_ya", glyph:"य", hint:"ya", level:1, stem:"ya" },
+      { id:"g_ra", glyph:"र", hint:"ra", level:1, stem:"ra" },
+      { id:"g_la", glyph:"ल", hint:"la", level:1, stem:"la" },
+      { id:"g_va", glyph:"व", hint:"va", level:1, stem:"va" },
+      { id:"g_sha",glyph:"श", hint:"śa", level:2, stem:"sha" },
+      { id:"g_ssa",glyph:"ष", hint:"ṣa", level:2, stem:"ssa" }, // only if you used ssa_* naming
+      { id:"g_sa", glyph:"स", hint:"sa", level:1, stem:"sa" },
+      { id:"g_ha", glyph:"ह", hint:"ha", level:1, stem:"ha" }
+    ];
+
+    // OPTIONAL: a tiny inline QA list (Dataset = custom_inline)
     const QA_INLINE = [
       // { id:"x001", glyph:"अ", hint:"a", level:1, file:"a.mp3", module:"" },
     ];
@@ -328,6 +473,7 @@
     const qaLevel = document.getElementById("qaLevel");
     const qaModuleWrap = document.getElementById("qaModuleWrap");
     const qaModule = document.getElementById("qaModule");
+    const dsHelp = document.getElementById("dsHelp");
 
     const qaPrev = document.getElementById("qaPrev");
     const qaNext = document.getElementById("qaNext");
@@ -377,7 +523,7 @@
     }
 
     // -----------------------------
-    // Load datasets
+    // Load JSON datasets (words + conjuncts)
     // -----------------------------
     let WORDS = [], WORDS_READY = false;
     let CONJ_WORDS = [], CONJ_WORDS_READY = false;
@@ -390,49 +536,34 @@
     }
 
     async function loadAll(){
-      // We load all 3 so switching datasets is instant
-      try{
-        WORDS = await fetchJson("words.json");
-        WORDS_READY = Array.isArray(WORDS);
-      }catch(e){ console.error(e); WORDS=[]; WORDS_READY=false; }
+      try{ WORDS = await fetchJson("words.json"); WORDS_READY = Array.isArray(WORDS); }
+      catch(e){ console.error(e); WORDS=[]; WORDS_READY=false; }
 
-      try{
-        CONJ_WORDS = await fetchJson("conj/conjunct_words.json");
-        CONJ_WORDS_READY = Array.isArray(CONJ_WORDS);
-      }catch(e){ console.error(e); CONJ_WORDS=[]; CONJ_WORDS_READY=false; }
+      try{ CONJ_WORDS = await fetchJson("conj/conjunct_words.json"); CONJ_WORDS_READY = Array.isArray(CONJ_WORDS); }
+      catch(e){ console.error(e); CONJ_WORDS=[]; CONJ_WORDS_READY=false; }
 
-      try{
-        CONJ = await fetchJson("conj/conjuncts.json");
-        CONJ_READY = Array.isArray(CONJ);
-      }catch(e){ console.error(e); CONJ=[]; CONJ_READY=false; }
+      try{ CONJ = await fetchJson("conj/conjuncts.json"); CONJ_READY = Array.isArray(CONJ); }
+      catch(e){ console.error(e); CONJ=[]; CONJ_READY=false; }
 
       setStatus("Loaded datasets", "ok");
       qaRebuildList(true);
     }
 
     // -----------------------------
-    // QA model
-    // Item model: { key, id, glyph, hint, level, file, module, source }
+    // QA storage
     // -----------------------------
     let qaAll = [];
     let qaList = [];
     let qaIdx = -1;
 
-    // Decisions stored in localStorage:
-    // key -> { decision: "approved"/"rejected"/"", note:"", t: timestamp }
-    const LS_KEY = "uccharanam_qa_v1";
+    const LS_KEY = "uccharanam_qa_v2";
 
     function loadStore(){
       try { return JSON.parse(localStorage.getItem(LS_KEY) || "{}"); }
       catch(e){ return {}; }
     }
-    function saveStore(obj){
-      localStorage.setItem(LS_KEY, JSON.stringify(obj));
-    }
-    function getEntry(key){
-      const st = loadStore();
-      return st[key] || null;
-    }
+    function saveStore(obj){ localStorage.setItem(LS_KEY, JSON.stringify(obj)); }
+    function getEntry(key){ const st = loadStore(); return st[key] || null; }
     function setEntry(key, patch){
       const st = loadStore();
       st[key] = { ...(st[key]||{}), ...patch, t: Date.now() };
@@ -443,9 +574,7 @@
       delete st[key];
       saveStore(st);
     }
-    function resetStore(){
-      localStorage.removeItem(LS_KEY);
-    }
+    function resetStore(){ localStorage.removeItem(LS_KEY); }
 
     function conjIdToModuleMap(){
       const m = new Map();
@@ -453,9 +582,72 @@
       return m;
     }
 
+    // -----------------------------
+    // Build items per dataset
+    // item model: { key, id, glyph, hint, level, file, module, source }
+    // -----------------------------
+    function buildGunitaItems(){
+      const out = [];
+      for (const c of GUNITA_STEMS){
+        for (const v of GUNITA_VOWELS){
+          const file = `${c.stem}_${v.key}.mp3`;
+          // We cannot reliably generate the Devanagari combined form without a full matra engine,
+          // so for QA we display: consonant + (vowel key) which is enough for reviewers.
+          const glyph = `${c.glyph} + ${v.label}`;
+          const hint = `${c.hint}${v.hint ? " + " + v.hint : ""}`;
+          const id = `${c.id}_${v.key}`;
+          out.push({
+            key: `gunita:${id}:${file}`,
+            id,
+            glyph,
+            hint,
+            level: c.level,
+            file,
+            module: "",
+            source: "gunita_generated"
+          });
+        }
+      }
+      return out;
+    }
+
     function buildDatasetItems(){
       const ds = qaDataset.value;
       const items = [];
+
+      if (ds === "vowels"){
+        QA_VOWELS.forEach(x=>{
+          items.push({
+            key: `vowels:${x.id}:${x.file}`,
+            id: x.id, glyph: x.glyph, hint: x.hint, level: x.level ?? "",
+            file: x.file, module:"", source:"built_in_vowels"
+          });
+        });
+      }
+
+      if (ds === "vargiya"){
+        QA_VARGIYA.forEach(x=>{
+          items.push({
+            key: `vargiya:${x.id}:${x.file}`,
+            id: x.id, glyph: x.glyph, hint: x.hint, level: x.level ?? "",
+            file: x.file, module:"", source:"built_in_vargiya"
+          });
+        });
+      }
+
+      if (ds === "avargiya"){
+        QA_AVARGIYA.forEach(x=>{
+          items.push({
+            key: `avargiya:${x.id}:${x.file}`,
+            id: x.id, glyph: x.glyph, hint: x.hint, level: x.level ?? "",
+            file: x.file, module:"", source:"built_in_avargiya"
+          });
+        });
+      }
+
+      if (ds === "gunita"){
+        buildGunitaItems().forEach(it=>items.push(it));
+      }
 
       if (ds === "gunita_words") {
         if (WORDS_READY) {
@@ -495,8 +687,8 @@
             const glyph = x.form || "";
             const hint = x.hint || "";
             const mod = x.module || "";
-            const file = x.audio || ""; // may be blank
-            const level = "";           // conjunct list has no level
+            const file = x.audio || "";
+            const level = "";
             const key = `conj_items:${id}:${file}`;
             items.push({ key, id, glyph, hint, level, file, module: mod, source:"conj/conjuncts.json" });
           });
@@ -528,15 +720,12 @@
         const entry = getEntry(it.key);
         const decision = entry?.decision || "";
 
-        // Decision filter
         if (f === "unreviewed" && decision) return false;
         if (f === "approved" && decision !== "approved") return false;
         if (f === "rejected" && decision !== "rejected") return false;
 
-        // Level filter (only if item has level)
         if (lvl !== "all" && String(it.level ?? "") !== String(lvl)) return false;
 
-        // Module filter (only for conjunct datasets)
         if (qaModuleWrap.style.display !== "none") {
           if (mod !== "ALL" && String(it.module || "") !== String(mod)) return false;
         }
@@ -555,9 +744,7 @@
         else unreviewed++;
       });
       qaCounts.textContent = `All: ${all} · ✅ ${approved} · ❌ ${rejected} · ⏳ ${unreviewed}`;
-
-      if (!qaList.length) qaProgress.textContent = "0 / 0";
-      else qaProgress.textContent = `${qaIdx+1} / ${qaList.length}`;
+      qaProgress.textContent = (!qaList.length) ? "0 / 0" : `${qaIdx+1} / ${qaList.length}`;
     }
 
     function currentItem(){ return (qaIdx>=0 && qaIdx<qaList.length) ? qaList[qaIdx] : null; }
@@ -597,8 +784,7 @@
 
       const entry = getEntry(it.key);
       const decision = entry?.decision || "";
-      const note = entry?.note || "";
-      qaNote.value = note;
+      qaNote.value = entry?.note || "";
 
       if (!decision) qaDecision.textContent = "Decision: —";
       if (decision==="approved") qaDecision.textContent = "Decision: ✅ Approved";
@@ -606,10 +792,14 @@
     }
 
     function qaRebuildList(resetIndex=false){
-      // Toggle Module selector only for conjunct datasets
       const ds = qaDataset.value;
+
+      // show Module filter only for conjunct datasets
       const needsModule = (ds === "conj_words" || ds === "conj_items");
       qaModuleWrap.style.display = needsModule ? "inline-flex" : "none";
+
+      // dataset-specific help
+      dsHelp.style.display = (ds === "gunita") ? "block" : "none";
 
       qaAll = buildDatasetItems();
       qaList = applyFilters(qaAll);
@@ -620,7 +810,7 @@
     }
 
     // -----------------------------
-    // Navigation + actions
+    // Actions
     // -----------------------------
     function qaNextAndPlay(){
       if (!qaList.length) { renderCurrent(); return; }
@@ -663,12 +853,8 @@
       const it = currentItem();
       if (!it) return;
       const entry = getEntry(it.key);
-      if (entry?.note) {
-        // keep note but clear decision
-        setEntry(it.key, { decision: "" });
-      } else {
-        clearEntry(it.key);
-      }
+      if (entry?.note) setEntry(it.key, { decision: "" });
+      else clearEntry(it.key);
       setStatus("Cleared decision", "neutral");
       renderCurrent();
     }
@@ -691,7 +877,6 @@
 
     function tsvEscape(s){
       s = (s ?? "").toString();
-      // TSV-safe: replace newlines and tabs
       return s.replace(/\t/g," ").replace(/\r?\n/g,"  ");
     }
 
@@ -756,7 +941,6 @@
       setStatus("Now using Custom inline list (edit QA_INLINE in qa.html)", "warn");
     });
 
-    // Keyboard shortcuts (ignore when typing in textarea)
     document.addEventListener("keydown", (e)=>{
       const tag = (document.activeElement && document.activeElement.tagName) ? document.activeElement.tagName.toLowerCase() : "";
       if (tag === "textarea" || tag === "input" || tag === "select") return;
@@ -772,8 +956,6 @@
     // Boot
     // -----------------------------
     loadAll().then(()=>{
-      // Start with first item ready; user presses Next(Play) or you can auto-start:
-      // qaNextAndPlay();
       setStatus("Ready — press Next (Play)", "ok");
     });
   </script>

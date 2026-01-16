@@ -384,6 +384,21 @@ canvas { touch-action: none; }
   }
 }
 
+/* Word record card accent (soft purple-ish like Back-to-top / TOC vibe) */
+.card--wordRecord { border-left: 6px solid #7b5cff1f; }
+.card--wordRecord.cardAccent { background: #fbfaff; }
+
+/* Make this module’s buttons/pills match your other sections */
+.card--wordRecord .letterBtn { font-size: 16px; padding: 10px 14px; }
+.card--wordRecord .pill { font-size: 13px; }
+
+/* Layout: keep controls tidy on small screens */
+.card--wordRecord .row { flex-wrap: wrap; gap: 10px; }
+.card--wordRecord .wrcBig { font-size: 40px; line-height: 1.2; }
+@media (max-width: 600px){
+  .card--wordRecord .wrcBig { font-size: 34px; }
+}
+
 
  </style>
 </head>
@@ -884,6 +899,74 @@ canvas { touch-action: none; }
 </section>
 <div class="backTop"><a href="#top">↑ Back to top</a></div>
   <p class="small">Developed by Samskritabharati USA</p>
+<h2 id="sec-word-record">शब्दोच्चारणस्य अभ्यासः — See → Record → Compare</h2>
+
+<div class="card cardAccent card--wordRecord">
+  <p class="small" style="margin: 0 0 10px;">
+    <b>How to use:</b> Click <b>Next</b> to show a word. (Optional) type it.
+    Then press <b>Record</b>, speak the word, and press <b>Stop</b>.
+    Use <b>Play mine</b> and <b>Play correct</b> (or <b>Compare</b>) to compare pronunciations.
+  </p>
+
+  <div class="row">
+    <span class="pill" id="wrcLoad">Words: …</span>
+
+    <label>
+      Source:
+      <select id="wrcSource" class="select">
+        <option value="all" selected>All</option>
+        <option value="gunita">Gunita words</option>
+        <option value="samyukta">Samyukta (conjunct) words</option>
+      </select>
+    </label>
+
+    <label>
+      Level:
+      <select id="wrcLevel" class="select">
+        <option value="all" selected>All</option>
+        <option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option>
+      </select>
+    </label>
+
+    <button id="wrcNext" class="letterBtn">Next (show word)</button>
+
+    <span class="pill" id="wrcStatus">Ready</span>
+  </div>
+
+  <div class="row" style="align-items:flex-start;">
+    <!-- LEFT: prompt -->
+    <div style="flex:1; min-width:260px;">
+      <div class="small"><b>Word</b></div>
+      <div id="wrcWord" class="wrcBig">—</div>
+
+      <div class="small" style="margin-top:6px;">
+        Hint: <span id="wrcHint">—</span>
+      </div>
+      <div class="small">
+        Audio file: <span id="wrcFile">—</span>
+      </div>
+
+      <div class="small" style="margin-top:10px;"><b>Type what you see (optional)</b></div>
+      <input id="wrcTyped" class="textInput" placeholder="Type the word in Devanāgarī…" />
+    </div>
+
+    <!-- RIGHT: recording -->
+    <div style="flex:1; min-width:260px;">
+      <div class="small"><b>Your recording</b></div>
+      <div class="row">
+        <button id="wrcRecord" class="letterBtn" disabled>Record</button>
+        <button id="wrcStop" class="letterBtn" disabled>Stop</button>
+        <button id="wrcPlayMine" class="letterBtn" disabled>Play mine</button>
+        <button id="wrcPlayCorrect" class="letterBtn" disabled>Play correct</button>
+        <button id="wrcCompare" class="letterBtn" disabled>Compare (mine → correct)</button>
+      </div>
+
+      <div class="small" style="margin-top:8px; color:#666;">
+        Tip: the comparison is subjective — listen for clear vowels, correct conjunct articulation, and proper aspiration.
+      </div>
+    </div>
+  </div>
+</div>
 
   <script>
     const AUDIO_BASE_URL = "https://laksiyer.github.io/ucchAraNam/audio/";
@@ -2338,6 +2421,252 @@ cqReset.addEventListener("click", cqResetAll);
   // Do not auto-start the quiz on load
   cqSetResult("Ready — click Next (play) to begin.", "neutral");
 })();
+// -----------------------------
+// Word Pronunciation Practice: See → Record → Compare
+// Uses your existing data loaders:
+//   window.WORDS (gunita words) + window.WORDS_READY
+//   CONJ_WORDS (conjunct words) + CONJ_WORDS_READY
+// Uses your existing audio helper:
+//   playFile(filePath, label)
+// -----------------------------
+const wrcLoad   = document.getElementById("wrcLoad");
+const wrcSource = document.getElementById("wrcSource");
+const wrcLevel  = document.getElementById("wrcLevel");
+const wrcNext   = document.getElementById("wrcNext");
+const wrcStatus = document.getElementById("wrcStatus");
+
+const wrcWord = document.getElementById("wrcWord");
+const wrcHint = document.getElementById("wrcHint");
+const wrcFile = document.getElementById("wrcFile");
+const wrcTyped = document.getElementById("wrcTyped");
+
+const wrcRecord = document.getElementById("wrcRecord");
+const wrcStop = document.getElementById("wrcStop");
+const wrcPlayMine = document.getElementById("wrcPlayMine");
+const wrcPlayCorrect = document.getElementById("wrcPlayCorrect");
+const wrcCompare = document.getElementById("wrcCompare");
+
+let wrcCurrent = null;   // {word, hint, level, file, source}
+let wrcRecorder = null;
+let wrcStream = null;
+let wrcChunks = [];
+let wrcBlob = null;
+let wrcMineUrl = null;
+
+function wrcSetStatus(msg, kind="neutral") {
+  wrcStatus.textContent = msg;
+  // If you want pills to colorize: reuse okPill/badPill if desired
+  wrcStatus.classList.remove("okPill","badPill");
+  if (kind === "ok") wrcStatus.classList.add("okPill");
+  if (kind === "bad") wrcStatus.classList.add("badPill");
+}
+
+function wrcWordsReadySummary() {
+  const gunitaCount = (window.WORDS_READY && Array.isArray(window.WORDS)) ? window.WORDS.length : 0;
+  const conjCount = (typeof CONJ_WORDS_READY !== "undefined" && CONJ_WORDS_READY && Array.isArray(CONJ_WORDS)) ? CONJ_WORDS.length : 0;
+  wrcLoad.textContent = `Words loaded: gunita ${gunitaCount}, samyukta ${conjCount}`;
+}
+
+function wrcPickOne(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+function wrcPool() {
+  const src = wrcSource.value; // all | gunita | samyukta
+  const lvl = wrcLevel.value;  // all | 1..4
+
+  let pool = [];
+
+  // gunita from window.WORDS
+  if (src === "all" || src === "gunita") {
+    if (window.WORDS_READY && Array.isArray(window.WORDS)) {
+      const g = window.WORDS.map(x => ({...x, source:"gunita"}));
+      pool = pool.concat(g);
+    }
+  }
+
+  // conjunct words from CONJ_WORDS
+  if (src === "all" || src === "samyukta") {
+    if (typeof CONJ_WORDS_READY !== "undefined" && CONJ_WORDS_READY && Array.isArray(CONJ_WORDS)) {
+      const c = CONJ_WORDS.map(x => ({...x, source:"samyukta"}));
+      pool = pool.concat(c);
+    }
+  }
+
+  if (lvl !== "all") {
+    pool = pool.filter(x => String(x.level ?? "") === String(lvl));
+  }
+
+  // must have a word; file is optional but strongly recommended
+  pool = pool.filter(x => x && x.word);
+
+  return pool;
+}
+
+function wrcRender() {
+  if (!wrcCurrent) {
+    wrcWord.textContent = "—";
+    wrcHint.textContent = "—";
+    wrcFile.textContent = "—";
+    return;
+  }
+  wrcWord.textContent = wrcCurrent.word || "—";
+  wrcHint.textContent = wrcCurrent.hint || "—";
+  wrcFile.textContent = wrcCurrent.file || "—";
+}
+
+function wrcResetRecordingState() {
+  // revoke old url
+  if (wrcMineUrl) { URL.revokeObjectURL(wrcMineUrl); wrcMineUrl = null; }
+  wrcChunks = [];
+  wrcBlob = null;
+
+  wrcPlayMine.disabled = true;
+  wrcPlayCorrect.disabled = true;
+  wrcCompare.disabled = true;
+  wrcRecord.disabled = true;
+  wrcStop.disabled = true;
+}
+
+function wrcPlayCorrectNow() {
+  if (!wrcCurrent || !wrcCurrent.file) {
+    wrcSetStatus("No correct audio file for this item.", "bad");
+    return;
+  }
+  playFile(wrcCurrent.file, wrcCurrent.word);
+}
+
+function wrcPlayMineNow() {
+  if (!wrcMineUrl) return;
+  const a = new Audio(wrcMineUrl);
+  a.play().catch(() => {});
+}
+
+function wrcCompareNow() {
+  if (!wrcMineUrl || !wrcCurrent?.file) return;
+  const a1 = new Audio(wrcMineUrl);
+  a1.onended = () => wrcPlayCorrectNow();
+  a1.play().catch(() => {});
+}
+
+function wrcNextWord() {
+  const pool = wrcPool();
+  if (!pool.length) {
+    wrcCurrent = null;
+    wrcRender();
+    wrcResetRecordingState();
+    wrcTyped.value = "";
+    wrcSetStatus("No words for this selection (check JSON loaders).", "bad");
+    return;
+  }
+
+  wrcCurrent = wrcPickOne(pool);
+  wrcRender();
+
+  // reset UI
+  wrcTyped.value = "";
+  if (wrcMineUrl) { URL.revokeObjectURL(wrcMineUrl); wrcMineUrl = null; }
+  wrcBlob = null;
+  wrcChunks = [];
+
+  // flow: type first, then record
+  wrcRecord.disabled = false;
+  wrcStop.disabled = true;
+  wrcPlayMine.disabled = true;
+  wrcPlayCorrect.disabled = true;
+  wrcCompare.disabled = true;
+
+  wrcSetStatus("Type the word, then record your pronunciation.", "neutral");
+}
+
+async function wrcStartRecording() {
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    wrcSetStatus("Recording not supported in this browser.", "bad");
+    return;
+  }
+  try {
+    // clean any previous recording
+    if (wrcMineUrl) { URL.revokeObjectURL(wrcMineUrl); wrcMineUrl = null; }
+    wrcChunks = [];
+    wrcBlob = null;
+
+    wrcStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    wrcRecorder = new MediaRecorder(wrcStream);
+
+    wrcRecorder.ondataavailable = (e) => {
+      if (e.data && e.data.size > 0) wrcChunks.push(e.data);
+    };
+
+    wrcRecorder.onstop = () => {
+      // stop tracks
+      if (wrcStream) {
+        wrcStream.getTracks().forEach(t => t.stop());
+        wrcStream = null;
+      }
+
+      wrcBlob = new Blob(wrcChunks, { type: "audio/webm" });
+      wrcMineUrl = URL.createObjectURL(wrcBlob);
+
+      wrcPlayMine.disabled = false;
+      wrcPlayCorrect.disabled = !(wrcCurrent && wrcCurrent.file);
+      wrcCompare.disabled = !(wrcCurrent && wrcCurrent.file);
+      wrcCompare.disabled = !(wrcCurrent && wrcCurrent.file);
+
+      wrcRecord.disabled = false;
+      wrcStop.disabled = true;
+
+      wrcSetStatus("Recorded. Now compare: Play mine / Play correct / Compare.", "ok");
+    };
+
+    wrcRecorder.start();
+
+    wrcRecord.disabled = true;
+    wrcStop.disabled = false;
+    wrcPlayMine.disabled = true;
+    wrcPlayCorrect.disabled = true;
+    wrcCompare.disabled = true;
+
+    wrcSetStatus("Recording… speak clearly, then press Stop.", "neutral");
+  } catch (e) {
+    console.error(e);
+    wrcSetStatus("Could not start recording (mic permission?).", "bad");
+  }
+}
+
+function wrcStopRecording() {
+  if (wrcRecorder && wrcRecorder.state !== "inactive") {
+    wrcRecorder.stop();
+  }
+}
+
+// Hook up controls
+wrcNext.addEventListener("click", wrcNextWord);
+wrcSource.addEventListener("change", wrcNextWord);
+wrcLevel.addEventListener("change", wrcNextWord);
+
+wrcRecord.addEventListener("click", wrcStartRecording);
+wrcStop.addEventListener("click", wrcStopRecording);
+wrcPlayMine.addEventListener("click", wrcPlayMineNow);
+wrcPlayCorrect.addEventListener("click", wrcPlayCorrectNow);
+wrcCompare.addEventListener("click", wrcCompareNow);
+
+// Boot
+(function bootWRC(attempt=0){
+  wrcWordsReadySummary();
+  // enable Next if either pool can exist
+  const gunitaOk = (window.WORDS_READY && Array.isArray(window.WORDS));
+  const conjOk = (typeof CONJ_WORDS_READY !== "undefined" && CONJ_WORDS_READY && Array.isArray(CONJ_WORDS));
+  if (gunitaOk || conjOk) {
+    wrcSetStatus("Ready — click Next to begin.", "neutral");
+    wrcRecord.disabled = true;
+    wrcStop.disabled = true;
+  } else if (attempt < 20) {
+    setTimeout(() => bootWRC(attempt+1), 250);
+  } else {
+    wrcSetStatus("Words not loaded (check words.json and conj/conjunct_words.json).", "bad");
+  }
+})();
+
 </script>
 </body>
 </html>

@@ -24,6 +24,50 @@
     .grid5 { display:grid; grid-template-columns: repeat(5, minmax(54px, 1fr)); gap: 10px; max-width: 520px; }
     .line { display:flex; gap:10px; flex-wrap: wrap; max-width: 900px; }
 
+/* TOC: hierarchical numbering 4.1, 4.2, 5.1 ... */
+ol.toc,
+ol.toc ol {
+  list-style: none;
+  margin: 0;
+  padding-left: 0;
+  counter-reset: item;
+}
+
+ol.toc li {
+  counter-increment: item;
+  position: relative;
+  margin: 6px 0;
+  padding-left: 3.0em;   /* space for "4.1" */
+}
+
+ol.toc li::before {
+  content: counters(item, ".") ".";
+  position: absolute;
+  left: 0;
+  width: 2.6em;
+  text-align: right;
+  font-weight: 600;
+  color: #222;
+}
+
+/* indentation for nested sections */
+ol.toc ol {
+  margin-top: 6px;
+  padding-left: 1.2em;
+}
+
+ol.toc ol li {
+  margin: 4px 0;
+  padding-left: 3.4em;  /* slightly more for 4.10 etc */
+}
+
+ol.toc ol li::before {
+  width: 3.0em;
+  font-weight: 500;
+  color: #555;
+}
+
+
 
 /* Ensure cards never clip content on small screens */
 .card {
@@ -412,7 +456,8 @@ canvas { touch-action: none; }
 <!-- TOC -->
 <div class="tocCard">
   <h3>Contents</h3>
-  <ul>
+
+  <ol class="toc">
     <li>
       <a href="#sec-vowels">स्वराः / svarāḥ — Vowels</a>
     </li>
@@ -429,7 +474,7 @@ canvas { touch-action: none; }
       <a href="#sec-gunita">
         गुणिताक्षराणि / guṇitākṣarāṇi — Vowel-modified consonants
       </a>
-      <ul>
+      <ol>
         <li>
           <a href="#sec-gunita-quiz">
             गुणिताक्षर-लेखन-प्रश्नोत्तरी — Writing practice
@@ -445,31 +490,35 @@ canvas { touch-action: none; }
             गुणित-शब्द-श्रवण-पठनावगमनम् — Hear &amp; read
           </a>
         </li>
-      </ul>
+      </ol>
     </li>
 
     <li>
       <a href="#sec-conj">
         संयुक्ताक्षराणि / saṃyuktākṣarāṇi — Conjunct consonants
       </a>
-      <ul>
+      <ol>
         <li>
           <a href="#sec-conj-rec">
             संयुक्ताक्षराणां अभिज्ञानम् — Conjunct Recognition Quiz
           </a>
         </li>
- <li>
+        <li>
           <a href="#sec-conj-word-quiz">
             संयुक्ताक्षर-शब्द-लेखन-प्रश्नोत्तरी — Conjunct Word Writing Quiz
           </a>
         </li>
-		</ul>
-    <li>
-      <a href="#sec-word-record">शब्दोच्चारणस्य अभ्यासः — See → Record → Compare</a>
+      </ol>
     </li>
-	</li>
-  </ul>
+
+    <li>
+      <a href="#sec-word-record">
+        शब्दोच्चारणस्य अभ्यासः — See → Record → Compare
+      </a>
+    </li>
+  </ol>
 </div>
+
 <!-- About / Scope -->
 <div class="tocCard">
   <h3>About this tool</h3>
